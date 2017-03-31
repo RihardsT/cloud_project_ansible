@@ -1,0 +1,56 @@
+---
+- hosts: all
+  remote_user: rihards
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    fail2ban_services:
+      - name: sshd
+        port: 22
+        bantime: 3600
+    security_ssh_port: 22
+    sudoers:
+      - rihards
+  pre_tasks: # Set as pre_task, to set up the user in the beginning
+    - name: Make sure we have a 'code' group
+      group:
+        name: code
+        state: present
+    - name: Allow 'code' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%code'
+        line: '%code ALL=(ALL) NOPASSWD: ALL'
+        validate: visudo -cf %s
+    - name: Add sudoers users to code group
+      user:
+        name: "{{ item }}"
+        shell: /bin/bash
+        groups: code
+        append: yes
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/{{ item }}
+      with_items: "{{ sudoers }}"
+    - name: SSH key
+      authorized_key:
+        user: "{{ item }}"
+        state: present
+        key: "{{ lookup('file', '../../Secrets/SSH_Keys/key.pub') }}"
+      with_items: "{{ sudoers }}"
+  roles:
+    - tersmitten.fail2ban
+    - geerlingguy.security
+
+- name: Run docker.ubuntu on x86 machines
+  hosts: backend
+  remote_user: rihards
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    docker_group_members: [rihards]
+  roles:
+    - angstwad.docker_ubuntu
