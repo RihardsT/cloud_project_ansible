@@ -5,7 +5,8 @@ which ansible
 
 ansible-galaxy install --roles-path ./roles tersmitten.fail2ban
 ansible-galaxy install --roles-path ./roles geerlingguy.security
-ansible-galaxy install --roles-path ./roles angstwad.docker_ubuntu,v2.2.2
+ansible-galaxy install --roles-path ./roles angstwad.docker_ubuntu,v2.2.2 # specific version as there were errors otherwise
+ansible-galaxy install --roles-path ./roles geerlingguy.firewall
 ansible-galaxy install --roles-path ./roles
 # ansible-galaxy install amidos.install-docker -p ./roles # for some reason this role failed for me
 
