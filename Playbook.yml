@@ -12,8 +12,6 @@
     security_ssh_port: 22
     sudoers:
       - rihards
-  vars_files:
-    - vars/firewall.yml
   pre_tasks: # Set as pre_task, to set up the user in the beginning
     - name: Make sure we have a 'code' group
       group:
@@ -45,7 +43,6 @@
   roles:
     - tersmitten.fail2ban
     - geerlingguy.security
-    - geerlingguy.firewall
 
 - name: Run docker.ubuntu on x86 machines
   hosts: backend
