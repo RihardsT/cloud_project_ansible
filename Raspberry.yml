@@ -1,20 +1,26 @@
 ---
-- hosts: all
+- hosts: raspberry
   remote_user: rihards
   become: yes
   become_user: root
   become_method: sudo
   vars:
-    repo_path: # variable refered to in task with_items
-      - /srv/
+    repo_path: /srv/repo
   tasks:
-    # - git:
-    #     repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
-    #     dest: {{ repo_path }}
-    #     accept_hostkey: yes
-    #     depth: 1
-        # key_file: /var/
-      # with_items: "{{ repo_path }}"
+    - copy:
+        src: ../Secrets/SSH_Keys/for_clone
+        dest: /home/rihards/.ssh/for_clone
+        owner: rihards
+        group: rihards
+        mode: 0700
+
+    - git:
+        repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
+        dest: "{{ repo_path }}"
+        depth: 1
+        update: yes
+        accept_hostkey: yes
+        key_file: /home/rihards/.ssh/for_clone
 
     # - docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
     #     project_src: /srv/
@@ -28,7 +34,7 @@
 
     - cron:
         name: "ip_change_notify_telegram"
-        minute: "*/1"
+        minute: "*/30"
         user: root
         # cron_file: /etc/cron.hourly/ip_change_notify_telegram
         job: "/bin/bash /root/ip_change_telegram.sh"
