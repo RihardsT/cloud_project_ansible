@@ -31,7 +31,7 @@
         groups: code
         append: yes
         generate_ssh_key: yes
-        ssh_key_bits: 2048
+        ssh_key_bits: 4096
         ssh_key_file: .ssh/{{ item }}
       with_items: "{{ sudoers }}"
     - name: SSH key
@@ -43,14 +43,3 @@
   roles:
     - tersmitten.fail2ban
     - geerlingguy.security
-
-- name: Run docker.ubuntu on x86 machines
-  hosts: backend
-  remote_user: rihards
-  become: yes
-  become_user: root
-  become_method: sudo
-  vars:
-    docker_group_members: [rihards]
-  roles:
-    - angstwad.docker_ubuntu
