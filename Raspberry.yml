@@ -7,6 +7,21 @@
   vars:
     repo_path: /srv/repo
   tasks:
+    # Set up IP change notification to telegram
+    - copy:
+        src: ../Secrets/ip_change_telegram.sh
+        dest: /root/ip_change_telegram.sh
+        owner: root
+        group: root
+        mode: 0700
+    - cron:
+        name: "ip_change_notify_telegram"
+        minute: "*/30"
+        user: root
+        # cron_file: /etc/cron.hourly/ip_change_notify_telegram
+        job: "/bin/bash /root/ip_change_telegram.sh"
+
+    # Project dependency setup
     - copy:
         src: ../Secrets/SSH_Keys/for_clone
         dest: /home/rihards/.ssh/for_clone
@@ -22,19 +37,12 @@
         accept_hostkey: yes
         key_file: /home/rihards/.ssh/for_clone
 
+    # Docker compose service stuff
     # - docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-    #     project_src: /srv/
-    #     state: absent
-    - copy:
-        src: ../Secrets/ip_change_telegram.sh
-        dest: /root/ip_change_telegram.sh
-        owner: root
-        group: root
-        mode: 0700
-
-    - cron:
-        name: "ip_change_notify_telegram"
-        minute: "*/30"
-        user: root
-        # cron_file: /etc/cron.hourly/ip_change_notify_telegram
-        job: "/bin/bash /root/ip_change_telegram.sh"
+    #     project_src: "{{ repo_path }}/DockerGunicornARM"
+    #     state: present
+    #     services: netdata
+    #
+    # - assert:
+    #     that:
+    #       - "netdata.netdata01.state.running"
