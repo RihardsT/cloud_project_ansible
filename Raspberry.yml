@@ -1,6 +1,5 @@
 ---
 - hosts: raspberry
-  remote_user: rihards
   become: yes
   become_user: root
   become_method: sudo

@@ -1,7 +1,5 @@
-pyenv local 3.6.0
-pip install -U packaging
-pip install -U ansible
-which ansible
+pyenv local 2.7.13 # Because ansible and molecule work better with python2
+pip2 install -U packaging; pip2 install -U ansible
 
 ansible-galaxy install --roles-path ./roles tersmitten.fail2ban
 ansible-galaxy install --roles-path ./roles geerlingguy.security
@@ -18,7 +16,7 @@ ansible-galaxy install --roles-path ./roles
 # --ask-pass # To ask for password when setting up pi
 
 export ANSIBLE_NOCOWS=1 # Skip the overly verbose cows
-ansible-playbook -i ./Inventory Playbook.yml --limit production
+ansible-playbook -i ./Inventory Playbook.yml --limit production -u rihards
 
 # when first setting up, had to use -u root, as it was the default ssh user
 ansible-playbook -i ./Inventory Playbook.yml --limit production -u root
@@ -30,3 +28,10 @@ ansible-playbook -i ./Inventory Raspberry.yml
 
 # https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
 # https://galaxy.ansible.com/geerlingguy/security/
+
+
+# Adding tests with Molecule:
+pip2 install -U ansible docker molecule
+molecule init --driver docker
+  # Add ansible: to molecule.yml
+molecule --help

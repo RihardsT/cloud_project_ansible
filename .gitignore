@@ -1,3 +1,11 @@
 roles
 Inventory
 *.retry
+
+
+__pycache__
+.python-version
+
+# Molecule test stuff
+.molecule/*
+*.pyc

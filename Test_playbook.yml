@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+    - name: Update repositories cache and install openssh-server
+      apt:
+        name: openssh-server
+        update_cache: yes
+
+- include: Playbook.yml

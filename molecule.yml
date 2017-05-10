@@ -1,0 +1,18 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+docker:
+  containers:
+    - name: cloud_project_ansible
+      image: ubuntu
+      image_version: 16.04
+      ansible_groups:
+        - group1
+verifier:
+  name: testinfra
+
+ansible:
+  playbook: Test_playbook.yml
+  user: root
