@@ -5,5 +5,12 @@
       apt:
         name: openssh-server
         update_cache: yes
+    - name: git and cron
+      apt:
+        name: git,cron
+    - name: Install pip
+      apt:
+        name: python-pip
 
-- include: Playbook.yml
+# - include: Playbook.yml
+- include: Raspberry.yml
