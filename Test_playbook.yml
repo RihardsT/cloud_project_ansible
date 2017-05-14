@@ -5,12 +5,14 @@
       apt:
         name: openssh-server
         update_cache: yes
-    - name: git and cron
+    - name: Install other dependencies - git,cron,python-pip
       apt:
-        name: git,cron
-    - name: Install pip
-      apt:
-        name: python-pip
+        name: git,cron,python-pip
+  roles:
+    - role: angstwad.docker_ubuntu
+      kernel_pkg_state: present
+      install_kernel_extras: yes
+      # docker_group_members: [] # Add the user to docker group
 
-# - include: Playbook.yml
+- include: Playbook.yml
 - include: Raspberry.yml

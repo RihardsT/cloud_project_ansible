@@ -36,15 +36,16 @@
         accept_hostkey: yes
         key_file: /home/rihards/.ssh/for_clone
 
-    - pip:
-        name: docker-compose
-        state: latest
+    # - pip:
+    #     name: docker-compose
+    #     state: latest
+
     # Docker compose service stuff
-    # - docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-    #     project_src: "{{ repo_path }}/DockerGunicornARM"
-    #     state: present
-    #     services: netdata
-    #
-    # - assert:
-    #     that:
-    #       - "netdata.netdata01.state.running"
+    - docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+        project_src: "/srv/repo/DockerGunicornARM/"
+        state: present
+        services: netdata
+
+    - assert:
+        that:
+          - "netdata.netdata01.state.running"
