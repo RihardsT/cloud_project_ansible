@@ -1,15 +1,43 @@
 ---
 dependency:
   name: galaxy
-driver:
-  name: docker
 docker:
   containers:
     - name: cloud_project_ansible
-      image: ubuntu
+      image: solita/ubuntu-systemd
       image_version: 16.04
       ansible_groups:
         - group1
+# vagrant:
+#   raw_config_args:
+#     - "ssh.insert_key = false"
+#     - "vm.network 'forwarded_port', guest: 80, host: 8080"
+#   platforms:
+#     - name: xenial64
+#       box: ubuntu/xenial64
+#   providers:
+#     - name: virtualbox
+#       type: virtualbox
+#       options:
+#         memory: 1024
+#         cpus: 2
+#   instances:
+#     - name: vagrant01
+#       ansible_groups:
+#         - group1
+#       interfaces:
+#         - network_name: private_network
+#           type: dhcp
+#           auto_config: true
+#         - network_name: private_network
+#           type: static
+#           ip: 192.168.0.30
+#           auto_config: true
+#       options:
+#         append_platform_to_hostname: no
+#       raw_config_args:
+#         - "vm.network 'private_network', type: 'dhcp', auto_config: false"
+
 verifier:
   name: testinfra
 

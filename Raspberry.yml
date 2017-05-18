@@ -7,13 +7,15 @@
     repo_path: /srv/repo
   tasks:
     # Set up IP change notification to telegram
-    - copy:
+    - name: Copy IP check script, that notifies to telegram
+      copy:
         src: ../Secrets/ip_change_telegram.sh
         dest: /root/ip_change_telegram.sh
         owner: root
         group: root
         mode: 0700
-    - cron:
+    - name: set up cronjob to notify of IP change
+      cron:
         name: "ip_change_notify_telegram"
         minute: "*/30"
         user: root
@@ -39,6 +41,16 @@
     # - pip:
     #     name: docker-compose
     #     state: latest
+    - name: Create .docker directory
+      file: path=/root/.docker state=directory # Nice example of "single line"
+
+    - name: Copy Docker auth
+      copy:
+        src: ../Secrets/Docker_auth.json
+        dest: /root/.docker/config.json
+        owner: root
+        group: root
+        mode: 0500
 
     # Docker compose service stuff
     - docker_service: # https://docs.ansible.com/ansible/docker_service_module.html

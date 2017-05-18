@@ -22,7 +22,7 @@ ansible-playbook -i ./Inventory Playbook.yml --limit production -u rihards
 ansible-playbook -i ./Inventory Playbook.yml --limit production -u root
 
 export ANSIBLE_NOCOWS=1 # Skip the overly verbose cows
-ansible-playbook -i ./Inventory Raspberry.yml
+ansible-playbook -i ./Inventory Raspberry.yml --limit raspberry
 
 -e 'ansible_port=22'
 
@@ -35,3 +35,11 @@ pip2 install -U ansible docker molecule
 molecule init --driver docker
   # Add ansible: to molecule.yml
 molecule --help
+
+
+
+solita/ubuntu-systemd
+# Should start systemd for the container, so that can start docker and other services in container
+https://developers.redhat.com/blog/2014/05/05/running-systemd-within-docker-container/
+http://container-solutions.com/running-docker-containers-with-systemd/
+https://developer.atlassian.com/blog/2015/03/docker-systemd-socket-activation/
