@@ -42,3 +42,60 @@
   roles:
     - tersmitten.fail2ban
     - geerlingguy.security
+
+
+- hosts: production
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    repo_path: /srv/repo
+  tasks:
+    # Project dependency setup
+    - copy:
+        src: ../Secrets/SSH_Keys/for_clone
+        dest: /root/.ssh/for_clone
+        owner: root
+        group: root
+        mode: 0700
+
+    - name: Clone/update the git repo
+      git:
+        repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
+        dest: "{{ repo_path }}"
+        depth: 1
+        update: yes
+        accept_hostkey: yes
+        key_file: /root/.ssh/for_clone
+
+    - name: Create .docker directory
+      file: path=/root/.docker state=directory # Nice example of "single line"
+
+    - name: Copy Docker auth
+      copy:
+        src: ../Secrets/Docker_auth.json
+        dest: /root/.docker/config.json
+        owner: root
+        group: root
+        mode: 0500
+
+    - name: Pip install docker-py, docker-compose
+      pip:
+        name: docker-py,docker-compose
+        state: latest
+    # Docker compose service stuff
+    - name: Docker compose up. Bring up the services
+      docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+        project_src: "/srv/repo/DockerGunicornARM/"
+        state: present
+        services: netdata,nginx,web,postgres
+    #   register: output
+    #
+    # - debug:
+    #     var: output
+    # - assert:
+    #     that:
+    #       - "netdata.netdata01.state.running"
+    #       - "nginx.nginx01.state.running"
+    #       - "web.django01.state.running"
+    #       - "postgres.postgres01.state.running"

@@ -53,11 +53,8 @@
         mode: 0500
 
     # Docker compose service stuff
-    - docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+    - name: Docker compose up. Bring up the services
+      docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
         project_src: "/srv/repo/DockerGunicornARM/"
         state: present
         services: netdata
-
-    - assert:
-        that:
-          - "netdata.netdata01.state.running"
