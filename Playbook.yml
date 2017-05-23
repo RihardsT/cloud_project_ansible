@@ -89,13 +89,3 @@
         project_src: "/srv/repo/DockerGunicornARM/"
         state: present
         services: netdata,nginx,web,postgres
-    #   register: output
-    #
-    # - debug:
-    #     var: output
-    # - assert:
-    #     that:
-    #       - "netdata.netdata01.state.running"
-    #       - "nginx.nginx01.state.running"
-    #       - "web.django01.state.running"
-    #       - "postgres.postgres01.state.running"
