@@ -37,6 +37,7 @@
         update: yes
         accept_hostkey: yes
         key_file: /home/rihards/.ssh/for_clone
+        version: feature/x86_64_compose_file
 
     # - pip:
     #     name: docker-compose
@@ -53,8 +54,21 @@
         mode: 0500
 
     # Docker compose service stuff
+    - command: "uname -m"
+      register: architecture
+      ignore_errors: True
+
     - name: Docker compose up. Bring up the services
       docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
         project_src: "/srv/repo/DockerGunicornARM/"
         state: present
         services: netdata
+      when: "'x86_64' not in architecture.stdout"
+
+    - name: Docker compose up. Bring up the services
+      docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+        project_src: "/srv/repo/DockerGunicornARM/"
+        state: present
+        services: netdata
+        files: docker-compose_x86_64.yml
+      when: "'x86_64' in architecture.stdout"
