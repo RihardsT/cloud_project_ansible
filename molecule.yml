@@ -7,6 +7,9 @@ docker:
       image: ubuntu
       image_version: 16.04
       privileged: true
+      port_bindings: {
+        "80":"8000" # Guest:Host
+      }
       ansible_groups:
         - group1
 

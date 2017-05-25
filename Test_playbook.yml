@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  tasks:
+  pre_tasks:
     - name: Update repository cache and install openssh-server
       apt:
         name: openssh-server
