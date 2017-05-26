@@ -22,37 +22,6 @@
         # cron_file: /etc/cron.hourly/ip_change_notify_telegram
         job: "/bin/bash /root/ip_change_telegram.sh"
 
-    # Project dependency setup
-    - copy:
-        src: ../Secrets/SSH_Keys/for_clone
-        dest: /home/rihards/.ssh/for_clone
-        owner: rihards
-        group: rihards
-        mode: 0700
-
-    - git:
-        repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
-        dest: "{{ repo_path }}"
-        depth: 1
-        update: yes
-        accept_hostkey: yes
-        key_file: /home/rihards/.ssh/for_clone
-        version: feature/x86_64_compose_file
-
-    # - pip:
-    #     name: docker-compose
-    #     state: latest
-    - name: Create .docker directory
-      file: path=/root/.docker state=directory # Nice example of "single line"
-
-    - name: Copy Docker auth
-      copy:
-        src: ../Secrets/Docker_auth.json
-        dest: /root/.docker/config.json
-        owner: root
-        group: root
-        mode: 0500
-
     # Docker compose service stuff
     - command: "uname -m"
       register: architecture

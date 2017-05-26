@@ -11,6 +11,7 @@
     security_ssh_port: 22
     sudoers:
       - rihards
+    repo_path: /srv/repo
   pre_tasks: # Set as pre_task, to set up the user in the beginning
     - name: Make sure we have a 'code' group
       group:
@@ -42,14 +43,6 @@
   roles:
     - tersmitten.fail2ban
     - geerlingguy.security
-
-
-- hosts: production
-  become: yes
-  become_user: root
-  become_method: sudo
-  vars:
-    repo_path: /srv/repo
   tasks:
     # Project dependency setup
     - copy:
@@ -83,6 +76,12 @@
       pip:
         name: docker-py,docker-compose
         state: latest
+
+- hosts: production
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
     # Docker compose service stuff
     - name: Docker compose up. Bring up the services
       docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
