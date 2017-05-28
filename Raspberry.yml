@@ -25,19 +25,10 @@
     # Docker compose service stuff
     - command: "uname -m"
       register: architecture
-      ignore_errors: True
 
     - name: Docker compose up. Bring up the services
       docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
         project_src: "/srv/repo/DockerGunicornARM/"
         state: present
         services: netdata
-      when: "'x86_64' not in architecture.stdout"
-
-    - name: Docker compose up. Bring up the services
-      docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-        project_src: "/srv/repo/DockerGunicornARM/"
-        state: present
-        services: netdata
-        files: docker-compose_x86_64.yml
-      when: "'x86_64' in architecture.stdout"
+        files: docker-compose_{{ architecture.stdout }}.yml

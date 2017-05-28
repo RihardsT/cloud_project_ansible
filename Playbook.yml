@@ -45,7 +45,11 @@
     - geerlingguy.security
   tasks:
     # Project dependency setup
-    - copy:
+    - name: Create .ssh directory
+      file: path=/root/.ssh state=directory
+
+    - name: Copy ssh key for cloning
+      copy:
         src: ../Secrets/SSH_Keys/for_clone
         dest: /root/.ssh/for_clone
         owner: root
