@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: Base setup: User setup, fail2ban, security.
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -11,12 +12,12 @@
     security_ssh_port: 22
     sudoers:
       - rihards
-    repo_path: /srv/repo
   pre_tasks: # Set as pre_task, to set up the user in the beginning
     - name: Make sure we have a 'code' group
       group:
         name: code
         state: present
+
     - name: Allow 'code' group to have passwordless sudo
       lineinfile:
         dest: /etc/sudoers
@@ -24,6 +25,7 @@
         regexp: '^%code'
         line: '%code ALL=(ALL) NOPASSWD: ALL'
         validate: visudo -cf %s
+
     - name: Add sudoers users to code group
       user:
         name: "{{ item }}"
@@ -34,27 +36,52 @@
         ssh_key_bits: 4096
         ssh_key_file: .ssh/{{ item }}
       with_items: "{{ sudoers }}"
-    - name: SSH key
+
+    - name: Copy SSH key
       authorized_key:
         user: "{{ item }}"
         state: present
         key: "{{ lookup('file', '../Secrets/SSH_Keys/key.pub') }}"
       with_items: "{{ sudoers }}"
+
+    - name: Set permissions on /srv/
+      file: path=/srv/ state=directory owner={{ item }} group={{ item }}
+      with_items: "{{ sudoers }}"
+
+    - name: Set permissions on /var/www
+      file: path=/var/www/ state=directory owner={{ item }} group={{ item }}
+      with_items: "{{ sudoers }}"
+
+    - name: Pip install docker-py, docker-compose
+      pip:
+        name: docker-py,docker-compose
+        state: latest
+
   roles:
     - tersmitten.fail2ban
     - geerlingguy.security
-  tasks:
-    # Project dependency setup
-    - name: Create .ssh directory
-      file: path=/root/.ssh state=directory
 
+- name: Set up auth, clone repository
+  hosts: all
+  vars:
+    sudoers:
+      - rihards
+    repo_path: /srv/repo
+  tasks:
     - name: Copy ssh key for cloning
       copy:
         src: ../Secrets/SSH_Keys/for_clone
-        dest: /root/.ssh/for_clone
-        owner: root
-        group: root
+        dest: /home/{{ ansible_user }}/.ssh/for_clone # ansible_user is the user running ansible-playbook. So -u rihards
         mode: 0700
+
+    - name: Create .docker directory
+      file: path=/home/{{ ansible_user }}/.docker state=directory # Nice example of "single line"
+
+    - name: Copy Docker auth
+      copy:
+        src: ../Secrets/Docker_auth.json
+        dest: /home/{{ ansible_user }}/.docker/config.json
+        mode: 0500
 
     - name: Clone/update the git repo
       git:
@@ -63,28 +90,10 @@
         depth: 1
         update: yes
         accept_hostkey: yes
-        key_file: /root/.ssh/for_clone
+        key_file: /home/{{ ansible_user }}/.ssh/for_clone
 
-    - name: Create .docker directory
-      file: path=/root/.docker state=directory # Nice example of "single line"
-
-    - name: Copy Docker auth
-      copy:
-        src: ../Secrets/Docker_auth.json
-        dest: /root/.docker/config.json
-        owner: root
-        group: root
-        mode: 0500
-
-    - name: Pip install docker-py, docker-compose
-      pip:
-        name: docker-py,docker-compose
-        state: latest
-
-- hosts: production
-  become: yes
-  become_user: root
-  become_method: sudo
+- name: Bring up services
+  hosts: production
   tasks:
     # Docker compose service stuff
     - name: Docker compose up. Bring up the services
