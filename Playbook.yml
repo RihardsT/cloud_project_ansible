@@ -1,5 +1,5 @@
 ---
-- name: Base setup: User setup, fail2ban, security.
+- name: Base setup - User setup, fail2ban, security.
   hosts: all
   become: yes
   become_user: root
@@ -63,9 +63,9 @@
 
 - name: Set up auth, clone repository
   hosts: all
+  become: yes
+  become_user: rihards
   vars:
-    sudoers:
-      - rihards
     repo_path: /srv/repo
   tasks:
     - name: Copy ssh key for cloning
@@ -94,6 +94,8 @@
 
 - name: Bring up services
   hosts: production
+  become: yes
+  become_user: rihards
   tasks:
     # Docker compose service stuff
     - name: Docker compose up. Bring up the services
