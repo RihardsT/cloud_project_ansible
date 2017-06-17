@@ -16,7 +16,7 @@ ansible-galaxy install --roles-path ./roles
 # --ask-pass # To ask for password when setting up pi
 
 export ANSIBLE_NOCOWS=1 # Skip the overly verbose cows
-ansible-playbook -i ./Inventory Playbook.yml --limit production -u rihards --diff
+ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml
 
 # when first setting up, had to use -u root, as it was the default ssh user
 ansible-playbook -i ./Inventory Playbook.yml --limit production -u root
