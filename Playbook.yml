@@ -106,6 +106,8 @@
 
 - name: Update documentation page
   hosts: production
+  become: yes
+  become_user: rihards
   vars:
     repo_path: /var/www/dok.rudenspavasaris.id.lv/
   tasks:
@@ -124,14 +126,13 @@
         update: yes
         accept_hostkey: yes
         key_file: /home/{{ ansible_user }}/.ssh/for_clone
-      register: git
+      register: git # For the when: git.changed below
 
-    # This need many imporements. As it's not working correctly.
     - name: Run mkdocs build
       command: mkdocs build
       args:
         chdir: '{{ repo_path }}'
-      when: git.changed # Add when statement, to only do these steps when new changes have pulled from git.
+      when: git.changed # do this when new changes have pulled from git
 
     - name: Restart Nginx service
       docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
@@ -139,4 +140,4 @@
         restarted: true
         state: present
         services: nginx
-      when: git.changed # Add when statement, to only do these steps when new changes have pulled from git.
+      when: git.changed # do this when new changes have pulled from git
