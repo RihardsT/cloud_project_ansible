@@ -1,0 +1,16 @@
+---
+- name: Bring up services
+  hosts: production
+  become: yes
+  become_user: rihards
+  tasks:
+    - name: Copy Vault config
+      copy:
+        src: ../Secrets/vault/
+        dest: /var/docker/vault/
+        mode: 0700
+
+    - name: Docker compose up. Bring up the services
+      docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+        project_src: "/var/docker/vault/"
+        state: present

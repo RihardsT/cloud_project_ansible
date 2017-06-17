@@ -52,9 +52,9 @@
       file: path=/var/www/ state=directory owner={{ item }} group={{ item }}
       with_items: "{{ sudoers }}"
 
-    - name: Pip install docker-py, docker-compose
+    - name: Pip install docker-compose
       pip:
-        name: docker-py,docker-compose
+        name: docker-compose
         state: latest
 
   roles:
