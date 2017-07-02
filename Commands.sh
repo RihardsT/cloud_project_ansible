@@ -24,6 +24,9 @@ ansible-playbook -i ./Inventory Playbook.yml --limit production -u root
 export ANSIBLE_NOCOWS=1 # Skip the overly verbose cows
 ansible-playbook -i ./Inventory Raspberry.yml --limit raspberry
 
+ansible-playbook -i ./Inventory -e 'ansible_python_interpreter=/usr/bin/python3' -u ubuntu aws.yml
+ansible-playbook -i ./Inventory -u ubuntu --limit aws --diff Playbook.yml
+
 -e 'ansible_port=22'
 
 # https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
