@@ -10,94 +10,13 @@
         port: 22
         bantime: 3600
     security_ssh_port: 22
-    sudoers:
-      - rihards
-  pre_tasks: # Set as pre_task, to set up the user in the beginning
-    - name: Make sure we have a 'code' group
-      group:
-        name: code
-        state: present
-
-    - name: Allow 'code' group to have passwordless sudo
-      lineinfile:
-        dest: /etc/sudoers
-        state: present
-        regexp: '^%code'
-        line: '%code ALL=(ALL) NOPASSWD: ALL'
-        validate: visudo -cf %s
-
-    - name: Add sudoers users to code group
-      user:
-        name: "{{ item }}"
-        shell: /bin/bash
-        groups: code
-        append: yes
-        generate_ssh_key: yes
-        ssh_key_bits: 4096
-        ssh_key_file: .ssh/{{ item }}
-      with_items: "{{ sudoers }}"
-
-    - name: Copy SSH key
-      authorized_key:
-        user: "{{ item }}"
-        state: present
-        key: "{{ lookup('file', '../Secrets/SSH_Keys/key.pub') }}"
-      with_items: "{{ sudoers }}"
-
-    - name: Set permissions on /srv/
-      file: path=/srv/ state=directory owner={{ item }} group={{ item }}
-      with_items: "{{ sudoers }}"
-
-    - name: Set permissions on /var/www
-      file: path=/var/www/ state=directory owner={{ item }} group={{ item }}
-      with_items: "{{ sudoers }}"
-
-    - name: Pip install docker-compose
-      pip:
-        name: docker-compose
-        state: latest
-
-    # TODO: Docker is still not installed in this playbook, so that should be done first
-    # and then this can be uncommented.
-    # - name: Add netdata user to docker group, so netdata can get container names
-    #   user:
-    #     name: netdata
-    #     groups: docker
-
+    app_user: rihards #
+    repo_path: /srv/repo
   roles:
+    - common # User setup, set up auth stuff and clone repository
+    - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
     - tersmitten.fail2ban
     - geerlingguy.security
-
-- name: Set up auth, clone repository
-  hosts: all
-  become: yes
-  become_user: rihards
-  vars:
-    repo_path: /srv/repo
-  tasks:
-    - name: Copy ssh key for cloning
-      copy:
-        src: ../Secrets/SSH_Keys/for_clone
-        dest: /home/{{ ansible_user }}/.ssh/for_clone # ansible_user is the user running ansible-playbook. So -u rihards
-        mode: 0700
-
-    - name: Create .docker directory
-      file: path=/home/{{ ansible_user }}/.docker state=directory # Nice example of "single line"
-
-    - name: Copy Docker auth
-      copy:
-        src: ../Secrets/Docker_auth.json
-        dest: /home/{{ ansible_user }}/.docker/config.json
-        mode: 0500
-
-    - name: Clone/update the git repo
-      git:
-        repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
-        dest: "{{ repo_path }}"
-        depth: 1
-        update: yes
-        accept_hostkey: yes
-        key_file: /home/{{ ansible_user }}/.ssh/for_clone
 
 - name: Bring up services
   hosts: production
@@ -132,7 +51,7 @@
         depth: 1
         update: yes
         accept_hostkey: yes
-        key_file: /home/{{ ansible_user }}/.ssh/for_clone
+        key_file: /home/{{ app_user }}/.ssh/for_clone
       register: git # For the when: git.changed below
 
     - name: Run mkdocs build

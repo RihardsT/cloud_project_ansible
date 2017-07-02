@@ -1,0 +1,58 @@
+---
+# Base setup - User setup, fail2ban, security.
+- name: Make sure we have a 'code' group
+  group:
+    name: code
+    state: present
+
+- name: Allow 'code' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%code'
+    line: '%code ALL=(ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+
+- name: Add sudoers users to code group
+  user:
+    name: "{{ item }}"
+    shell: /bin/bash
+    groups: code
+    append: yes
+    generate_ssh_key: yes
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/{{ item }}
+  with_items: "{{ sudoers }}"
+
+- name: Copy SSH key
+  authorized_key:
+    user: "{{ item }}"
+    state: present
+    key: "{{ lookup('file', '../Secrets/SSH_Keys/key.pub') }}"
+  with_items: "{{ sudoers }}"
+
+- name: Set permissions on /srv/
+  file: path=/srv/ state=directory owner={{ item }} group={{ item }}
+  with_items: "{{ sudoers }}"
+
+- name: Set permissions on /var/www
+  file: path=/var/www/ state=directory owner={{ item }} group={{ item }}
+  with_items: "{{ sudoers }}"
+
+- name: Install pip
+  apt: name=python3-pip
+
+- name: Pip install docker-compose
+  pip:
+    name: docker-compose
+    state: latest
+
+# TODO: Docker is still not installed in this playbook, so that should be done first
+# and then this can be uncommented.
+# - name: Add netdata user to docker group, so netdata can get container names
+#   user:
+#     name: netdata
+#     groups: docker
+
+
+- include: repo.yml
