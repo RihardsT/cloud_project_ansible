@@ -36,11 +36,13 @@
   become_user: rihards
   vars:
     repo_path: /var/www/dok.rudenspavasaris.id.lv/
+    app_user: rihards
   tasks:
     - name: Pip install mkdocs and cinder theme
       pip:
         name: mkdocs,mkdocs-cinder
         state: latest
+        executable: pip3
       become: yes
       become_user: root # This pip install requires root
 

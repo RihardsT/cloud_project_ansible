@@ -46,6 +46,7 @@
   pip:
     name: docker-compose
     state: latest
+    executable: pip3
 
 # TODO: Docker is still not installed in this playbook, so that should be done first
 # and then this can be uncommented.
