@@ -1,0 +1,59 @@
+---
+- block: # block to be executed by root
+  - name: Set permissions on /srv/
+    file: path=/srv/ state=directory owner={{ item }} group={{ item }}
+    with_items: "{{ sudoers }}"
+
+  # Figure out the docker_ubuntu role and let it do this
+  - name: Install pip
+    apt: name=python3-pip
+
+  - name: Pip install docker-compose
+    pip:
+      name: docker-compose
+      state: latest
+      executable: pip3
+
+  # TODO: Docker is still not installed in this playbook, so that should be done first
+  # and then this can be uncommented.
+  # - name: Add netdata user to docker group, so netdata can get container names
+  #   user:
+  #     name: netdata
+  #     groups: docker
+
+  become: yes
+  become_user: root
+
+- name: Copy ssh key for cloning
+  copy:
+    src: ../Secrets/SSH_Keys/for_clone
+    dest: /home/{{ app_user }}/.ssh/for_clone # ansible_user is the user running ansible-playbook. So -u rihards
+    mode: 0700
+
+- name: Create .docker directory
+  file: path=/home/{{ app_user }}/.docker state=directory # Nice example of "single line"
+
+- name: Copy Docker auth
+  copy:
+    src: ../Secrets/Docker_auth.json
+    dest: /home/{{ app_user }}/.docker/config.json
+    mode: 0500
+
+- name: Clone/update the git repo
+  git:
+    repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
+    dest: "{{ repo_path }}"
+    depth: 1
+    update: yes
+    accept_hostkey: yes
+    key_file: /home/{{ app_user }}/.ssh/for_clone
+
+# Docker compose service stuff
+- name: Docker compose up. Bring up the services
+  docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+    project_src: "/srv/repo/DockerGunicornARM/"
+    state: present
+    services: netdata,nginx,web,postgres,vault
+  # environment: # A terrible terrible way to do this. I think loading env file would be a bit better
+  #   POSTGRES_PASSWORD:
+  #   VAULT_TOKEN:
