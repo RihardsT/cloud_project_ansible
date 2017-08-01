@@ -38,7 +38,7 @@
 - name: Set permissions on /var/www
   file: path=/var/www/ state=directory owner={{ item }} group={{ item }}
   with_items: "{{ sudoers }}"
-
+# Figure out the docker_ubuntu role and let it do this
 - name: Install pip
   apt: name=python3-pip
 

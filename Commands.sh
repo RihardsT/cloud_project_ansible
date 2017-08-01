@@ -3,9 +3,10 @@ pip2 install -U packaging; pip2 install -U ansible
 
 ansible-galaxy install --roles-path ./roles tersmitten.fail2ban
 ansible-galaxy install --roles-path ./roles geerlingguy.security
-ansible-galaxy install --roles-path ./roles geerlingguy.firewall
-ansible-galaxy install --roles-path ./roles
+ansible-galaxy install --roles-path ./roles angstwad.docker_ubuntu
+# ansible-galaxy install --roles-path ./roles geerlingguy.firewall
 # ansible-galaxy install --roles-path ./roles angstwad.docker_ubuntu,v2.4.2 # specific version as there were errors otherwise
+ansible-galaxy install --roles-path ./roles
 # ansible-galaxy install amidos.install-docker -p ./roles # for some reason this role failed for me
 
 # ansible-playbook # apply a playbook to servers
@@ -21,7 +22,7 @@ echo "export ANSIBLE_NOCOWS=1" >> ~/.bash_profile
 ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml
 
 # when first setting up, had to use -u root, as it was the default ssh user
-ansible-playbook -i ./Inventory Playbook.yml --limit production -u root
+ansible-playbook -i ./Inventory --limit production -u root --diff Playbook.yml
 
 ansible-playbook -i ./Inventory Raspberry.yml --limit raspberry
 

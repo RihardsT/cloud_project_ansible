@@ -14,9 +14,12 @@
     repo_path: /srv/repo
   roles:
     - common # User setup, set up auth stuff and clone repository
-    - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
-    - tersmitten.fail2ban
     - geerlingguy.security
+    - tersmitten.fail2ban
+    - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
+  # tasks:
+  #   - name: Reload sshd service to load updated security settings
+  #     service: name=sshd state=reloaded
 
 - name: Bring up services
   hosts: production
@@ -28,7 +31,10 @@
       docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
         project_src: "/srv/repo/DockerGunicornARM/"
         state: present
-        services: netdata,nginx,web,postgres
+        services: netdata,nginx,web,postgres,vault
+      # environment: # A terrible terrible way to do this. I think loading env file would be a bit better
+      #   POSTGRES_PASSWORD:
+      #   VAULT_TOKEN:
 
 - name: Update documentation page
   hosts: production
