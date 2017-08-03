@@ -21,14 +21,3 @@
         user: root
         # cron_file: /etc/cron.hourly/ip_change_notify_telegram
         job: "/bin/bash /root/ip_change_telegram.sh"
-
-    # Docker compose service stuff
-    - command: "uname -m"
-      register: architecture
-
-    - name: Docker compose up. Bring up the services
-      docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-        project_src: "/srv/repo/DockerGunicornARM/"
-        state: present
-        services: netdata
-        files: docker-compose_{{ architecture.stdout }}.yml

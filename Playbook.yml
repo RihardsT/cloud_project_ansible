@@ -13,6 +13,7 @@
     app_user: rihards #
     repo_path: /srv/repo
     docs_path: /var/www/dok.rudenspavasaris.id.lv/
+    docker_group_members: [rihards]
   roles:
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security

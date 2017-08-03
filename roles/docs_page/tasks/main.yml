@@ -1,24 +1,27 @@
 ---
+- block:
+  - name: Pip install mkdocs and cinder theme
+    pip:
+      name: mkdocs,mkdocs-cinder
+      state: latest
+      executable: pip3
 
-- name: Pip install mkdocs and cinder theme
-  pip:
-    name: mkdocs,mkdocs-cinder
-    state: latest
-    executable: pip3
+  - name: Set permissions on /var/www
+    file: path=/var/www/ state=directory owner={{ app_user }} group={{ app_user }} recurse=yes
   become: yes
   become_user: root # This pip install requires root
-
-- name: Set permissions on /var/www
-  file: path=/var/www/ state=directory owner={{ app_user }} group={{ app_user }}
 
 - name: Clone/update the git repo
   git:
     repo: 'git@gitlab.com:RihardsT/cloud_project_documentation.git'
-    dest: '{{ repo_path }}'
+    dest: '{{ docs_path }}'
     depth: 1
     update: yes
     accept_hostkey: yes
     key_file: /home/{{ app_user }}/.ssh/for_clone
+    force: yes # TODO: Get rid of this by generating the site somewhere else
+    # and updating nginx config to point to that.
+    # Now this always complains about the folder existing...
   register: git # For the when: git.changed below
 
 - name: Run mkdocs build

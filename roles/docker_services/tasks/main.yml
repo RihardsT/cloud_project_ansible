@@ -1,8 +1,7 @@
 ---
 - block: # block to be executed by root
   - name: Set permissions on /srv/
-    file: path=/srv/ state=directory owner={{ item }} group={{ item }}
-    with_items: "{{ sudoers }}"
+    file: path=/srv/ state=directory owner={{ app_user }} group={{ app_user }}
 
   # Figure out the docker_ubuntu role and let it do this
   - name: Install pip
@@ -39,21 +38,34 @@
     dest: /home/{{ app_user }}/.docker/config.json
     mode: 0500
 
-- name: Clone/update the git repo
-  git:
-    repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
-    dest: "{{ repo_path }}"
-    depth: 1
-    update: yes
-    accept_hostkey: yes
-    key_file: /home/{{ app_user }}/.ssh/for_clone
+# - name: Clone/update the git repo
+#   git:
+#     repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
+#     dest: "{{ repo_path }}"
+#     depth: 1
+#     update: yes
+#     accept_hostkey: yes
+#     key_file: /home/{{ app_user }}/.ssh/for_clone
 
 # Docker compose service stuff
+# - name: Get system architecture
+#   command: "uname -m"
+#   register: architecture
+
 - name: Docker compose up. Bring up the services
   docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
     project_src: "/srv/repo/DockerGunicornARM/"
     state: present
     services: netdata,nginx,web,postgres,vault
+    files: docker-compose_{{ ansible_architecture }}.yml
+    # files: docker-compose_x86_64.yml
+
+# Docker compose service stuff
+# - name: Docker compose up. Bring up the services
+#   docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+#     project_src: "/srv/repo/DockerGunicornARM/"
+#     state: present
+#     services: netdata,nginx,web,postgres,vault
   # environment: # A terrible terrible way to do this. I think loading env file would be a bit better
   #   POSTGRES_PASSWORD:
   #   VAULT_TOKEN:
