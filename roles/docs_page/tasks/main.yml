@@ -32,7 +32,7 @@
 
 - name: Restart Nginx service
   docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-    project_src: "/srv/repo/DockerGunicornARM/"
+    project_src: "/srv/repo/DockerGunicorn/"
     restarted: true
     state: present
     services: nginx

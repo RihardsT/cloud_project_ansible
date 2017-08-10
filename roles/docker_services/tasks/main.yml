@@ -52,7 +52,7 @@
   # Docker compose service stuff
   # - name: Docker compose up. Bring up the services
   #   docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-  #     project_src: "/srv/repo/DockerGunicornARM/"
+  #     project_src: "/srv/repo/DockerGunicorn/"
   #     state: present
   #     services: netdata,nginx,web,postgres,vault
   #     files: docker-compose_{{ ansible_architecture }}.yml
