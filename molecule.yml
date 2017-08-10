@@ -5,7 +5,7 @@ docker:
   containers:
     - name: cloud_project_ansible
       image: ubuntu
-      image_version: 16.04
+      image_version: 17.04
       privileged: true
       port_bindings: {
         "80":"8000", # Guest:Host

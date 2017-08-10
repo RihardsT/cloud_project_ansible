@@ -14,19 +14,16 @@
     repo_path: /srv/repo
     docs_path: /var/www/dok.rudenspavasaris.id.lv/
     docker_group_members: [rihards]
+  vars_files:
+    - vars/gitlab_runner.yml
   roles:
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security
     - tersmitten.fail2ban
     - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
+    - dblaci.ansible-gitlab-runner
+    - docker_services
+    - docs_page
   # tasks:
   #   - name: Reload sshd service to load updated security settings
   #     service: name=sshd state=reloaded
-
-- name: Bring up services
-  hosts: production
-  become: yes
-  become_user: rihards
-  roles:
-    - docker_services
-    - docs_page

@@ -4,6 +4,7 @@ pip2 install -U packaging; pip2 install -U ansible
 ansible-galaxy install --roles-path ./roles tersmitten.fail2ban
 ansible-galaxy install --roles-path ./roles geerlingguy.security
 ansible-galaxy install --roles-path ./roles angstwad.docker_ubuntu
+git clone https://github.com/DBLaci/ansible-gitlab-runner roles/dblaci.ansible-gitlab-runner
 # ansible-galaxy install --roles-path ./roles geerlingguy.firewall
 # ansible-galaxy install --roles-path ./roles angstwad.docker_ubuntu,v2.4.2 # specific version as there were errors otherwise
 ansible-galaxy install --roles-path ./roles
