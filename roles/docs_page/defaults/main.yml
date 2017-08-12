@@ -1,2 +1,3 @@
 ---
 # defaults file for docs_page
+docs_repo_path: /var/www/doks
