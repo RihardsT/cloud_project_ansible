@@ -8,3 +8,8 @@ gitlab_runner_tags:
   - shell
 gitlab_runner_limit: '1'
 gitlab_runner_list: {}
+
+# To set up cron job that triggers nightly pipeline
+# Get these from Gitlab project settings -> Pipelines - Triggers
+gitlab_pipeline_url: https://gitlab.com/api/v4/projects/2646681/trigger/pipeline
+gitlab_pipeline_token: '{{ vault_gitlab_pipeline_token }}'

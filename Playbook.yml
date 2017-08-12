@@ -28,6 +28,14 @@
     - dblaci.ansible-gitlab-runner
     - docker_services
     - docs_page
-  # tasks:
+  tasks:
   #   - name: Reload sshd service to load updated security settings
   #     service: name=sshd state=reloaded
+    - name: Set up cron to trigger nightly docker image build job
+      cron:
+        name: "Trigger Gitlab CI docker image build job"
+        minute: 0
+        hour: 0
+        user: root
+        job: "curl -X POST -F token={{ gitlab_pipeline_token }} -F ref=master {{ gitlab_pipeline_url }}"
+        state: present

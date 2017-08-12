@@ -40,4 +40,5 @@ ansible-playbook -i ./Inventory -u ubuntu --limit aws --diff Playbook.yml
 ### Ansible vault
 ```
 ansible-vault create vars/vault.yml
+ansible-vault edit vars/vault.yml --vault-password-file ../Secrets/ansible_vault_pass
 ```
