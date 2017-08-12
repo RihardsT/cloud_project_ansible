@@ -5,10 +5,13 @@
   become_user: root
   become_method: sudo
   vars:
+    fail2ban_bantime: 604800
+    fail2ban_maxretry: 2
     fail2ban_services:
       - name: sshd
         port: 22
-        bantime: 3600
+        bantime: 604800
+        maxretry: 2
     security_ssh_port: 22
     app_user: rihards #
     repo_path: /srv/repo

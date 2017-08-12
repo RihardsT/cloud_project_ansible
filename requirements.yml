@@ -1,0 +1,8 @@
+# Install a roles from the Ansible Galaxy
+- src: tersmitten.fail2ban
+- src: geerlingguy.security
+- src: angstwad.docker_ubuntu
+
+# From GitHub
+- name: dblaci.ansible-gitlab-runner
+  src: https://github.com/DBLaci/ansible-gitlab-runner

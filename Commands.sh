@@ -1,14 +1,7 @@
 pyenv local 2.7.13 # Because ansible and molecule work better with python2
 pip2 install -U packaging; pip2 install -U ansible
 
-ansible-galaxy install --roles-path ./roles tersmitten.fail2ban
-ansible-galaxy install --roles-path ./roles geerlingguy.security
-ansible-galaxy install --roles-path ./roles angstwad.docker_ubuntu
-git clone https://github.com/DBLaci/ansible-gitlab-runner roles/dblaci.ansible-gitlab-runner
-# ansible-galaxy install --roles-path ./roles geerlingguy.firewall
-# ansible-galaxy install --roles-path ./roles angstwad.docker_ubuntu,v2.4.2 # specific version as there were errors otherwise
-ansible-galaxy install --roles-path ./roles
-# ansible-galaxy install amidos.install-docker -p ./roles # for some reason this role failed for me
+ansible-galaxy install --roles-path ./roles -r requirements.yml
 
 # ansible-playbook # apply a playbook to servers
 # --check # dry run
