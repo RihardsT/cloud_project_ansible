@@ -19,6 +19,7 @@
     docker_group_members: [rihards]
   vars_files:
     - vars/gitlab_runner.yml
+    - vars/vault.yml
   roles:
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security

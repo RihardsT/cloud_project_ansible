@@ -1,0 +1,12 @@
+[production]
+rudenspavasaris.id.lv
+
+[raspberry]
+black-pearl.local
+
+[backend]
+
+[aws]
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3

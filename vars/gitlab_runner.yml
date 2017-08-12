@@ -1,0 +1,10 @@
+gitlab_runner_concurrent: '1'
+gitlab_runner_coordinator_url: 'https://gitlab.com/'
+gitlab_runner_registration_token: '{{ vault_gitlab_runner_token }}'
+gitlab_runner_description: '{{ ansible_architecture }} shell runner'
+gitlab_runner_executor: 'shell'
+gitlab_runner_tags:
+  - arm
+  - shell
+gitlab_runner_limit: '1'
+gitlab_runner_list: {}
