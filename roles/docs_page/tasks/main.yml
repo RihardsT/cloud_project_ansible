@@ -6,8 +6,10 @@
       state: latest
       executable: pip3
 
-  - name: Set permissions on /var/www
-    file: path=/var/www/ state=directory owner={{ app_user }} group={{ app_user }} recurse=yes
+  # - name: Set permissions on {{ docs_path }}
+  #   file: path={{ docs_path }} state=directory owner={{ app_user }} group={{ app_user }}
+  # - name: Set permissions on {{ docs_path }}/site
+  #   file: path={{ docs_path }} state=directory owner={{ app_user }} group={{ app_user }}
   become: yes
   become_user: root # This pip install requires root
 
