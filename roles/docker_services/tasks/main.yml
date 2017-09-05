@@ -4,14 +4,14 @@
     file: path=/srv/ state=directory owner={{ app_user }} group={{ app_user }}
 
   # Figure out the docker_ubuntu role and let it do this
-  - name: Install pip
-    apt: name=python3-pip
+  # - name: Install pip
+  #   apt: name=python3-pip
 
-  - name: Pip install docker-compose
-    pip:
-      name: docker-compose
-      state: latest
-      executable: pip3
+  # - name: Pip install docker-compose
+  #   pip:
+  #     name: docker-compose
+  #     state: latest
+  #     executable: pip3
 
   # TODO: Docker is still not installed in this playbook, so that should be done first
   # and then this can be uncommented.
@@ -48,18 +48,6 @@
       update: yes
       accept_hostkey: yes
       key_file: /home/{{ app_user }}/.ssh/for_clone
-
-  #Docker compose service stuff
-  - name: Docker compose up. Bring up the services
-    docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-      project_src: "/srv/repo/DockerGunicorn/"
-      state: present
-      services: netdata,nginx,web,postgres,vault
-      files: docker-compose_{{ ansible_architecture }}.yml
-    # This still doesn't feel like the best approach.
-    # Would be more avesome to read postgres password from Hashicorp Vault, once it's set up
-    environment:
-      POSTGRES_PASSWORD: '{{ vault_postgres_password }}'
-      VAULT_TOKEN: '{{ vault_hashicorp_vault_token }}'
+      
   become: yes
   become_user: "{{ app_user }}"

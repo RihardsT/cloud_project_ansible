@@ -1,16 +1,31 @@
 ---
-- name: Bring up services
-  hosts: production
+- name: Vault setup
+  hosts: all
   become: yes
-  become_user: rihards
+  become_user: root
   tasks:
-    - name: Copy Vault config
-      copy:
-        src: ../Secrets/vault/
-        dest: /var/docker/vault/
-        mode: 0700
-
-    - name: Docker compose up. Bring up the services
+    # - name: Docker compose up. Bring up vault
+    #   docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+    #     project_src: "/srv/repo/DockerGunicorn/"
+    #     state: present
+    #     services: vault
+    #     files: docker-compose_{{ ansible_architecture }}.yml
+    - name: Docker compose up. Bring up vault
       docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-        project_src: "/var/docker/vault/"
-        state: present
+        project_name: vault
+        definition:
+          version: '2'
+          services:
+            vault:
+              image: vault:latest
+              volumes:
+                - /var/docker/vault/:/vault/file/:rw
+                - ./config/vault/:/vault/config/:rw
+              cap_add:
+                - IPC_LOCK
+              entrypoint: vault server -config=/vault/config/
+
+    # - name: Copy initial tokens to local machine
+    #   fetch:
+    #     src: /var/docker/tokens
+    #     dest: ../Secrets/vault_initial_secrets
