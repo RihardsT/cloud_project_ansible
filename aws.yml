@@ -3,9 +3,5 @@
   become: yes
   become_user: root
   become_method: sudo
-  # gather_facts: false # because python2 not available by default on ubuntu 16.04
-  # # Ansible requires python2, which is not installed by default on Ubuntu Xenial
-  # pre_tasks:
-  #   - raw: sudo apt-get -y install python
   roles:
     - role: angstwad.docker_ubuntu

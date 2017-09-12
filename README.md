@@ -37,6 +37,14 @@ ansible-playbook -i ./Inventory Raspberry.yml --limit raspberry
 ansible-playbook -i ./Inventory -u ubuntu --limit aws --diff Playbook.yml
 ```
 
+With docker:
+```
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
+cd /d && \
+ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml --vault-password-file ../Secrets/ansible_vault_pass'
+```
+
 
 ### Ansible vault
 ```
