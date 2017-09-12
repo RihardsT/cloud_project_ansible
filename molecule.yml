@@ -21,4 +21,5 @@ ansible:
   playbook: Test_playbook.yml
   user: root
   vault-password-file: ../Secrets/ansible_vault_pass
-  
+  raw_env_vars:
+    ansible_python_interpreter: /usr/bin/python3

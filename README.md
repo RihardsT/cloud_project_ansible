@@ -45,6 +45,15 @@ cd /d && \
 ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml --vault-password-file ../Secrets/ansible_vault_pass'
 ```
 
+Molecule with docker:
+```
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -v /var/run/docker.sock:/var/run/docker.sock williamyeh/ansible:alpine3-onbuild sh -c '
+apk add --no-cache docker && \
+pip install molecule==1.25.0 docker && \
+cd /d && \
+molecule list && \
+molecule converge'
+```
 
 ### Ansible vault
 ```
