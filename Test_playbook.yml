@@ -1,15 +1,12 @@
 ---
 - hosts: all
   pre_tasks:
-    # Because ?
-    # - name: Update repository cache and install openssh-server
-    #   apt:
-    #     name: openssh-server
-    #     update_cache: yes
-    # - name: Install other dependencies - curl,git,cron,python-pip
-    #   apt:
-    #     name: curl,git,cron,python-pip
-    #     update_cache: yes
+    # To completely converge the playbook, as ssh daemon settings get changed
+    # curl required for angstwad.docker_ubuntu and is good by itself too
+    - name: Update repository cache and install openssh-server,curl
+      apt:
+        name: openssh-server,curl
+        update_cache: yes
     - name: Output test variable
       command: echo {{ ansible_python_version }}
       register: command_ansible_python

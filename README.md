@@ -37,7 +37,7 @@ ansible-playbook -i ./Inventory Raspberry.yml --limit raspberry
 ansible-playbook -i ./Inventory -u ubuntu --limit aws --diff Playbook.yml
 ```
 
-With docker:
+## Run with docker:
 ```
 docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
 eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
@@ -52,6 +52,7 @@ apk add --no-cache docker && \
 pip install molecule==1.25.0 docker && \
 cd /d && \
 molecule list && \
+molecule create && \
 molecule converge'
 ```
 
