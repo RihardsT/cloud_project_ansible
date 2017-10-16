@@ -39,4 +39,7 @@
     restarted: true
     state: present
     services: nginx
+  environment:
+    POSTGRES_PASSWORD: '{{ vault_postgres_password }}'
+    VAULT_TOKEN: '{{ vault_hashicorp_vault_token }}'
   when: git.changed # do this when new changes have pulled from git

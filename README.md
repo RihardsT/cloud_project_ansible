@@ -14,7 +14,7 @@
 docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
 eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
 cd /d && \
-ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml --vault-password-file ../Secrets/ansible_vault_pass'
+ansible-playbook -i ./Inventory --limit aws -u rihards --diff aws.yml --vault-password-file ../Secrets/ansible_vault_pass'
 ```
 
 Molecule with docker:
@@ -58,6 +58,13 @@ Alternate run commands:
 ```
 ansible-playbook -i ./Inventory Raspberry.yml --limit raspberry
 ansible-playbook -i ./Inventory -u ubuntu --limit aws --diff Playbook.yml
+```
+AWS playbook runs. For first run use ubuntu user
+```
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/aws && \
+cd /d && \
+ansible-playbook -i ./Inventory --limit aws -u ubuntu --diff aws.yml --vault-password-file ../Secrets/ansible_vault_pass'
 ```
 
 ### Ansible vault
