@@ -11,7 +11,7 @@
 
 ### Run with docker:
 ```
-docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
 eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
 cd /d && \
 ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml --vault-password-file ../Secrets/ansible_vault_pass'
@@ -33,6 +33,8 @@ Get required roles, before running anything.
 ```
 # Install required roles
 ansible-galaxy install --roles-path ./roles -r requirements.yml
+# Force role update required roles
+ansible-galaxy install --roles-path ./roles -r requirements.yml --force
 ```
 Because ansible and molecule work better with python2, I was using pyenv. Now I don't care and use docker.
 ```
@@ -48,6 +50,13 @@ ansible-playbook -i ./Inventory --limit production -u root --diff Playbook.yml
 # Typical run for me
 ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml
 ```
+Scaleway first run
+```
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
+ansible-playbook -i ./Inventory --limit production --vault-password-file ../Secrets/ansible_vault_pass -u root --diff Playbook.yml'
+```
+
 Further runs are done now with Ansible vault:
 ```
 ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml --ask-vault-pass
@@ -61,10 +70,22 @@ ansible-playbook -i ./Inventory -u ubuntu --limit aws --diff Playbook.yml
 ```
 AWS playbook runs. For first run use ubuntu user
 ```
-docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
 eval "$(ssh-agent -s)"; ssh-add /root/.ssh/aws && \
-cd /d && \
+ANSIBLE_HOST_KEY_CHECKING=False && \
 ansible-playbook -i ./Inventory --limit aws -u ubuntu --diff aws.yml --vault-password-file ../Secrets/ansible_vault_pass'
+```
+
+AWS playbook runs. After the first one.
+```
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
+ansible-playbook -i ./Inventory --limit aws -u rihards --diff aws.yml --vault-password-file ../Secrets/ansible_vault_pass'
+```
+
+Try to get it working with In terraform:
+```
+docker run -i --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && eval $(ssh-agent -s) && ssh-add /root/.ssh/aws && export ANSIBLE_HOST_KEY_CHECKING=False && ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 -i ${aws_instance.web.public_ip}, -u ubuntu --diff --vault-password-file ../Secrets/ansible_vault_pass aws.yml'
 ```
 
 ### Ansible vault

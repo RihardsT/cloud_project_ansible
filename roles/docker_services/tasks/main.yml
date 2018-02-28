@@ -42,12 +42,13 @@
 
   - name: Clone/update the git repo
     git:
-      repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
+      # repo: 'git@gitlab.com:RihardsT/cloud_project_infrastructure.git'
+      repo: 'git@gitlab.com:RihardsT/hackaton_repo.git'
       dest: "{{ repo_path }}"
       depth: 1
       update: yes
       accept_hostkey: yes
       key_file: /home/{{ app_user }}/.ssh/for_clone
-      
+
   become: yes
   become_user: "{{ app_user }}"

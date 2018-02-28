@@ -7,6 +7,7 @@ black-pearl.local
 [backend]
 
 [aws]
+35.159.28.66
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3

@@ -16,9 +16,9 @@
   #     kernel_pkg_state: present
   #     install_kernel_extras: yes
   #     docker_group_members: [] # Add the user to docker group
-# - include: Playbook.yml
+- include: Playbook.yml
 # - include: Raspberry.yml
-- include: vault.yml
+# - include: vault.yml
 
 # - name: Bring up services
 #   hosts: all

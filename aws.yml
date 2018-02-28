@@ -1,5 +1,5 @@
 ---
-- hosts: aws
+- hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -13,9 +13,11 @@
         maxretry: 2
     security_ssh_port: 22
     app_user: rihards #
+    repo_path: /srv/repo
     docker_group_members: [rihards]
   roles:
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security
     - tersmitten.fail2ban
     - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
+    # - docker_services

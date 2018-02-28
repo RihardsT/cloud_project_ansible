@@ -14,42 +14,44 @@
         maxretry: 2
     security_ssh_port: 22
     app_user: rihards #
-    repo_path: /srv/repo
-    docs_path: /var/www/dok.rudenspavasaris.id.lv/
+    # repo_path: /srv/hackaton
+    # docs_path: /var/www/dok.rudenspavasaris.id.lv/
     docker_group_members: [rihards]
   vars_files:
     - vars/gitlab_runner.yml
-    - vars/vault.yml
+    # - vars/vault.yml
   roles:
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security
     - tersmitten.fail2ban
-    - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
-    # - dblaci.ansible-gitlab-runner
-    - docker_services
-    - docs_page
-  tasks:
-    - name: Start docker daemon # At least for molecule tests
-      service: name=docker state=started
-    - name: Reload sshd service to load updated security settings
-      service: name=sshd state=reloaded
-    #Docker compose service stuff
-    - name: Docker compose up. Bring up the services
-      docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-        project_src: "/srv/repo/DockerGunicorn/"
-        state: present
-        services: netdata,nginx,web,postgres
-        files: docker-compose_{{ ansible_architecture }}.yml
-      # This still doesn't feel like the best approach.
-      # Would be more avesome to read postgres password from Hashicorp Vault, once it's set up
-      environment:
-        POSTGRES_PASSWORD: '{{ vault_postgres_password }}'
-        VAULT_TOKEN: '{{ vault_hashicorp_vault_token }}'
-    - name: Set up cron to trigger nightly docker image build job
-      cron:
-        name: "Trigger Gitlab CI docker image build job"
-        minute: 0
-        hour: 0
-        user: root
-        job: "curl -X POST -F token={{ gitlab_pipeline_token }} -F ref=master {{ gitlab_pipeline_url }}"
-        state: present
+    # - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
+    - angstwad.docker_ubuntu
+    - dblaci.ansible-gitlab-runner
+    # - docker_services
+    # - docs_page
+    # - riemers-gitlab-runner
+  # tasks:
+  #   - name: Start docker daemon # At least for molecule tests
+  #     service: name=docker state=started
+  #   - name: Reload sshd service to load updated security settings
+  #     service: name=sshd state=reloaded
+  #   #Docker compose service stuff
+  #   - name: Docker compose up. Bring up the services
+  #     docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
+  #       project_src: "/srv/repo/DockerGunicorn/"
+  #       state: present
+  #       services: netdata,nginx,web,postgres
+  #       files: docker-compose_{{ ansible_architecture }}.yml
+  #     # This still doesn't feel like the best approach.
+  #     # Would be more avesome to read postgres password from Hashicorp Vault, once it's set up
+  #     environment:
+  #       POSTGRES_PASSWORD: '{{ vault_postgres_password }}'
+  #       VAULT_TOKEN: '{{ vault_hashicorp_vault_token }}'
+  #   - name: Set up cron to trigger nightly docker image build job
+  #     cron:
+  #       name: "Trigger Gitlab CI docker image build job"
+  #       minute: 0
+  #       hour: 0
+  #       user: root
+  #       job: "curl -X POST -F token={{ gitlab_pipeline_token }} -F ref=master {{ gitlab_pipeline_url }}"
+  #       state: present

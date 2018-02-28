@@ -1,5 +1,5 @@
 ---
-# Base setup - User setup, fail2ban, security.
+# Base setup - User setup,
 - name: Make sure we have a 'code' group
   group:
     name: code
@@ -28,5 +28,5 @@
   authorized_key:
     user: "{{ item }}"
     state: present
-    key: "{{ lookup('file', '../Secrets/SSH_Keys/key.pub') }}"
+    key: "{{ lookup('file', '../Secrets/SSH_Keys/scaleway.pub') }}"
   with_items: "{{ sudoers }}"
