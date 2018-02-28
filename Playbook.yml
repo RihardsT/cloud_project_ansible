@@ -19,17 +19,15 @@
     docker_group_members: [rihards]
   vars_files:
     - vars/gitlab_runner.yml
-    # - vars/vault.yml
+    - vars/vault.yml
   roles:
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security
     - tersmitten.fail2ban
-    # - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
-    - angstwad.docker_ubuntu
+    - { role: angstwad.docker_ubuntu, when: ansible_architecture == 'x86_64' }
     - dblaci.ansible-gitlab-runner
     # - docker_services
     # - docs_page
-    # - riemers-gitlab-runner
   # tasks:
   #   - name: Start docker daemon # At least for molecule tests
   #     service: name=docker state=started
