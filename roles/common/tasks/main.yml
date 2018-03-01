@@ -30,3 +30,13 @@
     state: present
     key: "{{ lookup('file', '../Secrets/SSH_Keys/scaleway.pub') }}"
   with_items: "{{ sudoers }}"
+
+# Part that's to be executed by app_user
+- block:
+  - name: Copy ssh key for cloning
+    copy:
+      src: ../Secrets/SSH_Keys/ansible_for_clone
+      dest: /home/{{ app_user }}/.ssh/ansible_for_clone
+      mode: 0600
+  become: yes
+  become_user: "{{ app_user }}"
