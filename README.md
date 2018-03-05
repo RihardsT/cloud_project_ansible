@@ -82,7 +82,7 @@ eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
 ansible-playbook -i ./Inventory --limit aws -u rihards --diff aws.yml --vault-password-file ../Secrets/ansible_vault_pass'
 ```
 
-Try to get it working with In terraform:
+Try to get it working within terraform:
 ```
 docker run -i --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && eval $(ssh-agent -s) && ssh-add /root/.ssh/aws && export ANSIBLE_HOST_KEY_CHECKING=False && ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 -i ${aws_instance.web.public_ip}, -u ubuntu --diff --vault-password-file ../Secrets/ansible_vault_pass aws.yml'
 ```

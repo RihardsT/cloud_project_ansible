@@ -23,7 +23,7 @@
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security
     - tersmitten.fail2ban
-    - dblaci.ansible-gitlab-runner
+    # - dblaci.ansible-gitlab-runner
     # - docker_services
     # - docs_page
   tasks:
@@ -43,15 +43,15 @@
   #     environment:
   #       POSTGRES_PASSWORD: '{{ vault_postgres_password }}'
   #       VAULT_TOKEN: '{{ vault_hashicorp_vault_token }}'
-    - name: Adding gitlab-runner user to docker group
-      user: name=gitlab-runner
-            groups=docker
-            append=yes
-    - name: Set up cron to trigger nightly docker image build job
-      cron:
-        name: "Trigger Gitlab CI docker image build job"
-        minute: 0
-        hour: 0
-        user: root
-        job: "curl -X POST -F token={{ gitlab_pipeline_token }} -F ref=master {{ gitlab_pipeline_url }}"
-        state: present
+    # - name: Adding gitlab-runner user to docker group
+    #   user: name=gitlab-runner
+    #         groups=docker
+    #         append=yes
+    # - name: Set up cron to trigger nightly docker image build job
+    #   cron:
+    #     name: "Trigger Gitlab CI docker image build job"
+    #     minute: 0
+    #     hour: 0
+    #     user: root
+    #     job: "curl -X POST -F token={{ gitlab_pipeline_token }} -F ref=master {{ gitlab_pipeline_url }}"
+    #     state: present
