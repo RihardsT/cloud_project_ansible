@@ -19,7 +19,7 @@
     shell: /bin/bash
     groups: code
     append: yes
-    generate_ssh_key: yes
+    generate_ssh_key: no
     ssh_key_bits: 4096
     ssh_key_file: .ssh/{{ item }}
   with_items: "{{ sudoers }}"
@@ -36,7 +36,7 @@
   - name: Copy ssh key for cloning
     copy:
       src: ../Secrets/SSH_Keys/ansible_for_clone
-      dest: /home/{{ app_user }}/.ssh/ansible_for_clone
+      dest: /home/{{ app_user }}/.ssh/id_rsa
       mode: 0600
   become: yes
   become_user: "{{ app_user }}"
