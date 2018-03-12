@@ -31,6 +31,11 @@
     key: "{{ lookup('file', '../Secrets/SSH_Keys/scaleway.pub') }}"
   with_items: "{{ sudoers }}"
 
+# - name: Install snapd for Ubuntu Live patch. Tried. Had error. Skipping it.
+#   apt:
+#     name: snapd
+#     update_cache: yes
+
 # Part that's to be executed by app_user
 - block:
   - name: Copy ssh key for cloning
