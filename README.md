@@ -34,6 +34,9 @@ Get required roles, before running anything.
 ansible-galaxy install --roles-path ./roles -r requirements.yml
 # Force role update required roles
 ansible-galaxy install --roles-path ./roles -r requirements.yml --force
+
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'ansible-galaxy install --roles-path ./roles -r requirements.yml --force'
+
 ```
 Because ansible and molecule work better with python2, I was using pyenv. Now I don't care and use docker.
 ```
