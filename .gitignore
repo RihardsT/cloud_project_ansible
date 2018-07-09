@@ -8,3 +8,5 @@ __pycache__
 # Molecule test stuff
 .molecule/*
 *.pyc
+
+Inventory

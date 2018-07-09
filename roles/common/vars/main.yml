@@ -1,5 +1,4 @@
 ---
 # vars file for common
 # app_user: rihards
-sudoers: "{{ app_user }}"
 repo_path: /srv/repo

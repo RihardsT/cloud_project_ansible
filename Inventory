@@ -2,12 +2,12 @@
 rudenspavasaris.id.lv
 
 [raspberry]
-black-pearl.local
+superpi.local
 
 [backend]
 
 [aws]
-54.93.197.73
+
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3

@@ -5,14 +5,15 @@
   become_user: root
   become_method: sudo
   vars:
-    fail2ban_bantime: 604800
-    fail2ban_maxretry: 2
-    fail2ban_services:
-      - name: sshd
-        port: 22
-        bantime: 604800
-        maxretry: 2
-    security_ssh_port: 22
+    # fail2ban_bantime: 604800
+    # fail2ban_maxretry: 2
+    # fail2ban_services:
+    #   - name: sshd
+    #     port: 3252
+    #     bantime: 604800
+    #     maxretry: 2
+    security_ssh_port: 3252
+    security_sudoers_passwordless: [rihards]
     app_user: rihards #
     # repo_path: /srv/hackaton
     # docs_path: /var/www/dok.rudenspavasaris.id.lv/
@@ -22,11 +23,11 @@
   roles:
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security
-    - tersmitten.fail2ban
+    - geerlingguy.docker
     # - dblaci.ansible-gitlab-runner
     # - docker_services
     # - docs_page
-  tasks:
+  # tasks:
   #   - name: Start docker daemon # At least for molecule tests
   #     service: name=docker state=started
   #   - name: Reload sshd service to load updated security settings

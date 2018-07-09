@@ -47,10 +47,11 @@ pip2 install -U ansible
 
 ### Run
 ```
-# when first setting up, had to use -u root, as it was the default ssh user
-ansible-playbook -i ./Inventory --limit production -u root --diff Playbook.yml
 # Typical run for me
-ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
+ansible-playbook -i ./Inventory --limit production --vault-password-file ../Secrets/ansible_vault_pass -u rihards --diff Playbook.yml'
+
 ```
 Scaleway first run
 ```

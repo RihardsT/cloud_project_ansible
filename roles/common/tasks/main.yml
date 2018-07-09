@@ -1,35 +1,19 @@
 ---
-# Base setup - User setup,
-- name: Make sure we have a 'code' group
-  group:
-    name: code
-    state: present
-
-- name: Allow 'code' group to have passwordless sudo
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    regexp: '^%code'
-    line: '%code ALL=(ALL) NOPASSWD: ALL'
-    validate: visudo -cf %s
-
-- name: Add sudoers users to code group
+- name: Create app_user
   user:
     name: "{{ item }}"
     shell: /bin/bash
-    groups: code
-    append: yes
     generate_ssh_key: no
     ssh_key_bits: 4096
     ssh_key_file: .ssh/{{ item }}
-  with_items: "{{ sudoers }}"
+  with_items: "{{ app_user }}"
 
 - name: Copy SSH key
   authorized_key:
     user: "{{ item }}"
     state: present
     key: "{{ lookup('file', '../Secrets/SSH_Keys/scaleway.pub') }}"
-  with_items: "{{ sudoers }}"
+  with_items: "{{ app_user }}"
 
 # - name: Install snapd for Ubuntu Live patch. Tried. Had error. Skipping it.
 #   apt:
