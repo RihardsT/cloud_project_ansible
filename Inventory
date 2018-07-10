@@ -1,5 +1,5 @@
 [production]
-rudenspavasaris.id.lv
+rudenspavasaris.id.lv ansible_port=3252 kubernetes_role="master"
 
 [raspberry]
 superpi.local

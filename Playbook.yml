@@ -12,9 +12,14 @@
     #     port: 3252
     #     bantime: 604800
     #     maxretry: 2
+    app_user: rihards #
     security_ssh_port: 3252
     security_sudoers_passwordless: [rihards]
-    app_user: rihards #
+    docker_users: rihards
+    kubernetes_version: 'stable-1.11'
+    kubernetes_allow_pods_on_master: True
+    kubernetes_kubelet_extra_args: "--fail-swap-on=false"
+    kubernetes_apiserver_advertise_address: "163.172.189.83"
     # repo_path: /srv/hackaton
     # docs_path: /var/www/dok.rudenspavasaris.id.lv/
   vars_files:
@@ -24,6 +29,7 @@
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security
     - geerlingguy.docker
+    - geerlingguy.kubernetes
     # - dblaci.ansible-gitlab-runner
     # - docker_services
     # - docs_page

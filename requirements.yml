@@ -1,6 +1,7 @@
 # Install a roles from the Ansible Galaxy
 - src: geerlingguy.security
 - src: geerlingguy.docker
+- src: geerlingguy.kubernetes
 
 # From GitHub
 # - name: dblaci.ansible-gitlab-runner
