@@ -1,4 +1,18 @@
 ---
+- name: Update repository cache and install sudo
+  apt:
+    name: sudo
+    update_cache: yes
+
+- name: Ensure /var/log/auth.log exists for fail2ban
+  copy:
+    content: ""
+    dest: /var/log/auth.log
+    force: no
+    group: root
+    owner: root
+    mode: 0644
+
 - name: Create app_user
   user:
     name: "{{ item }}"
