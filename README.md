@@ -1,30 +1,15 @@
 ## RudensPavasaris cloud project Ansible playbook
-
-### To do:
-- [x] Set up Gitlab runner
-  - [ ] Pull request to https://github.com/DBLaci/ansible-gitlab-runner for ubuntu 17.04 support
-  - [ ] Ensure /var/lib/gitlab-runner is created otherwise runner service doesn't start
-  - [x] Lookup the token from safer place and push the vars to repo then https://docs.ansible.com/ansible/latest/playbooks_lookups.html
-- [ ] Set up Vault
-- [ ]
-
-
-### Run with docker:
+### Run
 ```
 docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
 eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
 ansible-playbook -i ./Inventory --limit production --vault-password-file ../Secrets/ansible_vault_pass -u rihards --diff Playbook.yml'
 ```
-
-Molecule with docker:
+Scaleway first run
 ```
-docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -v /var/run/docker.sock:/var/run/docker.sock williamyeh/ansible:alpine3-onbuild sh -c '
-apk add --no-cache docker && \
-pip install molecule==1.25.0 docker && \
-cd /d && \
-molecule list && \
-molecule create && \
-molecule converge'
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
+ansible-playbook -i ./Inventory --limit production --vault-password-file ../Secrets/ansible_vault_pass -u root --diff Playbook.yml -e ansible_port=22'
 ```
 
 ### Set up
@@ -45,19 +30,9 @@ pip2 install -U packaging;
 pip2 install -U ansible
 ```
 
-### Run
-```
-docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
-eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
-ansible-playbook -i ./Inventory --limit production --vault-password-file ../Secrets/ansible_vault_pass -u rihards --diff Playbook.yml'
-```
-Scaleway first run
-```
-docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
-eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
-ansible-playbook -i ./Inventory --limit production --vault-password-file ../Secrets/ansible_vault_pass -u root --diff Playbook.yml -e ansible_port=22'
-```
 
+
+### Other or old stuff
 Further runs are done now with Ansible vault:
 ```
 ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml --ask-vault-pass
@@ -94,3 +69,27 @@ docker run -i --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/
 ansible-vault create vars/vault.yml
 ansible-vault edit vars/vault.yml --vault-password-file ../Secrets/ansible_vault_pass
 ```
+
+
+
+
+
+### Molecule with docker:
+```
+docker run -ti --rm -v /media/1TB/Other/Code/CloudProject/cloud_project_ansible:/d -v /media/1TB/Other/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -v /var/run/docker.sock:/var/run/docker.sock williamyeh/ansible:alpine3-onbuild sh -c '
+apk add --no-cache docker && \
+pip install molecule==1.25.0 docker && \
+cd /d && \
+molecule list && \
+molecule create && \
+molecule converge'
+```
+
+
+
+### To do:
+- [x] Set up Gitlab runner
+  - [ ] Pull request to https://github.com/DBLaci/ansible-gitlab-runner for ubuntu 17.04 support
+  - [ ] Ensure /var/lib/gitlab-runner is created otherwise runner service doesn't start
+  - [x] Lookup the token from safer place and push the vars to repo then https://docs.ansible.com/ansible/latest/playbooks_lookups.html
+- [ ] Set up Vault
