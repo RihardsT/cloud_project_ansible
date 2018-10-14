@@ -1,13 +1,17 @@
 [production]
-rudenspavasaris.id.lv ansible_port=3013 kubernetes_role="master"
+163.172.162.100 ansible_port=3013 kubernetes_role="master"
 
 [raspberry]
 superpi.local
 
 [backend]
+10.14.148.33 ansible_port=3013
 
 [aws]
 
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
+
+[backend:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p rihards@51.158.66.93 -p 3013"'

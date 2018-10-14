@@ -1,6 +1,6 @@
 ---
 - name: Base setup - User setup, fail2ban, security.
-  hosts: all
+  hosts: production
   become: yes
   become_user: root
   become_method: sudo
@@ -16,12 +16,16 @@
     security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
     docker_users: rihards
-    docker_apt_arch: arm64
-    kubernetes_version: 'stable-1.11'
+    # docker_apt_arch: arm64
+    docker_apt_arch: amd64
+    kubernetes_role: master
+    kubernetes_version: 'stable-1.12'
     kubernetes_pod_network_cidr: "10.244.0.0/16"
     kubernetes_allow_pods_on_master: True
     kubernetes_kubelet_extra_args: "--fail-swap-on=false"
-    kubernetes_apiserver_advertise_address: "163.172.189.83"
+    kubernetes_apiserver_advertise_address: "163.172.162.100"
+    kubernetes_kubeadm_init_extra_opts: "--apiserver-cert-extra-sans rudenspavasaris.id.lv"
+    kuberenetes_debug: true
     # repo_path: /srv/hackaton
     # docs_path: /var/www/dok.rudenspavasaris.id.lv/
   vars_files:
@@ -64,3 +68,17 @@
   #       user: root
   #       job: "curl -X POST -F token={{ gitlab_pipeline_token }} -F ref=master {{ gitlab_pipeline_url }}"
   #       state: present
+- name: Backend setup
+  hosts: backend
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    app_user: rihards
+    security_ssh_port: 3013
+    security_sudoers_passwordless: [rihards]
+    docker_users: rihards
+  roles:
+    - common # User setup, set up auth stuff and clone repository
+    - geerlingguy.security
+    - geerlingguy.docker

@@ -1,4 +1,5 @@
 ---
+# sudo is not installed on the new cloud distribution of Ubuntu
 - name: Update repository cache and install sudo
   apt:
     name: sudo
@@ -42,4 +43,5 @@
       dest: /home/{{ app_user }}/.ssh/id_rsa
       mode: 0600
   become: yes
+  become_method: su
   become_user: "{{ app_user }}"
