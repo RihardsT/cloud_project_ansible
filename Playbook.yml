@@ -19,13 +19,13 @@
     # docker_apt_arch: arm64
     docker_apt_arch: amd64
     kubernetes_role: master
-    kubernetes_version: 'stable-1.12'
+    kubernetes_version: '1.12'
     kubernetes_pod_network_cidr: "10.244.0.0/16"
     kubernetes_allow_pods_on_master: True
     kubernetes_kubelet_extra_args: "--fail-swap-on=false"
+    kubernetes_ignore_preflight_errors: "--fail-swap-on=false"
     kubernetes_apiserver_advertise_address: "163.172.162.100"
     kubernetes_kubeadm_init_extra_opts: "--apiserver-cert-extra-sans rudenspavasaris.id.lv"
-    kuberenetes_debug: true
     # repo_path: /srv/hackaton
     # docs_path: /var/www/dok.rudenspavasaris.id.lv/
   vars_files:
