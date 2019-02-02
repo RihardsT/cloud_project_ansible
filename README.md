@@ -53,7 +53,11 @@ ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.ym
 
 Alternate run commands:
 ```
-ansible-playbook -i ./Inventory Raspberry.yml --limit raspberry
+docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/raspberrypi && \
+ansible-playbook -i ./Inventory --limit raspberry --vault-password-file ../Secrets/ansible_vault_pass -u rihards --diff Raspberry.yml'
+
+
 ansible-playbook -i ./Inventory -u ubuntu --limit aws --diff Playbook.yml
 ```
 AWS playbook runs. For first run use ubuntu user

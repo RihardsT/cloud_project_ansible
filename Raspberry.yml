@@ -1,23 +1,37 @@
----
-- hosts: all
+- name: Base setup - User setup, fail2ban, security.
+  hosts: raspberry
   become: yes
   become_user: root
   become_method: sudo
   vars:
-    repo_path: /srv/repo
-  tasks:
-    # Set up IP change notification to telegram
-    - name: Copy IP check script, that notifies to telegram
-      copy:
-        src: ../Secrets/ip_change_telegram.sh
-        dest: /root/ip_change_telegram.sh
-        owner: root
-        group: root
-        mode: 0700
-    - name: set up cronjob to notify of IP change
-      cron:
-        name: "ip_change_notify_telegram"
-        minute: "*/30"
-        user: root
-        # cron_file: /etc/cron.hourly/ip_change_notify_telegram
-        job: "/bin/bash /root/ip_change_telegram.sh"
+    app_user: rihards
+    security_ssh_port: 3471
+    security_sudoers_passwordless: [rihards]
+    docker_users: [rihards]
+    docker_apt_arch: amd64
+  roles:
+    - common # User setup, set up auth stuff and clone repository
+    - geerlingguy.security
+  # tasks:
+  #   sudo apt-get remove python-pip -y && \
+  #   sudo apt-get update
+  #   sudo apt-get install python3-pip -y && \
+  #   sudo pip3 install picamera rpi.gpio
+
+
+
+  #   # Set up IP change notification to telegram
+  #   - name: Copy IP check script, that notifies to telegram
+  #     copy:
+  #       src: ../Secrets/ip_change_telegram.sh
+  #       dest: /root/ip_change_telegram.sh
+  #       owner: root
+  #       group: root
+  #       mode: 0700
+  #   - name: set up cronjob to notify of IP change
+  #     cron:
+  #       name: "ip_change_notify_telegram"
+  #       minute: "*/30"
+  #       user: root
+  #       # cron_file: /etc/cron.hourly/ip_change_notify_telegram
+  #       job: "/bin/bash /root/ip_change_telegram.sh"
