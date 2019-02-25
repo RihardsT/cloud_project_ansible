@@ -2,10 +2,10 @@
 163.172.162.100 ansible_port=3013 kubernetes_role="master"
 
 [raspberry]
-superpi.local
+192.168.1.7 ansible_port=3471
 
 [backend]
-10.14.148.33 ansible_port=3013
+10.17.44.11 ansible_port=3013
 
 [aws]
 
@@ -14,4 +14,4 @@ superpi.local
 ansible_python_interpreter=/usr/bin/python3
 
 [backend:vars]
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p rihards@51.158.66.93 -p 3013"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p rihards@163.172.162.100 -p 3013"'

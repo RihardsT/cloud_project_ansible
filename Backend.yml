@@ -1,0 +1,21 @@
+- name: Backend setup
+  hosts: backend
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    app_user: rihards
+    security_ssh_port: 3013
+    security_sudoers_passwordless: [rihards]
+    docker_users: [rihards]
+    kubernetes_role: 'node'
+    kubernetes_version: '1.12'
+    kubernetes_kubelet_extra_args: "--fail-swap-on=false"
+    kubernetes_ignore_preflight_errors: "all"
+  vars_files:
+    - vars/kubernetes.yml
+  roles:
+    # - common # User setup, set up auth stuff and clone repository
+    # - geerlingguy.security
+    # - geerlingguy.docker
+    - geerlingguy.kubernetes

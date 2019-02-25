@@ -1,3 +1,4 @@
+---
 - name: Base setup - User setup, fail2ban, security.
   hosts: raspberry
   become: yes
@@ -7,16 +8,22 @@
     app_user: rihards
     security_ssh_port: 3471
     security_sudoers_passwordless: [rihards]
-    docker_users: [rihards]
-    docker_apt_arch: amd64
   roles:
     - common # User setup, set up auth stuff and clone repository
     - geerlingguy.security
-  # tasks:
-  #   sudo apt-get remove python-pip -y && \
-  #   sudo apt-get update
-  #   sudo apt-get install python3-pip -y && \
-  #   sudo pip3 install picamera rpi.gpio
+  tasks:
+    - name: Remove python-pip
+      apt:
+        name: python-pip
+        state: absent
+    - name: Install python3-pip
+      apt:
+        name: python3-pip
+        update_cache: yes
+    - pip:
+        name:
+          - picamera
+          - rpi.gpio
 
 
 

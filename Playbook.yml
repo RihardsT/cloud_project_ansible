@@ -18,11 +18,11 @@
     docker_users: [rihards]
     docker_apt_arch: amd64
     kubernetes_role: master
-    kubernetes_version: '1.12'
-    kubernetes_pod_network_cidr: "10.244.0.0/16"
-    kubernetes_allow_pods_on_master: True
+    kubernetes_version: '1.13'
     kubernetes_kubelet_extra_args: "--fail-swap-on=false"
     kubernetes_ignore_preflight_errors: "all"
+    kubernetes_pod_network_cidr: "10.244.0.0/16"
+    kubernetes_allow_pods_on_master: True
     kubernetes_apiserver_advertise_address: "163.172.162.100"
     kubernetes_kubeadm_init_extra_opts: "--apiserver-cert-extra-sans rudenspavasaris.id.lv"
   vars_files:
@@ -65,17 +65,3 @@
   #       user: root
   #       job: "curl -X POST -F token={{ gitlab_pipeline_token }} -F ref=master {{ gitlab_pipeline_url }}"
   #       state: present
-- name: Backend setup
-  hosts: backend
-  become: yes
-  become_user: root
-  become_method: sudo
-  vars:
-    app_user: rihards
-    security_ssh_port: 3013
-    security_sudoers_passwordless: [rihards]
-    docker_users: rihards
-  roles:
-    - common # User setup, set up auth stuff and clone repository
-    - geerlingguy.security
-    - geerlingguy.docker

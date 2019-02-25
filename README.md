@@ -21,7 +21,7 @@ Backend first run:
 ```
 docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
 eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
-ansible-playbook -i ./Inventory --limit backend --vault-password-file ../Secrets/ansible_vault_pass -u root --diff Playbook.yml -e ansible_port=22'
+ansible-playbook -i ./Inventory --limit backend -u root --diff Backend.yml -e ansible_port=22'
 ```
 
 ### Set up
@@ -53,8 +53,13 @@ ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.ym
 
 Alternate run commands:
 ```
+# Raspberry first:
+docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c'
+ansible-playbook -i ./Inventory --limit raspberry --vault-password-file ../Secrets/ansible_vault_pass -u rihards --diff Raspberry.yml -e ansible_port=22 --ask-pass'
+
+# Raspberry next runs:
 docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
-eval "$(ssh-agent -s)"; ssh-add /root/.ssh/raspberrypi && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/raspberry && \
 ansible-playbook -i ./Inventory --limit raspberry --vault-password-file ../Secrets/ansible_vault_pass -u rihards --diff Raspberry.yml'
 
 

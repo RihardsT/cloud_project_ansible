@@ -1,9 +1,9 @@
 ---
 # sudo is not installed on the new cloud distribution of Ubuntu
-- name: Update repository cache and install sudo
-  apt:
-    name: sudo
-    update_cache: yes
+# - name: Update repository cache and install sudo
+#   apt:
+#     name: sudo
+#     update_cache: yes
 
 - name: Ensure /var/log/auth.log exists for fail2ban
   copy:
@@ -29,11 +29,6 @@
     state: present
     key: "{{ lookup('file', '../Secrets/SSH_Keys/scaleway.pub') }}"
   with_items: "{{ app_user }}"
-
-# - name: Install snapd for Ubuntu Live patch. Tried. Had error. Skipping it.
-#   apt:
-#     name: snapd
-#     update_cache: yes
 
 # Part that's to be executed by app_user
 - block:
