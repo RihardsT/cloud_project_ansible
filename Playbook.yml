@@ -5,20 +5,13 @@
   become_user: root
   become_method: sudo
   vars:
-    # fail2ban_bantime: 604800
-    # fail2ban_maxretry: 2
-    # fail2ban_services:
-    #   - name: sshd
-    #     port: 3252
-    #     bantime: 604800
-    #     maxretry: 2
-    app_user: rihards #
+    app_user: rihards
     security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
     docker_users: [rihards]
     docker_apt_arch: amd64
     kubernetes_role: master
-    kubernetes_version: '1.13'
+    kubernetes_version: '1.14'
     kubernetes_kubelet_extra_args: "--fail-swap-on=false"
     kubernetes_ignore_preflight_errors: "all"
     kubernetes_pod_network_cidr: "10.244.0.0/16"
@@ -29,39 +22,10 @@
     - vars/gitlab_runner.yml
     - vars/vault.yml
   roles:
-    - common # User setup, set up auth stuff and clone repository
+    - common # User setup, set up auth stuff
     - geerlingguy.security
     - geerlingguy.docker
     - geerlingguy.kubernetes
-    # - dblaci.ansible-gitlab-runner
-    # - docker_services
-    # - docs_page
   # tasks:
-  #   - name: Start docker daemon # At least for molecule tests
-  #     service: name=docker state=started
   #   - name: Reload sshd service to load updated security settings
   #     service: name=sshd state=reloaded
-  #   #Docker compose service stuff
-  #   - name: Docker compose up. Bring up the services
-  #     docker_service: # https://docs.ansible.com/ansible/docker_service_module.html
-  #       project_src: "/srv/repo/DockerGunicorn/"
-  #       state: present
-  #       services: netdata,nginx,web,postgres
-  #       files: docker-compose_{{ ansible_architecture }}.yml
-  #     # This still doesn't feel like the best approach.
-  #     # Would be more avesome to read postgres password from Hashicorp Vault, once it's set up
-  #     environment:
-  #       POSTGRES_PASSWORD: '{{ vault_postgres_password }}'
-  #       VAULT_TOKEN: '{{ vault_hashicorp_vault_token }}'
-  #   # - name: Adding gitlab-runner user to docker group
-  #     user: name=gitlab-runner
-  #           groups=docker
-  #           append=yes
-  #   - name: Set up cron to trigger nightly docker image build job
-  #     cron:
-  #       name: "Trigger Gitlab CI docker image build job"
-  #       minute: 0
-  #       hour: 0
-  #       user: root
-  #       job: "curl -X POST -F token={{ gitlab_pipeline_token }} -F ref=master {{ gitlab_pipeline_url }}"
-  #       state: present
