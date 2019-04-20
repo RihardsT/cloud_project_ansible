@@ -16,13 +16,25 @@
     kubernetes_ignore_preflight_errors: "all"
     kubernetes_pod_network_cidr: "10.244.0.0/16"
     kubernetes_allow_pods_on_master: True
-    kubernetes_apiserver_advertise_address: "163.172.162.100"
+    kubernetes_apiserver_advertise_address: "95.216.206.226"
     kubernetes_kubeadm_init_extra_opts: "--apiserver-cert-extra-sans rudenspavasaris.id.lv"
-  vars_files:
-    - vars/gitlab_runner.yml
-    - vars/vault.yml
+  pre_tasks:
+    - name: Create app_user
+      user:
+        name: "{{ item }}"
+        shell: /bin/bash
+        generate_ssh_key: no
+        ssh_key_bits: 4096
+        ssh_key_file: .ssh/{{ item }}
+      with_items: "{{ app_user }}"
+
+    - name: Copy SSH key
+      authorized_key:
+        user: "{{ item }}"
+        state: present
+        key: "{{ lookup('file', '../Secrets/SSH_Keys/ssh_key.pub') }}"
+      with_items: "{{ app_user }}"
   roles:
-    - common # User setup, set up auth stuff
     - geerlingguy.security
     - geerlingguy.docker
     - geerlingguy.kubernetes
