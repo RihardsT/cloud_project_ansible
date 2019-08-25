@@ -1,6 +1,6 @@
 ---
 - name: Base setup - User setup, fail2ban, security.
-  hosts: production
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -10,22 +10,17 @@
     security_sudoers_passwordless: [rihards]
     docker_users: [rihards]
     docker_apt_arch: amd64
-    kubernetes_role: master
+    kubernetes_role: node
     kubernetes_version: '1.15'
     kubernetes_kubelet_extra_args: "--fail-swap-on=false"
     kubernetes_ignore_preflight_errors: "all"
-    kubernetes_pod_network_cidr: "10.244.0.0/16"
-    kubernetes_allow_pods_on_master: True
-    kubernetes_apiserver_advertise_address: "95.216.206.226"
-    kubernetes_kubeadm_init_extra_opts: "--apiserver-cert-extra-sans rudenspavasaris.id.lv"
+    kubernetes_join_command: "kubeadm join 95.216.206.226:6443 --token kk4z8h.bmx2khs7jqmc1qwq --discovery-token-ca-cert-hash sha256:3c458c230ff5ef3f7fa9d21a1cd408b8f9e19b82b3aa103121cd610f715d3950 --ignore-preflight-errors=all"
   pre_tasks:
     - name: Create app_user
       user:
         name: "{{ item }}"
         shell: /bin/bash
         generate_ssh_key: no
-        ssh_key_bits: 4096
-        ssh_key_file: .ssh/{{ item }}
       with_items: "{{ app_user }}"
     - name: Copy SSH key
       authorized_key:
