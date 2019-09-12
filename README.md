@@ -2,7 +2,7 @@
 ### Run
 ```
 docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
-eval "$(ssh-agent -s)"; ssh-add /root/.ssh/scaleway && \
+eval "$(ssh-agent -s)"; ssh-add /root/.ssh/hetzner && \
 ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml'
 ```
 
