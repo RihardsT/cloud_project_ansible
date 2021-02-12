@@ -1,0 +1,23 @@
+- name: Install pip and utilties
+  apt:
+    pkg:
+      - python3-pip
+      - net-tools
+      - mlocate
+- name: Install s3cmd
+  pip:
+    name:
+      - s3cmd
+- name: s3cfg
+  copy:
+    src: /home/rihards/Code/cloud_project/cloud_project_ansible/files/s3cfg
+    dest: /home/rihards/.s3cfg
+    owner: rihards
+    group: rihards
+    mode: '0600'
+  no_log: True
+- name: Create a data directory
+  file:
+    path: /data/
+    state: directory
+    mode: '0755'

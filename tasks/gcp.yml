@@ -1,0 +1,51 @@
+- name: Create a data directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+    mode: '0755'
+  loop:
+    - /data/gitlab/data
+    - /data/gitlab/config
+    - /data/gitlab/logs
+- name: Check that /disk_formatted exists
+  stat:
+    path: /disk_formatted
+  register: result
+- name: Format disk
+  shell: |
+    fdisk /dev/nvme0n1 <<EOF
+    n
+    p
+    1
+
+
+    w
+    EOF
+    yes y | mkfs.ext4 /dev/nvme0n1
+    echo "/dev/nvme0n1 /data ext4 defaults 0 0" >> /etc/fstab
+    mount -a
+    touch /disk_formatted
+  when: not result.stat.exists
+- name: Check that dummy_ip exists
+  stat:
+    path: /dummy_ip
+  register: dummy_ip
+- name: Add dummy IP
+  shell: |
+    modprobe dummy
+    lsmod | grep dummy
+    ip link add eth10 type dummy
+    ip addr add "{{ node_ip_address }}"/24 brd + dev eth10 label eth10:0
+    touch /dummy_ip
+  when: not dummy_ip.stat.exists
+
+# Add dummy ip
+# sudo modprobe dummy
+# sudo lsmod | grep dummy
+# sudo ip link add eth10 type dummy
+# sudo ip addr add 34.91.22.67/24 brd + dev eth10 label eth10:0
+# #### Remove
+# sudo ip addr del 192.168.100.199/24 brd + dev eth10 label eth10:0
+# sudo ip link delete eth10 type dummy
+# sudo rmmod dummy

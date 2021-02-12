@@ -1,0 +1,16 @@
+- name: Create app_user
+  user:
+    name: "{{ item }}"
+    shell: /bin/bash
+    generate_ssh_key: no
+  with_items: "{{ app_user }}"
+- name: Copy SSH key
+  authorized_key:
+    user: "{{ item }}"
+    state: present
+    key: "{{ lookup('file', '/home/rihards/Code/cloud_project/Secrets/SSH_Keys/ssh_key.pub') }}"
+  with_items: "{{ app_user }}"
+- name: Upgrade packages
+  apt:
+    upgrade: yes
+    update_cache: yes

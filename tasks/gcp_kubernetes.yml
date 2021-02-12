@@ -1,0 +1,23 @@
+vars:
+  kubernetes_version: '1.20'
+  ### Kubernetes node
+  # kubernetes_role: node
+  # kubernetes_join_command: "KUBERNETES_JOIN_COMMAND"
+  # kubernetes_kubelet_extra_args: "--node-ip={{ node_ip_address }}"
+  ### Kubernetes Master
+  kubernetes_role: master
+  kubernetes_ignore_preflight_errors: "all"
+  kubernetes_pod_network_cidr: "10.244.0.0/16"
+  kubernetes_allow_pods_on_master: True
+  kubernetes_apiserver_advertise_address: "{{ node_ip_address }}"
+  kubernetes_kubeadm_init_extra_opts: "--apiserver-cert-extra-sans gcp.rudenspavasaris.id.lv"
+roles:
+  - geerlingguy.kubernetes
+tasks:
+  - name: Copy kube config
+    shell: |
+      mkdir /home/rihards/.kube
+      sudo cp /etc/kubernetes/admin.conf /home/rihards/.kube/config
+      sudo chown $(id -u):$(id -g) /home/rihards/.kube/config
+      echo "source <(kubectl completion bash)" >> /home/rihards/.bashrc
+      chown rihards:rihards /home/rihards/.kube/config

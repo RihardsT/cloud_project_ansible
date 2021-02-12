@@ -1,0 +1,13 @@
+- name: Podman sources list
+  copy:
+    dest: /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+    content: "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_facts['distribution_version'] }}/ /"
+- name: Add Podman APT key
+  apt_key:
+    url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_facts['distribution_version'] }}/Release.key"
+    state: present
+- name: Install Podman
+  apt:
+    pkg:
+      - podman
+    update_cache: yes

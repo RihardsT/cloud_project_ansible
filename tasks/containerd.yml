@@ -1,0 +1,44 @@
+##### Containerd
+- modprobe:
+    name: overlay
+    state: present
+- modprobe:
+    name: br_netfilter
+    state: present
+- sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
+    reload: yes
+- sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: '1'
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
+    reload: yes
+- sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: '1'
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
+    reload: yes
+- name: containerd conf
+  copy:
+    src: /home/rihards/Code/cloud_project/cloud_project_ansible/files/containerd.conf
+    dest: /etc/modules-load.d/containerd.conf
+- name: containerd
+  apt:
+    pkg:
+      - containerd
+- name: Create a data directory
+  file:
+    path: /etc/containerd
+    state: directory
+- name: Check that /etc/containerd/config.toml exists
+  stat:
+    path: /etc/containerd/config.toml
+  register: result
+- name: containerd config default
+  shell: |
+    containerd config default | tee /etc/containerd/config.toml
