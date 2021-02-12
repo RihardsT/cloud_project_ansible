@@ -5,16 +5,14 @@
   become_user: root
   become_method: sudo
   vars:
-    app_user: rihards
+    app_user: [rihards]
     security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
     docker_users: [rihards]
     docker_apt_arch: amd64
+    kubernetes_version: '1.20'
     kubernetes_role: node
-    kubernetes_version: '1.15'
-    kubernetes_kubelet_extra_args: "--fail-swap-on=false"
-    kubernetes_ignore_preflight_errors: "all"
-    kubernetes_join_command: "KUBERNETES_JOIN_COMMAND --ignore-preflight-errors=all"
+    kubernetes_join_command: "KUBERNETES_JOIN_COMMAND"
   pre_tasks:
     - name: Create app_user
       user:
@@ -26,14 +24,16 @@
       authorized_key:
         user: "{{ item }}"
         state: present
-        key: "{{ lookup('file', '../Secrets/SSH_Keys/ssh_key.pub') }}"
+        key: "{{ lookup('file', '/home/rihards/Code/cloud_project/Secrets/SSH_Keys/ssh_key.pub') }}"
       with_items: "{{ app_user }}"
-  roles:
-    - geerlingguy.security
-    - geerlingguy.docker
-    - geerlingguy.kubernetes
-  tasks:
     - name: Upgrade packages
       apt:
         upgrade: yes
         update_cache: yes
+  roles:
+    - geerlingguy.security
+    - geerlingguy.docker
+    - geerlingguy.kubernetes
+
+### Baremetal
+# curl, python3-distutils

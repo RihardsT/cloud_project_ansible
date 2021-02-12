@@ -11,7 +11,7 @@
     docker_users: [rihards]
     docker_apt_arch: amd64
     kubernetes_role: master
-    kubernetes_version: '1.15'
+    kubernetes_version: '1.20'
     kubernetes_kubelet_extra_args: "--fail-swap-on=false"
     kubernetes_ignore_preflight_errors: "all"
     kubernetes_pod_network_cidr: "10.244.0.0/16"
@@ -33,12 +33,11 @@
         state: present
         key: "{{ lookup('file', '../Secrets/SSH_Keys/ssh_key.pub') }}"
       with_items: "{{ app_user }}"
-  roles:
-    - geerlingguy.security
-    - geerlingguy.docker
-    - geerlingguy.kubernetes
-  tasks:
     - name: Upgrade packages
       apt:
         upgrade: yes
         update_cache: yes
+  roles:
+    - geerlingguy.security
+    - geerlingguy.docker
+    - geerlingguy.kubernetes

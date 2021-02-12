@@ -1,4 +1,7 @@
 ## RudensPavasaris cloud project Ansible playbook
+export ANSIBLE_HOST_KEY_CHECKING=False
+export ANSIBLE_SSH_RETRIES=5
+
 ### Run
 ```
 docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
@@ -16,12 +19,15 @@ ansible-playbook -i ./Inventory --limit production -u root --diff Playbook.yml -
 ### Set up
 Get required roles, before running anything.
 ```
+python3 -m pip install --user ansible
+python3 -m site &> /dev/null && PATH="$PATH:`python3 -m site --user-base`/bin"
+
 # Install required roles
 ansible-galaxy install --roles-path ./roles -r requirements.yml
 # Force role update required roles
 ansible-galaxy install --roles-path ./roles -r requirements.yml --force
 
-docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -w /d williamyeh/ansible:alpine3-onbuild sh -c 'ansible-galaxy install --roles-path ./roles -r requirements.yml --force'
+podman run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -w /d williamyeh/ansible:alpine3-onbuild sh -c 'ansible-galaxy install --roles-path ./roles -r requirements.yml --force'
 
 ```
 
@@ -44,3 +50,6 @@ ansible-playbook -i ./Inventory --limit raspberry -u rihards --diff Raspberry.ym
 ansible-vault create vars/vault.yml
 ansible-vault edit vars/vault.yml --vault-password-file /Secrets/ansible_vault_pass
 ```
+
+#### ansible.cfg
+display_skipped_hosts = false
