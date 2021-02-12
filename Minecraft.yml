@@ -1,0 +1,35 @@
+---
+- name: Base setup - User setup, fail2ban, security.
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    app_user: [rihards]
+    # security_ssh_port: 3013
+    security_sudoers_passwordless: [rihards]
+    docker_apt_arch: amd64
+    kubernetes_role: node
+    kubernetes_version: '1.20'
+    kubernetes_join_command: "KUBERNETES_JOIN_COMMAND"
+  pre_tasks:
+    - include: ./tasks/app_user.yml
+    - include: ./tasks/s3cfg.yml
+    - include: ./tasks/containerd.yml
+    - include: ./tasks/restore_minecraft.yml
+  roles:
+    - geerlingguy.security
+    - geerlingguy.kubernetes
+###
+    # - name: Create Minecraft server
+    #   community.general.docker_container:
+    #     name: minecraft
+    #     image: itzg/minecraft-server
+    #     state: stopped
+    #     env:
+    #       EULA: "true"
+    #       MEMORY: "4G"
+    #     volumes:
+    #       /data/minecraft_data:/data
+    #     published_ports:
+    #       - '25565:25565'

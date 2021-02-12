@@ -1,0 +1,34 @@
+---
+- name: Base setup - User setup, fail2ban, security.
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    app_user: [rihards]
+    security_ssh_port: 3013
+    security_sudoers_passwordless: [rihards]
+  pre_tasks:
+    - include: ./tasks/app_user.yml
+    - include: ./tasks/gcp.yml
+    - include: ./tasks/s3cfg.yml
+    - include: ./tasks/containerd.yml
+    - include: ./tasks/gcp_kubernetes.yml
+  #   - include: ./tasks/podman.yml
+  roles:
+    - geerlingguy.security
+  # tasks:
+  #   - name: Create Gitlab container
+  #     containers.podman.podman_container:
+  #       name: gitlab
+  #       image: docker.io/gitlab/gitlab-ce:latest
+  #       volumes:
+  #         - /data/gitlab/config:/etc/gitlab
+  #         - /data/gitlab/logs:/var/log/gitlab
+  #         - /data/gitlab/data:/var/opt/gitlab
+  #       publish:
+  #         - "443:443"
+  #         - "80:80"
+  #         - "4422:22"
+  #       hostname: gitlab.rudenspavasaris.id.lv
+  #       restart_policy: always
