@@ -1,4 +1,4 @@
-- name: Install pip and utilties
+- name: Install pip and utilities
   apt:
     pkg:
       - python3-pip
@@ -11,10 +11,13 @@
 - name: s3cfg
   copy:
     src: /home/rihards/Code/cloud_project/cloud_project_ansible/files/s3cfg
-    dest: /home/rihards/.s3cfg
+    dest: "{{ item }}"
     owner: rihards
     group: rihards
     mode: '0600'
+  loop:
+    - /home/rihards/.s3cfg
+    - /root/.s3cfg
   no_log: True
 - name: Create a data directory
   file:

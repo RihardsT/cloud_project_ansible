@@ -2,7 +2,7 @@
   stat:
     path: /data/minecraft_data
   register: result
-- name: Add dummy IP
+- name: Restore Minecraft
   shell: |
     backup_timestamp=$(s3cmd ls s3://rudenspavasaris/minecraft | awk '{print $4}' | grep -oP "(?<=minecraft_).*(?=.tar)" | sort | tail -n 1)
     s3cmd get s3://rudenspavasaris/minecraft_${backup_timestamp}.tar
