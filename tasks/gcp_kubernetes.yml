@@ -2,8 +2,9 @@ vars:
   kubernetes_version: '1.20'
   ### Kubernetes node
   # kubernetes_role: node
-  # kubernetes_join_command: "KUBERNETES_JOIN_COMMAND"
   # kubernetes_kubelet_extra_args: "--node-ip={{ node_ip_address }}"
+# vars_files:
+#   - vars/kubernetes.yml
   ### Kubernetes Master
   kubernetes_role: master
   kubernetes_ignore_preflight_errors: "all"

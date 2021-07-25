@@ -8,3 +8,9 @@
     s3cmd get s3://rudenspavasaris/minecraft_${backup_timestamp}.tar
     sudo tar -xzf "minecraft_${backup_timestamp}.tar" -C /
   when: not result.stat.exists
+- name: Backup script
+  copy:
+    src: /home/rihards/Code/cloud_project/cloud_project_ansible/files/minecraft_backup.sh
+    dest: /data/minecraft_backup.sh
+    mode: 0755
+    owner: rihards

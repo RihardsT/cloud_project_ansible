@@ -6,17 +6,23 @@
   become_method: sudo
   vars:
     app_user: [rihards]
-    security_ssh_port: 3013
+    # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
+    kubernetes_version: '1.21'
+    kubernetes_role: node
+    kubernetes_kubelet_extra_args: "--node-ip={{ node_ip_address }}"
+  vars_files:
+    - vars/kubernetes.yml
   pre_tasks:
     - include: ./tasks/app_user.yml
     - include: ./tasks/gcp.yml
     - include: ./tasks/s3cfg.yml
     - include: ./tasks/containerd.yml
-    - include: ./tasks/gcp_kubernetes.yml
-  #   - include: ./tasks/podman.yml
+    # - include: ./tasks/gcp_kubernetes.yml
+    - include: ./tasks/podman.yml
   roles:
     - geerlingguy.security
+    - geerlingguy.kubernetes
   # tasks:
   #   - name: Create Gitlab container
   #     containers.podman.podman_container:

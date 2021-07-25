@@ -42,3 +42,15 @@
 - name: containerd config default
   shell: |
     containerd config default | tee /etc/containerd/config.toml
+  when: not result.stat.exists
+- name: Create Elastic directory for GCP
+  file:
+    path: "/data/containerd"
+    state: directory
+    recurse: true
+    mode: '0700'
+- name: Containerd root storage
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^root ='
+    line: 'root = "/data/containerd"'

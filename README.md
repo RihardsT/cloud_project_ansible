@@ -35,6 +35,8 @@ podman run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -w /d willia
 Alternate run commands:
 ```
 # Raspberry first:
+ansible-playbook -i IP_ADDRESS, -u ubuntu --diff Raspberry.yml -e ansible_port=22 --ask-pass
+
 docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c'
 ansible-playbook -i ./Inventory --limit raspberry -u rihards --diff Raspberry.yml -e ansible_port=22 --ask-pass'
 

@@ -8,23 +8,31 @@
     app_user: [rihards]
     # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
+    kubernetes_version: '1.21'
+    kubernetes_role: node
+    kubernetes_kubelet_extra_args: "--node-ip={{ node_ip_address }}"
+  vars_files:
+    - vars/kubernetes.yml
   pre_tasks:
     - include: ./tasks/app_user.yml
+    - include: ./tasks/gcp.yml
     - include: ./tasks/s3cfg.yml
+    - include: ./tasks/containerd.yml
     - include: ./tasks/podman.yml
     - include: ./tasks/restore_minecraft.yml
   roles:
     - geerlingguy.security
-  tasks:
-    - name: Create Minecraft server
-      containers.podman.podman_container:
-        name: minecraft
-        image: docker.io/itzg/minecraft-server
-        state: started
-        env:
-          EULA: "true"
-          MEMORY: "4G"
-        volumes:
-          /data/minecraft_data:/data
-        publish:
-          - '25565:25565'
+    - geerlingguy.kubernetes
+#   tasks:
+#     - name: Create Minecraft server
+#       containers.podman.podman_container:
+#         name: minecraft
+#         image: docker.io/itzg/minecraft-server
+#         state: started
+#         env:
+#           EULA: "true"
+#           MEMORY: "4G"
+#         volumes:
+#           /data/minecraft_data:/data
+#         publish:
+#           - '25565:25565'
