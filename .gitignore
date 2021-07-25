@@ -10,3 +10,6 @@ __pycache__
 *.pyc
 
 Inventory
+
+s3cfg
+vars/kubernetes.yml
