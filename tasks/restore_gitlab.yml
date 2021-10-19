@@ -1,0 +1,22 @@
+- name: Create a data directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+    mode: '0755'
+  loop:
+    - /data/gitlab/data
+    - /data/gitlab/config
+    - /data/gitlab/logs
+- name: Check that /data/gitlab exists
+  stat:
+    path: /data/gitlab/config/gitlab-secrets.json
+  register: result
+- name: Restore Gitlab
+  shell: |
+    s3cmd get $(s3cmd ls s3://rudenspavasaris/ | grep gitlab_backup | awk '{print $4}' | sort | tail -n 1) /data/gitlab/data/backups/
+    s3cmd get s3://rudenspavasaris/gitlab-secrets.json /data/gitlab/config/
+  when: not result.stat.exists
+- name: Pull Gitlab image
+  shell: |
+    ctr image pull docker.io/gitlab/gitlab-ce:latest

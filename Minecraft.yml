@@ -18,7 +18,7 @@
     - include: ./tasks/gcp.yml
     - include: ./tasks/s3cfg.yml
     - include: ./tasks/containerd.yml
-    - include: ./tasks/podman.yml
+    # - include: ./tasks/podman.yml
     - include: ./tasks/restore_minecraft.yml
   roles:
     - geerlingguy.security

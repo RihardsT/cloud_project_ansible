@@ -43,14 +43,19 @@
   shell: |
     containerd config default | tee /etc/containerd/config.toml
   when: not result.stat.exists
-- name: Create Elastic directory for GCP
+- name: Create ContainerD directory for GCP
   file:
     path: "/data/containerd"
     state: directory
-    recurse: true
-    mode: '0700'
+    mode: '0755'
 - name: Containerd root storage
   lineinfile:
     path: /etc/containerd/config.toml
     regexp: '^root ='
     line: 'root = "/data/containerd"'
+  register: result
+- name: Restart containerd after root storage change
+  service:
+    name: containerd
+    state: restarted
+  when: result is changed

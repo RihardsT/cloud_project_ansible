@@ -18,8 +18,8 @@
     - include: ./tasks/gcp.yml
     - include: ./tasks/s3cfg.yml
     - include: ./tasks/containerd.yml
-    # - include: ./tasks/gcp_kubernetes.yml
-    - include: ./tasks/podman.yml
+    # - include: ./tasks/podman.yml
+    - include: ./tasks/restore_gitlab.yml
   roles:
     - geerlingguy.security
     - geerlingguy.kubernetes

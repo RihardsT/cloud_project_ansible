@@ -14,3 +14,6 @@
     dest: /data/minecraft_backup.sh
     mode: 0755
     owner: rihards
+- name: Pull Minecraft image
+  shell: |
+    ctr image pull docker.io/itzg/minecraft-server:latest

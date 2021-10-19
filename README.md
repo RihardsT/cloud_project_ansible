@@ -55,3 +55,16 @@ ansible-vault edit vars/vault.yml --vault-password-file /Secrets/ansible_vault_p
 
 #### ansible.cfg
 display_skipped_hosts = false
+
+### Notes
+Debug task output
+```
+- name: some task
+  ...
+  register: result
+- debug: msg="{{ result }}"
+
+- name: other task
+  ...
+  when: result is changed
+```

@@ -1,3 +1,10 @@
+- name: Data folder needs to exist for successful mount
+  file:
+    path: "/data"
+    state: directory
+    mode: '0755'
+    owner: 'root'
+
 - name: Check that /disk_formatted exists
   stat:
     path: /disk_formatted
@@ -18,23 +25,12 @@
     touch /disk_formatted
   when: not result.stat.exists
 
-- name: Create a data directory
-  file:
-    path: "{{ item }}"
-    state: directory
-    recurse: true
-    mode: '0755'
-  loop:
-    - /data/gitlab/data
-    - /data/gitlab/config
-    - /data/gitlab/logs
 - name: Create Elastic directory for GCP
   file:
     path: "/data/elasticsearch_data"
     state: directory
-    recurse: true
     mode: '0755'
-    owner: 'ubuntu'
+    # owner: 'ubuntu'
 
 - name: Check that dummy_ip exists
   stat:
