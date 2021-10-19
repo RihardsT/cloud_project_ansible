@@ -1,0 +1,7 @@
+- name: Journalctl SystemMaxUse
+  lineinfile:
+    path: /etc/systemd/journald.conf
+    regexp: '^#SystemMaxUse='
+    line: 'SystemMaxUse=100M'
+# Set up a cronjob to remove old Kubernetes backup files
+# ls -t /etc/kubernetes/tmp | sed -e '1,4d' | xargs rm -rf
