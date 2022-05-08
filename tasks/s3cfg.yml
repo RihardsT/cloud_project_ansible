@@ -21,6 +21,10 @@
   no_log: True
 - name: Create a data directory
   file:
-    path: /data/
+    path: "{{ item }}"
+    owner: rihards
     state: directory
-    mode: '0755'
+    mode: '0775'
+  loop:
+    - /data/
+    - /backups/

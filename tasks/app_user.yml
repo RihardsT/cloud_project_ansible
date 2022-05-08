@@ -3,6 +3,9 @@
     name: "{{ item }}"
     shell: /bin/bash
     generate_ssh_key: no
+    password: "{{ app_user_password }}"
+    groups: "{{ app_user_groups }}"
+    append: yes
   with_items: "{{ app_user }}"
 - name: Copy SSH key
   authorized_key:

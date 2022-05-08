@@ -25,7 +25,7 @@
     reload: yes
 - name: containerd conf
   copy:
-    src: /home/rihards/Code/cloud_project/cloud_project_ansible/files/containerd.conf
+    src: files/containerd.conf
     dest: /etc/modules-load.d/containerd.conf
 - name: containerd
   apt:

@@ -4,4 +4,4 @@
     regexp: '^#SystemMaxUse='
     line: 'SystemMaxUse=100M'
 # Set up a cronjob to remove old Kubernetes backup files
-# ls -t /etc/kubernetes/tmp | sed -e '1,4d' | xargs rm -rf
+# ls -t /etc/kubernetes/tmp | sed -e '1,4d' | xargs -I % rm -rf '/etc/kubernetes/tmp/%'
