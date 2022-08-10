@@ -54,6 +54,18 @@
     regexp: '^root ='
     line: 'root = "/data/containerd"'
   register: result
+- name: Containerd CRI plugin was disabled by default, but enable it by commenting
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^disabled_plugins'
+    line: '#disabled_plugins'
+  register: result
+- name: Add sockets to crictl
+  copy:
+    dest: /etc/crictl.yaml
+    content: |
+      runtime-endpoint: unix:///run/containerd/containerd.sock
+      image-endpoint: unix:///run/containerd/containerd.sock
 - name: Restart containerd after root storage change
   service:
     name: containerd

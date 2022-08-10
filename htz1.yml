@@ -5,39 +5,26 @@
   become_user: root
   become_method: sudo
   vars:
-    app_user: rihards
+    app_user: [rihards]
+    app_user_groups:
     security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
-    docker_users: [rihards]
-    docker_apt_arch: amd64
     kubernetes_role: master
-    kubernetes_version: '1.20'
+    kubernetes_version: '1.24'
     kubernetes_kubelet_extra_args: "--fail-swap-on=false"
+    # move that to /var/lib/kubelet/kubeadm-flags.env # failSwapOn: false
     kubernetes_ignore_preflight_errors: "all"
     kubernetes_pod_network_cidr: "10.244.0.0/16"
     kubernetes_allow_pods_on_master: True
     kubernetes_apiserver_advertise_address: "95.216.206.226"
     kubernetes_kubeadm_init_extra_opts: "--apiserver-cert-extra-sans rudenspavasaris.id.lv"
+  vars_files:
+    - vars/app_user.yml
   pre_tasks:
-    - name: Create app_user
-      user:
-        name: "{{ item }}"
-        shell: /bin/bash
-        generate_ssh_key: no
-        ssh_key_bits: 4096
-        ssh_key_file: .ssh/{{ item }}
-      with_items: "{{ app_user }}"
-    - name: Copy SSH key
-      authorized_key:
-        user: "{{ item }}"
-        state: present
-        key: "{{ lookup('file', '../Secrets/SSH_Keys/ssh_key.pub') }}"
-      with_items: "{{ app_user }}"
-    - name: Upgrade packages
-      apt:
-        upgrade: yes
-        update_cache: yes
+    - include_tasks: ./tasks/app_user.yml
+    - include_tasks: ./tasks/s3cfg.yml
+    - include_tasks: ./tasks/containerd.yml
+    - include_tasks: ./tasks/keep_clean.yml
   roles:
     - geerlingguy.security
-    - geerlingguy.docker
     - geerlingguy.kubernetes

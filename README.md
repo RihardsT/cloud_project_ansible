@@ -4,9 +4,7 @@ export ANSIBLE_SSH_RETRIES=5
 
 ### Run
 ```
-docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
-eval "$(ssh-agent -s)"; ssh-add /root/.ssh/hetzner && \
-ansible-playbook -i ./Inventory --limit production -u rihards --diff Playbook.yml'
+ansible-playbook -i ./Inventory --limit production -u rihards --diff htz1.yml'
 ```
 
 First run with root user
@@ -19,7 +17,7 @@ ansible-playbook -i ./Inventory --limit production -u root --diff Playbook.yml -
 ### Set up
 Get required roles, before running anything.
 ```
-python3 -m pip install --user ansible
+python3 -m pip install -U --user ansible
 python3 -m site &> /dev/null && PATH="$PATH:`python3 -m site --user-base`/bin"
 
 # Install required roles
