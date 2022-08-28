@@ -1,0 +1,29 @@
+- name: Remove packages
+  become: yes
+  apt:
+    pkg:
+      - hexchat
+      - transmission-*
+    state: absent
+- name: Upgrade packages
+  become: yes
+  apt:
+    upgrade: yes
+    update_cache: yes
+- name: Install packages
+  become: yes
+  apt:
+    pkg:
+      - vim
+      - git
+      - chromium
+      - audacious
+      - vlc
+      - keepass2
+      - psensor
+      - sysstat
+      - lutris
+- name: Install Atom
+  become: yes
+  ansible.builtin.apt:
+    deb: https://atom.io/download/deb
