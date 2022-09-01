@@ -24,9 +24,11 @@
     sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
     reload: yes
 - name: containerd conf
-  copy:
-    src: files/containerd.conf
+  ansible.builtin.copy:
     dest: /etc/modules-load.d/containerd.conf
+    content: |
+      overlay
+      br_netfilter
 - name: containerd
   apt:
     pkg:

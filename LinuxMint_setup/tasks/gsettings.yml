@@ -1,6 +1,6 @@
 - name: Check that Gsettings were applied. Dirty with a file
   stat:
-    path: /media/data/gsettings_script_out
+    path: /media/data/.gsettings_script_out
   register: result
 - name: Gsettings script
   ansible.builtin.shell: bash ./files/gsettings.sh >> /media/data/gsettings_script_out

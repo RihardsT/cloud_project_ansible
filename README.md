@@ -74,3 +74,18 @@ Debug task output
   ...
   when: result is changed
 ```
+```
+ansible localhost -m ansible.builtin.setup > facts.json
+
+# Or in playbook
+- name: Show facts available on the system
+  ansible.builtin.debug:
+    var: ansible_facts
+- name: Ansible facts to file
+  copy:
+   content: "{{ ansible_facts }}"
+   dest: ./ansible_facts_details.json
+# Get package facts, which will then show up in ansible_facts
+- name: Gather the package facts
+  package_facts:
+```

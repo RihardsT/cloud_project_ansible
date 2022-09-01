@@ -1,0 +1,15 @@
+- name: Kubernetes apt key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+- name: Kubernetes repository
+  apt_repository:
+    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: present
+    update_cache: true
+- name: Install Kubernetes packages
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - kubectl
+      - cri-tools

@@ -7,6 +7,10 @@
   - include: ./tasks/disks.yml
   - include: ./tasks/packages.yml
   # - include: ./tasks/gsettings.yml
+  - include: ../tasks/containerd.yml
+    become: yes
+  - include: ./tasks/kubernetes.yml
+    become: yes
   - name: Remove folders
     file:
       path: "{{ item }}"

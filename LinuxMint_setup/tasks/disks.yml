@@ -17,6 +17,12 @@
   become: yes
   command: 'mount -a'
   when: fstab.changed
+- name: Symlink to data
+  become: yes
+  ansible.builtin.file:
+    src: /media/data
+    dest: /data
+    state: link
 - name: Symlink to Code
   ansible.builtin.file:
     src: /media/data/Rihards/Code
