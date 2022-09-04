@@ -1,8 +1,8 @@
 - name: "Playing with Ansible and Git"
   hosts: localhost
   connection: local
-  # become: yes
-  # become_user: root
+  vars_files:
+    - vars/disks.yml
   tasks:
   - include: ./tasks/disks.yml
   - include: ./tasks/packages.yml

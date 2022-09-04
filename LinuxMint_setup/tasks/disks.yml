@@ -9,9 +9,9 @@
   ansible.builtin.blockinfile:
     path: /etc/fstab
     block: |
-      /dev/sda5 /media/1TB ntfs-3g defaults,permissions,nofail 0 0
+      UUID={{ disk_uuid_1TB }} /media/1TB ntfs-3g defaults,permissions,nofail 0 0
       /dev/nvme0n1p5 /media/nvme ext4 defaults,nofail 0 0
-      /dev/sdb1 /media/data ext4 defaults,nofail 0 0
+      UUID={{ disk_uuid_data }} /media/data ext4 defaults,nofail 0 0
   register: fstab
 - name: 'Mount all'
   become: yes
