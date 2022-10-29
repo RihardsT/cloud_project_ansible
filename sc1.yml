@@ -1,0 +1,19 @@
+---
+- name: Base setup - User setup, fail2ban, security.
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+    app_user: [rihards]
+    app_user_groups: [rihards]
+    security_sudoers_passwordless: [rihards]
+  vars_files:
+    - vars/app_user.yml
+  handlers:
+    - import_tasks: handlers/containerd.yml
+  pre_tasks:
+    - include_tasks: ./tasks/app_user.yml
+    - include_tasks: ./tasks/containerd.yml
+  roles:
+    - geerlingguy.security
