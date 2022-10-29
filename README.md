@@ -4,14 +4,15 @@ export ANSIBLE_SSH_RETRIES=5
 
 ### Run
 ```
-ansible-playbook -i ./Inventory --limit production -u rihards --diff htz1.yml'
+ansible-playbook -i ./Inventory --limit production -u rihards --diff htz1.yml
+ansible-playbook -i 51.158.168.192, -u rihards --diff sc1.yml
 ```
 
 First run with root user
 ```
-docker run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -v ~/Code/CloudProject/Secrets/:/Secrets/ -v ~/.ssh/:/root/.ssh -w /d williamyeh/ansible:alpine3-onbuild sh -c 'apk add --no-cache openssh-client && \
-eval "$(ssh-agent -s)"; ssh-add /root/.ssh/hetzner && \
-ansible-playbook -i ./Inventory --limit production -u root --diff Playbook.yml -e ansible_port=22'
+ansible-playbook -i ./Inventory --limit production -u root --diff Playbook.yml -e ansible_port=22
+
+ansible-playbook -i 51.158.168.192, -u root --diff sc1.yml
 ```
 
 ### Set up
