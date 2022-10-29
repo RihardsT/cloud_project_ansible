@@ -6,21 +6,21 @@
   become_method: sudo
   vars:
     app_user: [rihards]
-    app_user_groups: 
+    app_user_groups:
     # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
-    kubernetes_version: '1.23'
+    kubernetes_version: '1.25'
     kubernetes_role: node
-    kubernetes_kubelet_extra_args: "--node-ip={{ node_ip_address }}"
+    # kubernetes_kubelet_extra_args: "--node-ip={{ node_ip_address }}" # GCP only
     # This one changes node InternalIP. Allows to do kubectl logs and kubectl exec against containers,
     # This is good, if it is applied from the start I guess. If you applied the playbook without those extra args from the start, destroy the VM and start again.
   vars_files:
     - vars/kubernetes.yml # This file just contains kubernetes_join_command, so that I do not have to commit it in repo
+    - vars/app_user.yml
   pre_tasks:
     - include: ./tasks/app_user.yml
-    - include: ./tasks/gcp.yml
+    # - include: ./tasks/gcp.yml # GCP only
     - include: ./tasks/containerd.yml
-    - include: ./tasks/podman.yml
   roles:
     - geerlingguy.security
     - geerlingguy.kubernetes

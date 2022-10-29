@@ -10,7 +10,7 @@
     security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
     kubernetes_role: master
-    kubernetes_version: '1.24'
+    kubernetes_version: '1.25'
     kubernetes_kubelet_extra_args: "--fail-swap-on=false"
     # move that to /var/lib/kubelet/kubeadm-flags.env # failSwapOn: false
     kubernetes_ignore_preflight_errors: "all"

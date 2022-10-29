@@ -13,3 +13,4 @@ Inventory
 
 s3cfg
 vars/kubernetes.yml
+vars/app_user.yml
