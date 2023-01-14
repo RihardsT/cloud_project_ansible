@@ -11,7 +11,6 @@
     block: |
       UUID={{ disk_uuid_1TB }} /media/1TB ntfs-3g defaults,permissions,nofail 0 0
       /dev/nvme0n1p5 /media/nvme ext4 defaults,nofail 0 0
-      UUID={{ disk_uuid_data }} /media/data ext4 defaults,nofail 0 0
   register: fstab
 - name: 'Mount all'
   become: yes
@@ -22,9 +21,4 @@
   ansible.builtin.file:
     src: /media/data
     dest: /data
-    state: link
-- name: Symlink to Code
-  ansible.builtin.file:
-    src: /media/data/Rihards/Code
-    dest: /home/rihards/Code
     state: link

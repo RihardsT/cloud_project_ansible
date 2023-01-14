@@ -7,9 +7,13 @@
     repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
     state: present
     update_cache: true
-- name: Install Kubernetes packages
-  become: yes
-  ansible.builtin.apt:
-    pkg:
-      - kubectl
-      - cri-tools
+
+- name: Terraform apt key
+  apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+- name: Terraform repository
+  apt_repository:
+    repo: "deb https://apt.releases.hashicorp.com bullseye main"
+    state: present
+    update_cache: true

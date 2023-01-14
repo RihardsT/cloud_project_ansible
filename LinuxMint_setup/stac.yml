@@ -3,13 +3,15 @@
   connection: local
   vars_files:
     - vars/disks.yml
+  handlers:
+    - import_tasks: ../handlers/containerd.yml
   tasks:
   - include: ./tasks/disks.yml
+  - include: ./tasks/repositories.yml
+    become: yes
   - include: ./tasks/packages.yml
   # - include: ./tasks/gsettings.yml
   - include: ../tasks/containerd.yml
-    become: yes
-  - include: ./tasks/kubernetes.yml
     become: yes
   - name: Remove folders
     file:
