@@ -6,13 +6,15 @@
   handlers:
     - import_tasks: ../handlers/containerd.yml
   tasks:
-  - include: ./tasks/disks.yml
-  - include: ./tasks/repositories.yml
+  - name: Do the admin tasks
     become: yes
-  - include: ./tasks/packages.yml
+    block:
+    - include: ./tasks/disks.yml
+    - include: ./tasks/repositories.yml
+    - include: ./tasks/packages.yml
+    - include: ../tasks/containerd.yml
   # - include: ./tasks/gsettings.yml
-  - include: ../tasks/containerd.yml
-    become: yes
+  - include: ./tasks/pip.yml
   - name: Remove folders
     file:
       path: "{{ item }}"
