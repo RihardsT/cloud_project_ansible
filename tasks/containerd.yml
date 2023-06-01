@@ -56,6 +56,12 @@
     regexp: '^root ='
     line: 'root = "/data/containerd"'
   register: result
+- name: Containerd SystemdCgroup storage
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '            SystemdCgroup = false'
+    line: '            SystemdCgroup = true'
+  register: result
 - name: Containerd CRI plugin was disabled by default, but enable it by commenting
   lineinfile:
     path: /etc/containerd/config.toml
@@ -68,6 +74,8 @@
     content: |
       runtime-endpoint: unix:///run/containerd/containerd.sock
       image-endpoint: unix:///run/containerd/containerd.sock
+# TODO: make sure that if one those above changes the result, then it restarts
+# currently first one might change, but not latest, then result is not changed.
 - name: Restart containerd after root storage change
   service:
     name: containerd
@@ -98,3 +106,6 @@
     mode: '0775'
   with_items: ["bridge", "portmap", "firewall", "tuning", "host-local"]
   notify: restart_containerd
+
+# TODO: https://github.com/flannel-io/cni-plugin
+# Download and put the plugin at /opt/cni/bin

@@ -9,7 +9,7 @@
     app_user_groups:
     # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
-    kubernetes_version: '1.23'
+    kubernetes_version: '1.27'
     kubernetes_role: node
     kubernetes_kubelet_extra_args: "--node-ip={{ node_ip_address }}"
   vars_files:
