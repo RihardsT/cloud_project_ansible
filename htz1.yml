@@ -6,7 +6,7 @@
   become_method: sudo
   vars:
     app_user: [rihards]
-    app_user_groups: [rihards]
+    app_user_groups: []
     # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
     kubernetes_version: '1.27'
@@ -35,5 +35,5 @@
   roles:
     - geerlingguy.security
     - geerlingguy.kubernetes
-  # tasks:
-  #   - include_tasks: ./tasks/copy_kubeconfig.yml
+  tasks:
+    - include_tasks: ./tasks/after_tasks.yml

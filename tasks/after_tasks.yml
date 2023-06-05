@@ -1,0 +1,21 @@
+- name: Create a .kube directory
+  file:
+    path: "/home/{{ item }}/.kube"
+    state: directory
+    owner: "{{ item }}"
+  with_items: "{{ app_user }}"
+- name: Symlink the kubectl admin.conf to ~/.kube/conf.
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ item }}/.kube/config"
+    remote_src: yes
+    mode: 0644
+    owner: "{{ item }}"
+  with_items: "{{ app_user }}"
+- name: Copy kubeconfig to local
+  ansible.builtin.fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: ~/.kube/config
+    flat: yes
+- name: Set up Longhorn storage
+  command: "kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.4.0/deploy/longhorn.yaml"
