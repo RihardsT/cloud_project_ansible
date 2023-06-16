@@ -16,11 +16,7 @@
     kubernetes_allow_pods_on_master: True
     kubernetes_config_kubelet_configuration:
       failSwapOn: false
-      # containerRuntime: remote
-      # containerRuntimeEndpoint: unix:///run/containerd/containerd.sock
     kubernetes_config_init_configuration:
-      # localAPIEndpoint:
-      #   advertiseAddress: "{{ ansible_default_ipv4.address }}"
       apiserverCertExtraSans: rudenspavasaris.id.lv
   handlers:
     - import_tasks: handlers/containerd.yml
