@@ -1,4 +1,3 @@
-# TODO: Scaleway DNS Api
 # https://developers.scaleway.com/en/products/domain/dns/api/#get-cae7c2
 - name: Scaleway DNS
   shell: |
