@@ -1,6 +1,11 @@
 # https://developers.scaleway.com/en/products/domain/dns/api/#get-cae7c2
+- name: Prevent DNS to be applied on each run. Dirty way for now
+  stat:
+    path: /home/rihards/
+  register: result
 - name: Scaleway DNS
   shell: |
     /bin/bash ./files/scaleway_dns.sh {{ scaleway_token }} {{ node_ip_address }}
   delegate_to: localhost
   become_user: rihards
+  when: not result.stat.exists

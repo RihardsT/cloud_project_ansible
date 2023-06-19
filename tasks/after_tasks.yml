@@ -17,5 +17,11 @@
     src: /etc/kubernetes/admin.conf
     dest: ~/.kube/config
     flat: yes
-- name: Set up Longhorn storage
-  command: "kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.4.0/deploy/longhorn.yaml"
+# Replace this below with K8s task? Don't want to install a module currently
+- name: Set up K8s services (Longhorn, Traefik)
+  become_user: rihards
+  delegate_to: localhost
+  ansible.builtin.command: "kubectl apply -f {{ item }}"
+  loop:
+   - ~/Code/cloud_project/cloud_project_kubernetes/Traefik_v2/
+   - https://raw.githubusercontent.com/longhorn/longhorn/v1.4.0/deploy/longhorn.yaml

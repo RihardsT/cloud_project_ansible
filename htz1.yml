@@ -28,6 +28,7 @@
     - include_tasks: ./tasks/s3cfg.yml
     - include_tasks: ./tasks/containerd.yml
     - include_tasks: ./tasks/keep_clean.yml
+    - include_tasks: ./tasks/dirty_swap.yml
   roles:
     - geerlingguy.security
     - geerlingguy.kubernetes

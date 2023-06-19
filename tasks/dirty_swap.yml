@@ -1,0 +1,11 @@
+- name: Check if swapfile exists already
+  stat:
+    path: /swapfile
+  register: result
+- name: Create swapfile
+  shell: |
+    fallocate -l 4G /swapfile
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+  when: not result.stat.exists
