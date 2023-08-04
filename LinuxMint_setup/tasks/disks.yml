@@ -3,7 +3,7 @@
   file:
     path: "{{ item }}"
     state: directory
-  loop: ["/media/1TB", "/media/nvme", "/media/data"]
+  loop: ["/media/1TB", "/media/nvme"]
 - name: Update /etc/fstab
   become: yes
   ansible.builtin.blockinfile:
@@ -16,9 +16,3 @@
   become: yes
   command: 'mount -a'
   when: fstab.changed
-- name: Symlink to data
-  become: yes
-  ansible.builtin.file:
-    src: /media/data
-    dest: /data
-    state: link

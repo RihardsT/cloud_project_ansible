@@ -1,3 +1,7 @@
+# https://forums.linuxmint.com/viewtopic.php?t=376881
+### Get the PlacesCenter applet
+# https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
+# unzip to $HOME/.local/share/cinnamon/applets
 - name: Check that Gsettings were applied. Dirty with a file
   stat:
     path: /media/data/.gsettings_script_out
