@@ -17,3 +17,7 @@
   apt:
     upgrade: yes
     update_cache: yes
+- name: Install jq
+  apt:
+    pkg:
+      - jq

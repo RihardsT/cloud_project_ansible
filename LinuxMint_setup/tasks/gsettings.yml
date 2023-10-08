@@ -1,11 +1,19 @@
+- name: Create applets folder
+  become: yes
+  file:
+    path: "/home/rihards/.local/share/cinnamon/applets"
+    state: directory
 # https://forums.linuxmint.com/viewtopic.php?t=376881
 ### Get the PlacesCenter applet
-# https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
-# unzip to $HOME/.local/share/cinnamon/applets
+- name: PlacesCenter applet
+  ansible.builtin.unarchive:
+    src: https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
+    dest: /home/rihards/.local/share/cinnamon/applets
+    remote_src: yes
 - name: Check that Gsettings were applied. Dirty with a file
   stat:
     path: /media/data/.gsettings_script_out
   register: result
 - name: Gsettings script
-  ansible.builtin.shell: bash ./files/gsettings.sh >> /media/data/gsettings_script_out
+  ansible.builtin.shell: bash ./files/gsettings.sh >> /media/data/.gsettings_script_out
   when: not result.stat.exists

@@ -1,12 +1,14 @@
+#! /bin/bash
+# set -x
 gsettings list-recursively > /home/rihards/gsettings_before_ansible
 
 ##### Things that can be done in Welcome screen
 ### Desktop colours
-gsettings set org.cinnamon.desktop.interface icon-theme 'Mint-Y'
 gsettings set org.cinnamon.theme name 'Mint-Y-Dark'
+gsettings set org.cinnamon.desktop.interface cursor-theme 'DMZ-White'
+gsettings set org.cinnamon.desktop.interface gtk-theme 'Mint-Y-Dark'
+gsettings set org.cinnamon.desktop.interface icon-theme 'Mint-Y'
 gsettings set org.x.apps.portal color-scheme 'prefer-dark'
-org.cinnamon.desktop.interface cursor-theme 'DMZ-White'
-# gsettings set org.cinnamon.desktop.interface gtk-theme 'Mint-Y-Dark'
 ### Panel Layout: Traditional
 gsettings set org.cinnamon app-menu-label 'Menu'
 gsettings set org.cinnamon panels-height "['1:27']"
@@ -31,8 +33,8 @@ gsettings set org.cinnamon next-applet-id 95
 
 ##### List view
 gsettings set org.nemo.preferences default-folder-viewer 'list-view'
-gsettings set org.nemo.list-view default-visible-columns ['name', 'size']
-gsettings set org.nemo.list-view default-column-order ['name', 'size', 'type', 'date_modified', 'date_created_with_time', 'date_accessed', 'date_created', 'detailed_type', 'group', 'where', 'mime_type', 'date_modified_with_time', 'octal_permissions', 'owner', 'permissions']
+gsettings set org.nemo.list-view default-visible-columns "['name', 'size']"
+gsettings set org.nemo.list-view default-column-order "['name', 'size', 'type', 'date_modified', 'date_created_with_time', 'date_accessed', 'date_created', 'detailed_type', 'group', 'where', 'mime_type', 'date_modified_with_time', 'octal_permissions', 'owner', 'permissions']"
 
 #### Desktop
 gsettings set psensor interface-window-h 282
@@ -53,11 +55,22 @@ gsettings set org.cinnamon.sounds switch-enabled false
 gsettings set org.cinnamon.sounds login-enabled false
 gsettings set org.cinnamon.sounds logout-enabled false
 gsettings set org.cinnamon.sounds tile-enabled false
+gsettings set org.cinnamon.sounds notification-enabled false
+gsettings set org.cinnamon.desktop.sound maximum-volume 150
 
 # Favovites
 gsettings set org.cinnamon favorite-apps "['firefox.desktop']"
 
 # Ignored System reports
-gsettings set com.linuxmint.report ignored-reports "['install-language-packs', 'install-media-codecs']"
+gsettings set com.linuxmint.report ignored-reports "['install-language-packs', 'install-media-codecs', 'timeshift-no-setup']"
+
+# Mouse
+gsettings set org.cinnamon.desktop.peripherals.mouse middle-click-emulation true
+gsettings set org.cinnamon.desktop.peripherals.mouse left-handed true
+gsettings set org.cinnamon.desktop.peripherals.touchpad send-events 'disabled-on-external-mouse'
+
+# Other
+gsettings set org.blueman.plugins.powermanager auto-power-on '@mb false' # default was '@mb nothing'
+gsettings set org.cinnamon.desktop.interface first-day-of-week 1
 
 gsettings list-recursively > /home/rihards/gsettings_after_ansible

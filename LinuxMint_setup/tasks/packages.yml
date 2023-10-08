@@ -26,3 +26,5 @@
       - kubectl
       - cri-tools
       - terraform
+      - codium
+      - brave-browser

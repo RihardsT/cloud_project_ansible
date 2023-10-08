@@ -1,0 +1,24 @@
+- name: Create mountpoints
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop: ["/media/1TB", "/media/data"]
+- name: Update /etc/fstab
+  become: yes
+  ansible.builtin.blockinfile:
+    path: /etc/fstab
+    block: |
+      /dev/sdb1 /media/1TB ext4 defaults,nofail 0 0
+      /dev/sdb2 /media/data ext4 defaults,nofail 0 0
+  register: fstab
+- name: 'Mount all'
+  become: yes
+  command: 'mount -a'
+  when: fstab.changed
+- name: Symlink to data
+  become: yes
+  ansible.builtin.file:
+    src: /media/data
+    dest: /data
+    state: link

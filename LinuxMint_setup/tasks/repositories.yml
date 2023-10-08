@@ -1,19 +1,26 @@
-- name: Kubernetes apt key
+- name: apt keys
   apt_key:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    url: "{{ item }}"
     state: present
-- name: Kubernetes repository
-  apt_repository:
-    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
-    state: present
-    update_cache: true
+  loop:
+    - https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    - https://apt.releases.hashicorp.com/gpg
+    - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+    - https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
 
-- name: Terraform apt key
-  apt_key:
-    url: https://apt.releases.hashicorp.com/gpg
-    state: present
-- name: Terraform repository
+- name: apt repositories
   apt_repository:
-    repo: "deb https://apt.releases.hashicorp.com bullseye main"
+    repo: "{{ item }}"
     state: present
-    update_cache: true
+    update_cache: false
+  loop:
+    - "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    - "deb https://apt.releases.hashicorp.com bullseye main"
+    - "deb https://download.vscodium.com/debs vscodium main"
+    - "deb https://brave-browser-apt-release.s3.brave.com/ stable main"
+
+- name: Containerd CRI plugin was disabled by default, but enable it by commenting
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^disabled_plugins'
+    line: '#disabled_plugins'
