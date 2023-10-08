@@ -19,8 +19,12 @@
     - "deb https://download.vscodium.com/debs vscodium main"
     - "deb https://brave-browser-apt-release.s3.brave.com/ stable main"
 
-- name: Containerd CRI plugin was disabled by default, but enable it by commenting
-  lineinfile:
-    path: /etc/containerd/config.toml
-    regexp: '^disabled_plugins'
-    line: '#disabled_plugins'
+##### Change the mirror
+# cat /etc/apt/sources.list.d/official-package-repositories.list
+# deb https://ftp.linux.edu.lv/mirrors/packages.linuxmint.com victoria main upstream import backport
+
+# deb http://ubuntu.koyanet.lv/ubuntu jammy main restricted universe multiverse
+# deb http://ubuntu.koyanet.lv/ubuntu jammy-updates main restricted universe multiverse
+# deb http://ubuntu.koyanet.lv/ubuntu jammy-backports main restricted universe multiverse
+
+# deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse

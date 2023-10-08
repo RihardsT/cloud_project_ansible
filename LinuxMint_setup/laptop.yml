@@ -48,12 +48,3 @@
       value: vim
 
 ## for F in $(awk '$4=="unmasked"&&$1>1000{print FILENAME}' /sys/firmware/acpi/interrupts/*); do sudo tee $F <<<mask; done
-
-# cat /etc/apt/sources.list.d/official-package-repositories.list
-# deb https://ftp.linux.edu.lv/mirrors/packages.linuxmint.com victoria main upstream import backport
-
-# deb http://ubuntu.koyanet.lv/ubuntu jammy main restricted universe multiverse
-# deb http://ubuntu.koyanet.lv/ubuntu jammy-updates main restricted universe multiverse
-# deb http://ubuntu.koyanet.lv/ubuntu jammy-backports main restricted universe multiverse
-
-# deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
