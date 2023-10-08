@@ -17,3 +17,12 @@
 - name: Gsettings script
   ansible.builtin.shell: bash ./files/gsettings.sh >> /media/data/.gsettings_script_out
   when: not result.stat.exists
+- name: VSCodium settings
+  copy:
+    src: "VSCodium/{{ item }}"
+    dest: "/home/rihards/.config/VSCodium/User/{{ item }}"
+    owner: rihards
+    group: rihards
+  loop:
+    - settings.json
+    - keybindings.json

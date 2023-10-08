@@ -1,0 +1,9 @@
+{
+    "editor.minimap.enabled": false,
+    "editor.rulers": [80],
+    "editor.wordWrap": "on",
+    "files.insertFinalNewline": true,
+    // "window.zoomLevel": -1,
+    "editor.tabSize": 2,
+    "files.eol": "\n",
+}
