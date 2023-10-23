@@ -1,3 +1,4 @@
+#! /usr/bin/bash
 scaleway_token=${1}
 node_ip=${2}
 record_ids=($(/usr/bin/curl -s -X GET -H "X-Auth-Token: ${scaleway_token}" https://api.scaleway.com/domain/v2beta1/dns-zones/rudenspavasaris.id.lv/records | /usr/bin/jq '.records[] | select(.type == "A") | .id'))
@@ -12,3 +13,6 @@ new_record_data='{"changes": [{"add": {"records": [{"name": "","data": "'${node_
 /usr/bin/curl -X PATCH -H "X-Auth-Token: ${scaleway_token}" -H "Content-Type: application/json" \
 https://api.scaleway.com/domain/v2beta1/dns-zones/rudenspavasaris.id.lv/records -d \
 "${new_record_data}"
+
+### Run script manually
+# bash scaleway_dns.sh "TOKEN" IP

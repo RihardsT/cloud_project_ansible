@@ -16,6 +16,8 @@ ansible-playbook -i 51.158.168.192, -u root --diff sc1.yml
 ```
 
 ### Set up
+Set variables from the template and files/s3cfg also from template
+
 Get required roles, before running anything.
 ```
 python3 -m pip install -U --user ansible
@@ -25,11 +27,7 @@ python3 -m site &> /dev/null && PATH="$PATH:`python3 -m site --user-base`/bin"
 ansible-galaxy install --roles-path ./roles -r requirements.yml
 # Force role update required roles
 ansible-galaxy install --roles-path ./roles -r requirements.yml --force
-
-podman run -ti --rm -v ~/Code/CloudProject/cloud_project_ansible:/d -w /d williamyeh/ansible:alpine3-onbuild sh -c 'ansible-galaxy install --roles-path ./roles -r requirements.yml --force'
-
 ```
-
 
 ### Raspberry
 ```

@@ -1,0 +1,9 @@
+[default]
+host_base = s3.fr-par.scw.cloud
+host_bucket = BUCKET_NAME.s3.fr-par.scw.cloud
+bucket_location = fr-par
+use_https = True
+
+# Login credentials
+access_key = ACCESS_KEY_HERE
+secret_key = SECRET_KEY_HERE
