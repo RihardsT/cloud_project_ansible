@@ -9,7 +9,7 @@
     src: /etc/kubernetes/admin.conf
     dest: "/home/{{ item }}/.kube/config"
     remote_src: yes
-    mode: 0644
+    mode: 0600
     owner: "{{ item }}"
   with_items: "{{ app_user }}"
 - name: Copy kubeconfig to local

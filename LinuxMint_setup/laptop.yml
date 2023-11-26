@@ -46,5 +46,15 @@
       name: core.editor
       scope: global
       value: vim
+  - name: ACPI error workaround with cron on reboot
+    become: yes
+    ansible.builtin.cron:
+      name: "ACPI workaround on reboot"
+      special_time: reboot
+      # job: /bin/bash for F in $(awk '$4=="unmasked"&&$1>1000{print FILENAME}' /sys/firmware/acpi/interrupts/*); do tee $F <<<mask; done
+      job: /usr/bin/echo "mask" > /sys/firmware/acpi/interrupts/gpe16
+      user: root
+      cron_file: acpi_workaround
 
-## for F in $(awk '$4=="unmasked"&&$1>1000{print FILENAME}' /sys/firmware/acpi/interrupts/*); do sudo tee $F <<<mask; done
+# Set default apps in here
+# /usr/share/applications/defaults.list
