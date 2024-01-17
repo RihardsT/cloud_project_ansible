@@ -13,8 +13,9 @@
     - include: ./tasks/repositories.yml
     - include: ./tasks/packages.yml
     - include: ../tasks/containerd.yml
-    - include: ./tasks/gsettings.yml
-    - include: ./tasks/pip.yml
+  - include: ./tasks/gsettings.yml
+  - include: ./tasks/pip.yml
+  - include: ./tasks/debug.yaml
   - name: Remove folders
     file:
       path: "{{ item }}"

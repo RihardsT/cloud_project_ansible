@@ -13,6 +13,7 @@ PATH="$PATH:`python3 -m site --user-base`/bin"
 cd ~/Code/cloud_project_ansible/
 ansible-playbook LinuxMint_setup/stac.yml --diff
 
+cd ~/Code/cloud_project/cloud_project_ansible/
 ansible-playbook LinuxMint_setup/laptop.yml --diff
 ```
 
@@ -26,3 +27,12 @@ gsettings list-recursively > /home/rihards/gsettings_after_ansible; diff gsettin
 
 https://stackoverflow.com/questions/36627258/how-can-i-find-out-the-default-applications-on-linux-centos-ubuntu-using-the
 https://superuser.com/questions/1006983/how-to-set-cinnamon-preferences-in-command-line
+
+### To Do
+Firefox about:config
+browser.sessionstore.restore_on_demand
+browser.sessionstore.restore_pinned_tabs_on_demand true
+
+https://askubuntu.com/questions/313483/how-do-i-change-firefoxs-aboutconfig-from-a-shell-script
+put it in .mozilla/firefox/lgc3asai.default-release/user.js
+take inspiration from .mozilla/firefox/lgc3asai.default-release/prefs.js

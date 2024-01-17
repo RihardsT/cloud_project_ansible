@@ -6,6 +6,7 @@
 # https://forums.linuxmint.com/viewtopic.php?t=376881
 ### Get the PlacesCenter applet
 - name: PlacesCenter applet
+  become: yes
   ansible.builtin.unarchive:
     src: https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
     dest: /home/rihards/.local/share/cinnamon/applets
@@ -17,6 +18,7 @@
 - name: Gsettings script
   ansible.builtin.shell: bash ./files/gsettings.sh >> /media/data/.gsettings_script_out
   when: not result.stat.exists
+
 - name: VSCodium settings
   copy:
     src: "VSCodium/{{ item }}"
@@ -26,3 +28,19 @@
   loop:
     - settings.json
     - keybindings.json
+
+- name: Find Firefox user directory
+  ansible.builtin.find:
+    paths: /home/rihards/.mozilla/firefox/
+    patterns: '*.default-release'
+    recurse: no
+    file_type: directory
+  register: firefox_setting_folder
+- debug:
+    var: firefox_setting_folder.files[0].path
+- name: Firefox settings
+  copy:
+    src: "user.js"
+    dest: "{{ firefox_setting_folder.files[0].path }}/user.js"
+    owner: rihards
+    group: rihards
