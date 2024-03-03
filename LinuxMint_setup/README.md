@@ -36,3 +36,12 @@ browser.sessionstore.restore_pinned_tabs_on_demand true
 https://askubuntu.com/questions/313483/how-do-i-change-firefoxs-aboutconfig-from-a-shell-script
 put it in .mozilla/firefox/lgc3asai.default-release/user.js
 take inspiration from .mozilla/firefox/lgc3asai.default-release/prefs.js
+
+
+### LMDE
+```
+sudo apt update && sudo apt install -y python3.11-venv # python3-pip ansible-core
+python3 -m venv venv-ansible
+$(pwd)/venv-ansible/bin/pip3 install ansible
+PATH="$PATH:$(pwd)/venv-ansible/bin/"
+`

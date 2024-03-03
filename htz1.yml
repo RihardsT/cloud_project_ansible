@@ -9,7 +9,7 @@
     app_user_groups: []
     # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
-    kubernetes_version: '1.28'
+    kubernetes_version: '1.29'
     kubernetes_role: control_plane
     kubernetes_ignore_preflight_errors: "all"
     kubernetes_pod_network_cidr: "10.244.0.0/16"

@@ -1,7 +1,7 @@
 - name: Create applets folder
   become: yes
   file:
-    path: "/home/rihards/.local/share/cinnamon/applets"
+    path: "/home/{{ user }}/.local/share/cinnamon/applets"
     state: directory
 # https://forums.linuxmint.com/viewtopic.php?t=376881
 ### Get the PlacesCenter applet
@@ -19,19 +19,20 @@
   ansible.builtin.shell: bash ./files/gsettings.sh >> /media/data/.gsettings_script_out
   when: not result.stat.exists
 
+# TODO: VScodium and Firefox need to be started before running these
 - name: VSCodium settings
   copy:
     src: "VSCodium/{{ item }}"
-    dest: "/home/rihards/.config/VSCodium/User/{{ item }}"
-    owner: rihards
-    group: rihards
+    dest: "/home/{{ user }}/.config/VSCodium/User/{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
   loop:
     - settings.json
     - keybindings.json
 
 - name: Find Firefox user directory
   ansible.builtin.find:
-    paths: /home/rihards/.mozilla/firefox/
+    paths: "/home/{{ user }}/.mozilla/firefox/"
     patterns: '*.default-release'
     recurse: no
     file_type: directory
@@ -42,5 +43,5 @@
   copy:
     src: "user.js"
     dest: "{{ firefox_setting_folder.files[0].path }}/user.js"
-    owner: rihards
-    group: rihards
+    owner: "{{ user }}"
+    group: "{{ user }}"
