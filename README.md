@@ -1,3 +1,7 @@
+## ToDo:
+Test these changes locally
+https://github.com/geerlingguy/ansible-role-kubernetes/pull/153
+
 ## RudensPavasaris cloud project Ansible playbook
 export ANSIBLE_HOST_KEY_CHECKING=False
 export ANSIBLE_SSH_RETRIES=5

@@ -18,6 +18,7 @@
       failSwapOn: false
     kubernetes_config_init_configuration:
       apiserverCertExtraSans: rudenspavasaris.id.lv
+    # kubernetes_apt_repository: "deb https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
   handlers:
     - import_tasks: handlers/containerd.yml
   vars_files:
