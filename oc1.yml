@@ -7,17 +7,17 @@
   vars:
     app_user: [rihards]
     app_user_groups: []
-    # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
     kubernetes_version: '1.29'
     kubernetes_role: control_plane
-    kubernetes_ignore_preflight_errors: "all"
     kubernetes_pod_network_cidr: "10.244.0.0/16"
     kubernetes_allow_pods_on_master: True
     kubernetes_config_kubelet_configuration:
       failSwapOn: false
     kubernetes_config_init_configuration:
-      apiserverCertExtraSans: rudenspavasaris.id.lv
+      localAPIEndpoint:
+        advertiseAddress: "{{ node_ip_address }}"
+        bindPort: 6443
     # kubernetes_apt_repository: "deb https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
     server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
     nerdctl_version: "1.7.5"
@@ -27,12 +27,13 @@
   vars_files:
     - vars/app_user.yml
   pre_tasks:
+    - include_tasks: ./tasks/dummy_ip.yml
+    - include_tasks: ./tasks/oracle_iptables.yml
     - include_tasks: ./tasks/scaleway_dns.yml
     - include_tasks: ./tasks/app_user.yml
     - include_tasks: ./tasks/s3cfg.yml
     - include_tasks: ./tasks/containerd.yml
     - include_tasks: ./tasks/keep_clean.yml
-    - include_tasks: ./tasks/dirty_swap.yml
   roles:
     - geerlingguy.security
     - geerlingguy.kubernetes
