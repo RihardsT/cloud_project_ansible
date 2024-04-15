@@ -1,11 +1,12 @@
 - ansible.builtin.iptables:
     chain: INPUT
-    rule_num: 6
     match: state
     ctstate: NEW
     protocol: tcp
     destination_port: 80
     jump: ACCEPT
+    action: insert # this is required together with rule_num
+    rule_num: 6
 - ansible.builtin.iptables:
     chain: INPUT
     rule_num: 6
@@ -14,6 +15,7 @@
     protocol: tcp
     destination_port: 443
     jump: ACCEPT
+    action: insert
 - ansible.builtin.iptables:
     chain: INPUT
     rule_num: 6
@@ -22,6 +24,7 @@
     protocol: tcp
     destination_port: 6443
     jump: ACCEPT
+    action: insert
 - ansible.builtin.iptables:
     chain: INPUT
     rule_num: 6
@@ -30,6 +33,8 @@
     protocol: tcp
     destination_port: 10250
     jump: ACCEPT
+    action: insert
+
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 6443 -j ACCEPT
