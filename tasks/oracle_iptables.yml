@@ -40,3 +40,7 @@
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 6443 -j ACCEPT
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 10250 -j ACCEPT
   # sudo netfilter-persistent save
+
+# TODO: With the reject rules Longhorn doesn't work on K8s. Investigate it more
+# Option to get list of commands to remove all REJECT rules
+# sudo iptables-save > iptables_save; cat iptables_save | grep REJECT | sed 's/-A/sudo iptables -D/g'

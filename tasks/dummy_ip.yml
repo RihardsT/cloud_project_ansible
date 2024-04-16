@@ -15,3 +15,11 @@
     ip addr add {{ node_ip_address }}/24 brd + dev eth0 label eth0:0
     touch /dummy_ip
   when: not dummy_ip.stat.exists
+- name: Dummy IP on reboot
+    become: yes
+    ansible.builtin.cron:
+      name: "Dummy IP on reboot"
+      special_time: reboot
+      job: ip link add eth0 type dummy; ip addr add {{ node_ip_address }}/24 brd + dev eth0 label eth0:0
+      user: root
+      cron_file: dummy_ip

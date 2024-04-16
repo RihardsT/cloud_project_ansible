@@ -14,6 +14,9 @@
     kubernetes_allow_pods_on_master: True
     kubernetes_config_kubelet_configuration:
       failSwapOn: false
+      localAPIEndpoint:
+        advertiseAddress: "{{ node_ip_address }}"
+        bindPort: 6443
     kubernetes_config_init_configuration:
       localAPIEndpoint:
         advertiseAddress: "{{ node_ip_address }}"
@@ -39,3 +42,6 @@
     - geerlingguy.kubernetes
   tasks:
     - include_tasks: ./tasks/after_tasks.yml
+    - name: Netfilter-persistent save
+      shell: |
+        netfilter-persistent save
