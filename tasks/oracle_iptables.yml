@@ -34,6 +34,15 @@
     destination_port: 10250
     jump: ACCEPT
     action: insert
+### Very important!
+# Delete REJECT rule in FORWARD, because FLANNEL-FWD is created at the end,
+# thus blocking Flannel and everything.
+# This could be added after K8s resources are applied
+- ansible.builtin.iptables:
+    chain: FORWARD
+    jump: REJECT
+    reject_with: icmp-host-prohibited
+    state: absent
 
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT

@@ -45,3 +45,7 @@
     - name: Netfilter-persistent save
       shell: |
         netfilter-persistent save
+    - ansible.builtin.iptables: # Adding the rule back in the end
+        chain: FORWARD
+        jump: REJECT
+        reject_with: icmp-host-prohibited
