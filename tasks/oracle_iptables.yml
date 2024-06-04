@@ -34,6 +34,24 @@
     destination_port: 10250
     jump: ACCEPT
     action: insert
+- ansible.builtin.iptables:
+    chain: INPUT
+    rule_num: 6
+    match: state
+    ctstate: NEW
+    protocol: tcp
+    destination_port: 25565
+    jump: ACCEPT
+    action: insert
+- ansible.builtin.iptables:
+    chain: INPUT
+    rule_num: 6
+    match: state
+    ctstate: NEW
+    protocol: udp
+    destination_port: 25565
+    jump: ACCEPT
+    action: insert
 ### Very important!
 # Delete REJECT rule in FORWARD, because FLANNEL-FWD is created at the end,
 # thus blocking Flannel and everything.
@@ -43,6 +61,8 @@
     jump: REJECT
     reject_with: icmp-host-prohibited
     state: absent
+  # sudo iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
+  # sudo iptables -A FORWARD -j REJECT --reject-with icmp-host-prohibited
 
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
@@ -50,6 +70,5 @@
   # sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 10250 -j ACCEPT
   # sudo netfilter-persistent save
 
-# TODO: With the reject rules Longhorn doesn't work on K8s. Investigate it more
-# Option to get list of commands to remove all REJECT rules
-# sudo iptables-save > iptables_save; cat iptables_save | grep REJECT | sed 's/-A/sudo iptables -D/g'
+  # Option to get list of commands to remove all REJECT rules, but not needed
+  # sudo iptables-save > iptables_save; cat iptables_save | grep REJECT | sed 's/-A/sudo iptables -D/g'

@@ -30,22 +30,23 @@
   vars_files:
     - vars/app_user.yml
   pre_tasks:
-    - include_tasks: ./tasks/dummy_ip.yml
+    - include_tasks: ./tasks/dirty_workarounds.yml
     - include_tasks: ./tasks/oracle_iptables.yml
     - include_tasks: ./tasks/scaleway_dns.yml
     - include_tasks: ./tasks/app_user.yml
     - include_tasks: ./tasks/s3cfg.yml
     - include_tasks: ./tasks/containerd.yml
     - include_tasks: ./tasks/keep_clean.yml
+    - include_tasks: ./tasks/restore_minecraft.yml
   roles:
     - geerlingguy.security
     - geerlingguy.kubernetes
   tasks:
     - include_tasks: ./tasks/after_tasks.yml
-    - name: Netfilter-persistent save
-      shell: |
-        netfilter-persistent save
     - ansible.builtin.iptables: # Adding the rule back in the end
         chain: FORWARD
         jump: REJECT
         reject_with: icmp-host-prohibited
+    - name: Netfilter-persistent save
+      shell: |
+        netfilter-persistent save

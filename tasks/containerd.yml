@@ -98,6 +98,10 @@
     # include: bridge # This one breaks this one for some reason
     dest: /cni_plugins
     remote_src: yes
+- name: Check that /cni_plugins/host-local exists
+  stat:
+    path: /cni_plugins/host-local
+  register: result
 - name: Move CNI plugins
   ansible.builtin.copy:
     src: "/cni_plugins/{{ item }}"
@@ -106,6 +110,7 @@
     mode: '0775'
   with_items: ["bridge", "portmap", "firewall", "tuning", "host-local"]
   notify: restart_containerd
+  when: not result.stat.exists
 
 # TODO: https://github.com/flannel-io/cni-plugin
 # Download and put the plugin at /opt/cni/bin

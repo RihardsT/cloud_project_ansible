@@ -1,0 +1,53 @@
+# Found that dummy IP is required for Oracle Cloud and GCP.
+# In general for nodes, that do not have public IP anywhere in their interfaces
+# ifconfig or ip addr
+- name: Check that dummy_ip exists
+  stat:
+    path: /dummy_ip
+  register: dummy_ip
+- modprobe:
+    name: dummy
+    state: present
+- name: Add dummy IP
+  shell: |
+    lsmod | grep dummy
+    ip link add eth0 type dummy
+    ip addr add {{ node_ip_address }}/24 brd + dev eth0 label eth0:0
+    touch /dummy_ip
+  when: not dummy_ip.stat.exists
+- name: Dummy IP on reboot
+  become: yes
+  ansible.builtin.cron:
+    name: "Dummy IP on reboot"
+    special_time: reboot
+    job: ip link add eth0 type dummy; ip addr add {{ node_ip_address }}/24 brd + dev eth0 label eth0:0
+    user: root
+    cron_file: workarounds
+
+# Flannel on reboot. Super dirty workaround, but didn't yet figure out
+# where is the actual problem.
+# https://github.com/kubernetes/kubernetes/issues/70202
+# /run/flannel/subnet.env
+# FLANNEL_NETWORK=10.244.0.0/16
+# FLANNEL_SUBNET=10.244.0.1/24
+# FLANNEL_MTU=8950
+# FLANNEL_IPMASQ=true
+- name: Flannel /run/flannel/subnet.env on reboot
+  become: yes
+  ansible.builtin.cron:
+    name: "Flannel subnet.env on reboot"
+    special_time: reboot
+    job: sleep 60 && echo "FLANNEL_NETWORK=10.244.0.0/16\nFLANNEL_SUBNET=10.244.0.1/24\nFLANNEL_MTU=8950\nFLANNEL_IPMASQ=true" | tee /run/flannel/subnet.env
+    user: root
+    cron_file: workarounds
+# Potentially replace with
+# https://unix.stackexchange.com/questions/57852/how-do-i-start-a-cron-job-1-min-after-reboot
+
+- name: Modify iptables a bit, for flannel
+  become: yes
+  ansible.builtin.cron:
+    name: "After reboot, Flannel iptables rule is again after reject rule, thus this workaround"
+    special_time: reboot
+    job: sleep 90 && iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited && iptables -A FORWARD -j REJECT --reject-with icmp-host-prohibited
+    user: root
+    cron_file: workarounds
