@@ -32,22 +32,27 @@
 # FLANNEL_SUBNET=10.244.0.1/24
 # FLANNEL_MTU=8950
 # FLANNEL_IPMASQ=true
-- name: Flannel /run/flannel/subnet.env on reboot
-  become: yes
-  ansible.builtin.cron:
-    name: "Flannel subnet.env on reboot"
-    special_time: reboot
-    job: sleep 60 && echo "FLANNEL_NETWORK=10.244.0.0/16\nFLANNEL_SUBNET=10.244.0.1/24\nFLANNEL_MTU=8950\nFLANNEL_IPMASQ=true" | tee /run/flannel/subnet.env
-    user: root
-    cron_file: workarounds
-# Potentially replace with
+# Potentially replace with systemd
 # https://unix.stackexchange.com/questions/57852/how-do-i-start-a-cron-job-1-min-after-reboot
+
+- name: iptables reject script for flannel
+  copy:
+    dest: /iptables_reject_workaround.sh
+    content: |
+      #!/bin/sh
+      for i in `seq 1 10`
+      do
+        echo "FLANNEL_NETWORK=10.244.0.0/16\nFLANNEL_SUBNET=10.244.0.1/24\nFLANNEL_MTU=8950\nFLANNEL_IPMASQ=true" | tee /run/flannel/subnet.env
+        iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
+        iptables -A FORWARD -j REJECT --reject-with icmp-host-prohibited
+        sleep 30
+      done
 
 - name: Modify iptables a bit, for flannel
   become: yes
   ansible.builtin.cron:
-    name: "After reboot, Flannel iptables rule is again after reject rule, thus this workaround"
+    name: "After reboot, Flannel iptables rule is again after reject rule, thus this workaround, also /run/flannel/subnet.env"
     special_time: reboot
-    job: sleep 90 && iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited && iptables -A FORWARD -j REJECT --reject-with icmp-host-prohibited
+    job: /bin/sh /iptables_reject_workaround.sh
     user: root
     cron_file: workarounds

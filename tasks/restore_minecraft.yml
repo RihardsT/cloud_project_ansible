@@ -16,4 +16,4 @@
     owner: rihards
 - name: Pull Minecraft image
   shell: |
-    ctr image pull docker.io/itzg/minecraft-server:latest
+    ctr -n k8s.io image pull docker.io/itzg/minecraft-server:latest

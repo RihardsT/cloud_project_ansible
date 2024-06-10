@@ -1,0 +1,17 @@
+- name: Add some aliases
+  copy:
+    dest: "/home/{{ item }}/.bash_aliases"
+    content: |
+      alias nerk="sudo nerdctl -n k8s.io"
+      alias nerdctl="sudo nerdctl"
+      alias dfsda1="df -h /dev/sda1"
+  with_items: "{{ app_user }}"
+
+- name: Autocompletions
+  become: yes
+  ansible.builtin.blockinfile:
+    path: "/home/{{ item }}/.bashrc"
+    block: |
+      source <(/usr/local/bin/nerdctl completion bash)
+      source <(kubectl completion bash)
+  with_items: "{{ app_user }}"
