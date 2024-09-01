@@ -59,5 +59,9 @@
       user: root
       cron_file: acpi_workaround
 
+# TODO: Trying to turn off Wifi powersave due to it dropping off
+# sudo sed -i 's/3/2/' /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
+# https://easylinuxtipsproject.blogspot.com/p/internet.html#ID2.1
+
 # Set default apps in here
 # /usr/share/applications/defaults.list

@@ -21,3 +21,4 @@
   apt:
     pkg:
       - jq
+# TODO: Copy private SSH key too, for Gitlab
