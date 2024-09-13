@@ -5,6 +5,7 @@
       alias nerk="sudo nerdctl -n k8s.io"
       alias nerdctl="sudo nerdctl"
       alias dfsda1="df -h /dev/sda1"
+      alias aptupgr="sudo apt update; sudo apt upgrade"
   with_items: "{{ app_user }}"
 
 - name: Autocompletions

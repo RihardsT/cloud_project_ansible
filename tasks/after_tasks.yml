@@ -1,3 +1,13 @@
+# Seems like this didn't help anyway with the Nextcloud AIO too many open files issue
+# sudo sysctl -w fs.nr_open=1048576 # The value it had
+# sudo sysctl -w fs.nr_open=91048576
+- sysctl:
+    name: fs.nr_open
+    value: '91048576'
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.d/98-fs-nr-open.conf
+    reload: yes
+
 - name: Create a .kube directory
   file:
     path: "/home/{{ item }}/.kube"
