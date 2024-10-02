@@ -61,6 +61,21 @@
     destination_port: 25565
     jump: ACCEPT
     action: insert
+# NAT instance
+- ansible.builtin.iptables:
+    table: nat
+    chain: POSTROUTING
+    out_interface: enp0s6
+    jump: MASQUERADE
+    # rule_num: 6
+    # action: insert
+- ansible.builtin.iptables:
+    # table: filter # filter is default
+    chain: FORWARD
+    out_interface: enp0s6
+    jump: ACCEPT
+    # rule_num: 6
+    # action: insert
 ### Very important!
 # Delete REJECT rule in FORWARD, because FLANNEL-FWD is created at the end,
 # thus blocking Flannel and everything.

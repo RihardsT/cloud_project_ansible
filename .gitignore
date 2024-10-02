@@ -11,6 +11,6 @@ __pycache__
 
 Inventory
 
-s3cfg
+s3cfg*
 vars/kubernetes.yml
 vars/app_user.yml

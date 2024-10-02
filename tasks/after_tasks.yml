@@ -1,4 +1,4 @@
-# Seems like this didn't help anyway with the Nextcloud AIO too many open files issue
+# Seems like this didn't help anyway with the kubectl logs too many open files issue
 # sudo sysctl -w fs.nr_open=1048576 # The value it had
 # sudo sysctl -w fs.nr_open=91048576
 - sysctl:
@@ -7,6 +7,19 @@
     sysctl_set: yes
     sysctl_file: /etc/sysctl.d/98-fs-nr-open.conf
     reload: yes
+
+##### This containerd limit seemed to help, after reboot, but service restart should suffice. Nop doesn't seem to help
+# sudo sed -i 's/LimitNOFILE=infinity/LimitNOFILE=665535/' /usr/lib/systemd/system/containerd.service
+
+# Get
+# sudo sysctl fs.inotify.max_user_watches # 186764
+# sudo sysctl fs.inotify.max_user_instances # 128
+# sudo sysctl fs.inotify.max_queued_events # 16384
+# This seemed to work
+# sudo sysctl -w fs.inotify.max_user_instances=256 # was 128
+# Keep this in case it's needed
+# sudo sysctl -w fs.inotify.max_user_watches=99999999
+# sudo sysctl -w fs.inotify.max_queued_events=99999999
 
 - name: Create a .kube directory
   file:

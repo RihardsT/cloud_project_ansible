@@ -8,6 +8,7 @@
     app_user: [rihards]
     app_user_groups: []
     security_sudoers_passwordless: [rihards]
+    s3cfg_cloud: "oracle"
     kubernetes_version: '1.29'
     kubernetes_role: control_plane
     kubernetes_pod_network_cidr: "10.244.0.0/16"
@@ -32,7 +33,6 @@
   pre_tasks:
     - include_tasks: ./tasks/dirty_workarounds.yml
     - include_tasks: ./tasks/oracle_iptables.yml
-    - include_tasks: ./tasks/scaleway_dns.yml
     - include_tasks: ./tasks/app_user.yml
     - include_tasks: ./tasks/s3cfg.yml
     - include_tasks: ./tasks/containerd.yml
