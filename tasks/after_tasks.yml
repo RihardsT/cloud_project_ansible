@@ -2,10 +2,10 @@
 # sudo sysctl -w fs.nr_open=1048576 # The value it had
 # sudo sysctl -w fs.nr_open=91048576
 - sysctl:
-    name: fs.nr_open
-    value: '91048576'
+    name: fs.inotify.max_user_instances
+    value: '256'
     sysctl_set: yes
-    sysctl_file: /etc/sysctl.d/98-fs-nr-open.conf
+    sysctl_file: /etc/sysctl.d/98-inotify.conf
     reload: yes
 
 ##### This containerd limit seemed to help, after reboot, but service restart should suffice. Nop doesn't seem to help
@@ -49,7 +49,7 @@
     - https://raw.githubusercontent.com/traefik/traefik/v2.10/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
     - https://raw.githubusercontent.com/traefik/traefik/v2.10/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
     - ~/Code/cloud_project/cloud_project_kubernetes/Base/Traefik_v2/
-    - https://raw.githubusercontent.com/longhorn/longhorn/v1.6.1/deploy/longhorn.yaml
+    - https://raw.githubusercontent.com/longhorn/longhorn/v1.6.3/deploy/longhorn.yaml
     - ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/namespace.yaml
     - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd
     - ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/argo_config.yaml

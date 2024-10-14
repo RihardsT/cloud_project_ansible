@@ -8,20 +8,12 @@
     app_user: [rihards]
     app_user_groups: []
     security_sudoers_passwordless: [rihards]
-    cloud: "oracle"
+    s3cfg_cloud: "oracle"
     kubernetes_version: '1.31'
-    kubernetes_role: control_plane
+    kubernetes_role: node
     kubernetes_pod_network_cidr: "10.244.0.0/16"
-    kubernetes_allow_pods_on_master: True
     kubernetes_config_kubelet_configuration:
       failSwapOn: false
-      localAPIEndpoint:
-        advertiseAddress: "{{ node_ip_address }}"
-        bindPort: 6443
-    kubernetes_config_init_configuration:
-      localAPIEndpoint:
-        advertiseAddress: "{{ node_ip_address }}"
-        bindPort: 6443
     # kubernetes_apt_repository: "deb https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
     server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
     nerdctl_version: "1.7.5"
@@ -30,24 +22,19 @@
     - import_tasks: handlers/containerd.yml
   vars_files:
     - vars/app_user.yml
+    - vars/kubernetes.yml
   pre_tasks:
     - include_tasks: ./tasks/OCI/dirty_workarounds.yml
-    - include_tasks: ./tasks/OCI/oracle_iptables.yml
+    - include_tasks: ./tasks/dirty_swap.yml
     - include_tasks: ./tasks/app_user.yml
     - include_tasks: ./tasks/s3cfg.yml
     - include_tasks: ./tasks/containerd.yml
-    - include_tasks: ./tasks/keep_clean.yml
-    - include_tasks: ./tasks/restore_minecraft.yml
     - include_tasks: ./tasks/aliases.yaml
   roles:
     - geerlingguy.security
     - geerlingguy.kubernetes
-  tasks:
-    - include_tasks: ./tasks/after_tasks.yml
-    # - ansible.builtin.iptables: # Adding the rule back in the end
-    #     chain: FORWARD
-    #     jump: REJECT
-    #     reject_with: icmp-host-prohibited
-    - name: Netfilter-persistent save
-      shell: |
-        netfilter-persistent save
+
+# kubectl taint nodes oc2 oc0=true:NoSchedule
+# kubectl taint nodes oc3 oc0=true:NoSchedule
+# kubectl drain oc2
+# kubectl drain oc3

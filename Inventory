@@ -1,2 +1,7 @@
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
+
+[oracle0]
+
+[oracle0:vars]
+ansible_ssh_common_args="-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q rudenspavasaris.id.lv'"

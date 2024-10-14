@@ -1,0 +1,47 @@
+# TCP Iptables
+- ansible.builtin.iptables:
+    chain: INPUT
+    match: state
+    ctstate: NEW
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+    action: insert # this is required together with rule_num
+    rule_num: 6
+  with_items: [80,81,443,6443,10250,25565]
+  # 81 - Potentially for ACME challenge
+  # 6443
+  # 10250 - Kubelet API, required to see logs
+  # 25565 - Minecraft
+- ansible.builtin.iptables:
+    chain: INPUT
+    match: state
+    ctstate: NEW
+    protocol: udp
+    destination_port: 25565
+    jump: ACCEPT
+    action: insert
+    rule_num: 6
+# NAT instance
+- ansible.builtin.iptables:
+    table: nat
+    chain: POSTROUTING
+    out_interface: enp0s6
+    jump: MASQUERADE
+- ansible.builtin.iptables:
+    # table: filter # filter is default
+    chain: FORWARD
+    out_interface: enp0s6
+    jump: ACCEPT
+### Very important!
+# Delete REJECT rule in FORWARD, because FLANNEL-FWD is created at the end,
+# thus blocking Flannel and everything.
+# This could be added after K8s resources are applied
+- ansible.builtin.iptables:
+    chain: FORWARD
+    jump: REJECT
+    reject_with: icmp-host-prohibited
+    state: absent
+  # Option to get list of commands to remove all REJECT rules, but not needed
+  # sudo iptables-save > iptables_save; cat iptables_save | grep REJECT | sed 's/-A/sudo iptables -D/g'
+  
