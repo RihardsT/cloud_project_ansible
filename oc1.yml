@@ -22,7 +22,6 @@
       localAPIEndpoint:
         advertiseAddress: "{{ node_ip_address }}"
         bindPort: 6443
-    # kubernetes_apt_repository: "deb https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
     server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
     nerdctl_version: "1.7.5"
     cni_plugin_version: "1.4.1"
@@ -44,10 +43,3 @@
     - geerlingguy.kubernetes
   tasks:
     - include_tasks: ./tasks/after_tasks.yml
-    # - ansible.builtin.iptables: # Adding the rule back in the end
-    #     chain: FORWARD
-    #     jump: REJECT
-    #     reject_with: icmp-host-prohibited
-    - name: Netfilter-persistent save
-      shell: |
-        netfilter-persistent save

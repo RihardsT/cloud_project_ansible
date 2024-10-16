@@ -1,0 +1,8 @@
+- name: "Set up aliases locally"
+  hosts: localhost
+  connection: local
+  vars:
+    user: [rihards]
+    cloud: "oracle"
+  tasks:
+  - include_tasks: ../tasks/aliases_local.yaml

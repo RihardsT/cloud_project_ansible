@@ -8,13 +8,10 @@
     app_user: [rihards]
     app_user_groups: []
     security_sudoers_passwordless: [rihards]
-    s3cfg_cloud: "oracle"
+    cloud: "oracle"
     kubernetes_version: '1.31'
     kubernetes_role: node
     kubernetes_pod_network_cidr: "10.244.0.0/16"
-    kubernetes_config_kubelet_configuration:
-      failSwapOn: false
-    # kubernetes_apt_repository: "deb https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
     server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
     nerdctl_version: "1.7.5"
     cni_plugin_version: "1.4.1"

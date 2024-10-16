@@ -7,7 +7,7 @@
     destination_port: "{{ item }}"
     jump: ACCEPT
     action: insert # this is required together with rule_num
-    rule_num: 6
+    rule_num: 3
   with_items: [80,81,443,6443,10250,25565]
   # 81 - Potentially for ACME challenge
   # 6443
