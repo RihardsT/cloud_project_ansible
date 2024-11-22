@@ -12,6 +12,7 @@
     kubernetes_version: '1.31'
     kubernetes_role: node
     kubernetes_pod_network_cidr: "10.244.0.0/16"
+    kubernetes_join_command: "kubeadm join --config=/data/kubeadm_join.yaml"
     server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
     nerdctl_version: "1.7.5"
     cni_plugin_version: "1.4.1"
@@ -22,16 +23,17 @@
     - vars/kubernetes.yml
   pre_tasks:
     - include_tasks: ./tasks/OCI/dirty_workarounds.yml
+    - include_tasks: ./tasks/OCI/oracle_iptables.yml
     - include_tasks: ./tasks/dirty_swap.yml
     - include_tasks: ./tasks/app_user.yml
     - include_tasks: ./tasks/s3cfg.yml
     - include_tasks: ./tasks/containerd.yml
     - include_tasks: ./tasks/aliases.yaml
+    - include_tasks: ./tasks/kubeadm_join.yaml
   roles:
     - geerlingguy.security
     - geerlingguy.kubernetes
-
-# kubectl taint nodes oc2 oc0=true:NoSchedule
-# kubectl taint nodes oc3 oc0=true:NoSchedule
-# kubectl drain oc2
-# kubectl drain oc3
+  tasks:
+    - name: Persist iptables on reboot
+      shell: |
+        netfilter-persistent save

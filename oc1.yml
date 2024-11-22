@@ -43,3 +43,6 @@
     - geerlingguy.kubernetes
   tasks:
     - include_tasks: ./tasks/after_tasks.yml
+    - name: Persist iptables on reboot
+      shell: |
+        netfilter-persistent save
