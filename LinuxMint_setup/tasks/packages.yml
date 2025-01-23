@@ -22,10 +22,10 @@
       - keepass2
       - psensor
       - sysstat
-      - lutris
-      - kubectl
-      - cri-tools
-      - terraform
+#      - lutris
+#      - kubectl
+#      - cri-tools
+#      - terraform
       - codium
       - brave-browser
       - gimp

@@ -42,6 +42,11 @@ take inspiration from .mozilla/firefox/lgc3asai.default-release/prefs.js
 
 ### LMDE
 ```
+# Change the apt mirror first
+sudo software-sources
+sudo apt update && sudo apt install -y ansible
+
+#
 sudo apt update && sudo apt install -y python3.11-venv # python3-pip ansible-core
 python3 -m venv venv-ansible
 $(pwd)/venv-ansible/bin/pip3 install ansible

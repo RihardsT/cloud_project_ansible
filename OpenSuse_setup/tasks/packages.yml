@@ -1,0 +1,28 @@
+- name: Remove packages
+  become: yes
+  community.general.zypper:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - hexchat
+    - rhythmbox
+- name: Update all packages
+  community.general.zypper:
+    name: '*'
+    state: latest
+- name: Install packages
+  become: yes
+  community.general.zypper:
+    name: "{{ item }}"
+  loop:
+    - vim
+    - git
+    - chromium
+    - audacious
+    - vlc
+    - sysstat
+    - gimp
+    - jq
+    - keepass
+    - cronie
+    # - psensor

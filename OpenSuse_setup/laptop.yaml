@@ -3,23 +3,13 @@
   connection: local
   vars:
     user: rihards
-    server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-    nerdctl_version: "1.7.5"
-    cni_plugin_version: "1.4.1"
-  vars_files:
-    - vars/disks.yml
-  handlers:
-    - import_tasks: ../handlers/containerd.yml
   tasks:
   - name: Do the admin tasks
     become: yes
     block:
-    - include: ./tasks/laptop_disks.yml
-    - include: ./tasks/repositories.yml
-    - include: ./tasks/packages.yml
-    # - include: ../tasks/containerd.yml # Haven't really run containers locally in a long time
-  - include: ./tasks/gsettings.yml
-#  - include: ./tasks/pip.yml
+    - include_tasks: ./tasks/laptop_disks.yml
+    - include_tasks: ./tasks/packages.yml
+  - include_tasks: ./tasks/gsettings.yml
   - name: Remove folders
     file:
       path: "{{ item }}"
@@ -31,11 +21,6 @@
       - /home/rihards/Pictures
       - /home/rihards/Music
       - /home/rihards/Documents
-#  - name: Generate SSH key
-#    community.crypto.openssh_keypair:
-#      path: /home/rihards/.ssh/id_ed25519
-#      type: ed25519
-      # comment: rhp
   - name: git email
     community.general.git_config:
       name: user.email

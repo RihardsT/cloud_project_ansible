@@ -1,0 +1,47 @@
+# - name: Create applets folder
+#   become: yes
+#   file:
+#     path: "/home/{{ user }}/.local/share/cinnamon/applets"
+#     state: directory
+# # https://forums.linuxmint.com/viewtopic.php?t=376881
+# ### Get the PlacesCenter applet
+# - name: PlacesCenter applet
+#   become: yes
+#   ansible.builtin.unarchive:
+#     src: https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
+#     dest: /home/rihards/.local/share/cinnamon/applets
+#     remote_src: yes
+- name: Check that Gsettings were applied. Dirty with a file
+  stat:
+    path: /data/.gsettings_script_out
+  register: result
+- name: Gsettings script
+  ansible.builtin.shell: bash ../LinuxMint_setup/files/gsettings.sh >> /data/.gsettings_script_out
+  when: not result.stat.exists
+
+# TODO: VScodium and Firefox need to be started before running these
+- name: VSCodium settings
+  copy:
+    src: "../../LinuxMint_setup/files/VSCodium/{{ item }}"
+    dest: "/home/{{ user }}/.config/Code/User/{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  loop:
+    - settings.json
+    - keybindings.json
+
+- name: Find Firefox user directory
+  ansible.builtin.find:
+    paths: "/home/{{ user }}/.mozilla/firefox/"
+    patterns: '*.default-release'
+    recurse: no
+    file_type: directory
+  register: firefox_setting_folder
+- debug:
+    var: firefox_setting_folder.files[0].path
+- name: Firefox settings
+  copy:
+    src: "../../LinuxMint_setup/files/user.js"
+    dest: "{{ firefox_setting_folder.files[0].path }}/user.js"
+    owner: "{{ user }}"
+    group: "{{ user }}"
