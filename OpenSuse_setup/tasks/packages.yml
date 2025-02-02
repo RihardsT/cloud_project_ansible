@@ -6,10 +6,6 @@
   loop:
     - hexchat
     - rhythmbox
-- name: Update all packages
-  community.general.zypper:
-    name: '*'
-    state: latest
 - name: Install packages
   become: yes
   community.general.zypper:
@@ -19,10 +15,15 @@
     - git
     - chromium
     - audacious
-    - vlc
     - sysstat
     - gimp
     - jq
-    - keepass
+    - keepassxc
     - cronie
+    - blueman
     # - psensor
+
+- name: Update all packages
+  community.general.zypper:
+    name: '*'
+    state: latest

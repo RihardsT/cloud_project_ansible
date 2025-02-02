@@ -1,3 +1,14 @@
+# Remember to have: source ~/.bash_aliases
+# in ~/.bashrc or such
+
+- name: Touch again the same file, but do not change times this makes the task idempotent
+  ansible.builtin.file:
+    path: ~/.bash_aliases
+    state: touch
+    mode: u+rw,g-wx,o-rwx
+    modification_time: preserve
+    access_time: preserve
+
 - name: Check if alias markers exist
   when: cloud == "oracle"
   become_user: rihards
@@ -24,32 +35,35 @@
   become_user: rihards
   delegate_to: localhost
   ansible.builtin.shell: |
-    echo "Hello"
-    echo "Ansible command" > ~/ansible_command
+    OUTPUT_IP_1=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip)
+    
     ex ~/.bash_aliases << EOF
     /#OCI_ALIASES/,/#END_OCI_ALIASES/c
     #OCI_ALIASES
     alias local_alias_update="ansible-playbook ~/Code/cloud_project/cloud_project_ansible/LinuxMint_setup/aliases_only.yaml"
-    alias oc1_tf="terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ apply"
+    alias oc1_tf="tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ apply"
     # SSH
-    alias oc1_ssh="ssh $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip) -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null'"
-    alias oc2_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip) $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2)"
-    alias oc3_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip) $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3)"
-    # Ansible
-    alias oc1_ansible="ansible-playbook -i $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip), \
-      -e node_ip_address=$(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip) \
+    alias oc1_ssh="ssh ${OUTPUT_IP_1} -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null'"
+    # alias oc2_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2)"
+    # alias oc3_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3)"
+    
+    ########## Ansible
+    alias oc1_ansible="ansible-playbook -i ${OUTPUT_IP_1}, \
+      -e node_ip_address=${OUTPUT_IP_1} \
       -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
       /home/rihards/Code/cloud_project/cloud_project_ansible/oc1.yml"
-    alias oc2_ansible="ansible-playbook -i $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2), \
-      -e node_ip_address=$(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2) \
-      --ssh-common-args=\"-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip)'\" \
-      -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
-      /home/rihards/Code/cloud_project/cloud_project_ansible/oc0.yml"
-    alias oc3_ansible="ansible-playbook -i $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3), \
-      -e node_ip_address=$(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3) \
-      --ssh-common-args=\"-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q $(terraform -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip)'\" \
-      -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
-      /home/rihards/Code/cloud_project/cloud_project_ansible/oc0.yml"
+    ##### OC2
+    # alias oc2_ansible="ansible-playbook -i $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2), \
+    #   -e node_ip_address=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2) \
+    #   --ssh-common-args=\"-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q ${OUTPUT_IP_1}'\" \
+    #   -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
+    #   /home/rihards/Code/cloud_project/cloud_project_ansible/oc0.yml"
+    ##### OC3
+    # alias oc3_ansible="ansible-playbook -i $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3), \
+    #   -e node_ip_address=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3) \
+    #   --ssh-common-args=\"-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q ${OUTPUT_IP_1}'\" \
+    #   -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
+    #   /home/rihards/Code/cloud_project/cloud_project_ansible/oc0.yml"
     #END_OCI_ALIASES
     .
     w!
