@@ -20,10 +20,20 @@
   when: not result.stat.exists
 
 # TODO: VScodium and Firefox need to be started before running these
-- name: VSCodium settings
+- name: VSCode settings
   copy:
     src: "../../LinuxMint_setup/files/VSCodium/{{ item }}"
     dest: "/home/{{ user }}/.config/Code/User/{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  loop:
+    - settings.json
+    - keybindings.json
+
+- name: VSCodium settings
+  copy:
+    src: "../../LinuxMint_setup/files/VSCodium/{{ item }}"
+    dest: "/home/{{ user }}/.config/VSCodium/User/{{ item }}"
     owner: "{{ user }}"
     group: "{{ user }}"
   loop:

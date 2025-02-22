@@ -36,6 +36,8 @@
   delegate_to: localhost
   ansible.builtin.shell: |
     OUTPUT_IP_1=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip)
+    # OUTPUT_IP_2=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2)
+    # OUTPUT_IP_3=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3)
     
     ex ~/.bash_aliases << EOF
     /#OCI_ALIASES/,/#END_OCI_ALIASES/c
@@ -44,8 +46,8 @@
     alias oc1_tf="tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ apply"
     # SSH
     alias oc1_ssh="ssh ${OUTPUT_IP_1} -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null'"
-    # alias oc2_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2)"
-    # alias oc3_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3)"
+    # alias oc2_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} ${OUTPUT_IP_2}"
+    # alias oc3_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} ${OUTPUT_IP_3}"
     
     ########## Ansible
     alias oc1_ansible="ansible-playbook -i ${OUTPUT_IP_1}, \
@@ -53,14 +55,14 @@
       -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
       /home/rihards/Code/cloud_project/cloud_project_ansible/oc1.yml"
     ##### OC2
-    # alias oc2_ansible="ansible-playbook -i $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2), \
-    #   -e node_ip_address=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2) \
+    # alias oc2_ansible="ansible-playbook -i ${OUTPUT_IP_2}, \
+    #   -e node_ip_address=${OUTPUT_IP_2} \
     #   --ssh-common-args=\"-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q ${OUTPUT_IP_1}'\" \
     #   -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
     #   /home/rihards/Code/cloud_project/cloud_project_ansible/oc0.yml"
     ##### OC3
-    # alias oc3_ansible="ansible-playbook -i $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3), \
-    #   -e node_ip_address=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3) \
+    # alias oc3_ansible="ansible-playbook -i ${OUTPUT_IP_3}, \
+    #   -e node_ip_address=${OUTPUT_IP_3} \
     #   --ssh-common-args=\"-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q ${OUTPUT_IP_1}'\" \
     #   -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
     #   /home/rihards/Code/cloud_project/cloud_project_ansible/oc0.yml"
@@ -69,3 +71,5 @@
     w!
     q
     EOF
+    # Copy to fish shell too
+    cp ~/.bash_aliases ~/.config/fish/conf.d/bash_aliases.fish

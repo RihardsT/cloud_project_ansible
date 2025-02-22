@@ -21,9 +21,11 @@
     - keepassxc
     - cronie
     - blueman
+    - gparted # To run, switch to root first
+    - digikam
     # - psensor
 
-- name: Update all packages
-  community.general.zypper:
-    name: '*'
-    state: latest
+# - name: Update all packages
+#   community.general.zypper:
+#     name: '*'
+#     state: latest

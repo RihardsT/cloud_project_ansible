@@ -1,0 +1,2 @@
+### Todo run this in cronjob
+nerk rmi -f $(nerk images -q)
