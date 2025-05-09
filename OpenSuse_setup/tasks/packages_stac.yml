@@ -21,10 +21,15 @@
     - jq
     - keepassxc
     - cronie
-    - gparted
-    - blueman
-    - digikam
-    # - psensor
+    - gparted # To run, switch to root first
+    # - lutris
+    # - amdgpu_top
+    # - libvulkan_radeon-32bit
+    # - xf86-video-amdgpu
+    # - dxvk
+    # - libvkd3d1
+    # - Mesa-libRusticlOpenCL
+    # - wine
 
 # - name: Update all packages
 #   community.general.zypper:

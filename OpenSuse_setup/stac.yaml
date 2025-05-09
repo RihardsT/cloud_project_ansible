@@ -1,0 +1,53 @@
+- name: "Playing with Ansible and Git"
+  hosts: localhost
+  connection: local
+  vars:
+    user: rihards
+    stac: true
+    disk_uuid_1TB: "{{ ansible_facts['devices']['sdb']['partitions']['sdb5']['uuid']
+      if ansible_facts['devices']['sdb']['partitions']|length == 2
+      else
+      ansible_facts['devices']['sda']['partitions']['sda5']['uuid'] }}"
+    disk_uuid_ssd: "{{ ansible_facts['devices']['sda']['partitions']['sda1']['uuid']
+      if ansible_facts['devices']['sda']['partitions']|length == 1
+      else
+      ansible_facts['devices']['sdb']['partitions']['sdb1']['uuid'] }}"
+  tasks:
+  - name: Do the admin tasks
+    become: yes
+    block:
+    - include_tasks: ./tasks/stac_disks.yml
+    - include_tasks: ./tasks/packages_stac.yml
+  - include_tasks: ./tasks/gsettings.yml
+  - name: Gsettings for stac
+    ansible.builtin.shell: |
+      gsettings set org.cinnamon.desktop.background picture-uri 'file:///usr/share/wallpapers/openSUSEdefault/contents/images/default.png'
+      gsettings set org.cinnamon.desktop.peripherals.mouse left-handed false
+      gsettings set org.cinnamon favorite-apps "['firefox.desktop', 'brave-browser.desktop', 'chromium-browser.desktop']"
+      gsettings set org.cinnamon.desktop.screensaver lock-enabled false
+  - name: Remove folders
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop:
+      - /home/rihards/Videos
+      - /home/rihards/Templates
+      - /home/rihards/Public
+      - /home/rihards/Pictures
+      - /home/rihards/Music
+      - /home/rihards/Documents
+  - name: git email
+    community.general.git_config:
+      name: user.email
+      scope: global
+      value: rudenspavasaris@proton.me
+  - name: git username
+    community.general.git_config:
+      name: user.name
+      scope: global
+      value: Rihards
+  - name: git username
+    community.general.git_config:
+      name: core.editor
+      scope: global
+      value: vim

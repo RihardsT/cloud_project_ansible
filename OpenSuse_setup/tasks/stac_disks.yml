@@ -1,0 +1,19 @@
+- name: Create mountpoints
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop: ["/data", "/data_ssd"]
+# chown rihards:rihards /data_ssd
+- name: Update /etc/fstab
+  become: yes
+  ansible.builtin.blockinfile:
+    path: /etc/fstab
+    block: |
+      UUID={{ disk_uuid_1TB }} /data ntfs-3g defaults,permissions,nofail 0 0
+      UUID={{ disk_uuid_ssd }} /data_ssd ext4 defaults,nofail 0 0
+  register: fstab
+- name: 'Mount all'
+  become: yes
+  command: 'mount -a'
+  when: fstab.changed
