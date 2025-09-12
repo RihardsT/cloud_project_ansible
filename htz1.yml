@@ -7,9 +7,10 @@
   vars:
     app_user: [rihards]
     app_user_groups: []
+    s3cfg_cloud: "oracle"
     # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
-    kubernetes_version: '1.29'
+    kubernetes_version: '1.33'
     kubernetes_role: control_plane
     kubernetes_ignore_preflight_errors: "all"
     kubernetes_pod_network_cidr: "10.244.0.0/16"
@@ -20,14 +21,14 @@
       apiserverCertExtraSans: rudenspavasaris.id.lv
     # kubernetes_apt_repository: "deb https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
     server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-    nerdctl_version: "1.7.5"
-    cni_plugin_version: "1.4.1"
+    nerdctl_version: "2.1.3" # https://github.com/containerd/nerdctl/releases
+    cni_plugin_version: "1.7.1" # https://github.com/containernetworking/plugins/releases
   handlers:
     - import_tasks: handlers/containerd.yml
   vars_files:
     - vars/app_user.yml
   pre_tasks:
-    - include_tasks: ./tasks/scaleway_dns.yml
+    # - include_tasks: ./tasks/scaleway_dns.yml
     - include_tasks: ./tasks/app_user.yml
     - include_tasks: ./tasks/s3cfg.yml
     - include_tasks: ./tasks/containerd.yml

@@ -24,9 +24,6 @@
     - gparted
     - blueman
     - digikam
-    # - psensor
-
-# - name: Update all packages
-#   community.general.zypper:
-#     name: '*'
-#     state: latest
+    - helm
+    - btop # instead of psensor, though I should search more
+    - audacity

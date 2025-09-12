@@ -6,9 +6,9 @@
   { "key": "ctrl+shift+tab", "command": "workbench.action.previousEditor" },
   { "key": "ctrl+shift+d",   "command": "editor.action.copyLinesDownAction",
       "when": "editorTextFocus && !editorReadonly" },
-  { "key": "shift+alt+up", "command": "editor.action.insertCursorAbove",
+  { "key": "ctrl+alt+up", "command": "editor.action.insertCursorAbove",
     "when": "editorTextFocus" },
-  { "key": "shift+alt+down", "command": "editor.action.insertCursorBelow",
+  { "key": "ctrl+alt+down", "command": "editor.action.insertCursorBelow",
     "when": "editorTextFocus" },
   { "key": "ctrl+v", "command": "-editor.action.clipboardPasteAction" } // because VSCode has a bug https://github.com/microsoft/vscode/issues/238609
 ]

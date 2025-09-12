@@ -35,37 +35,45 @@
   become_user: rihards
   delegate_to: localhost
   ansible.builtin.shell: |
-    OUTPUT_IP_1=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip)
-    # OUTPUT_IP_2=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2)
-    # OUTPUT_IP_3=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3)
+    # OUTPUT_IP_1=$(tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip)
+    # OUTPUT_IP_2=$(tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_2)
+    # OUTPUT_IP_3=$(tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3)
+    OUTPUT_IP_0_PUB=$(tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -json oc0_pub_ip | jq '.[]')
     
     ex ~/.bash_aliases << EOF
     /#OCI_ALIASES/,/#END_OCI_ALIASES/c
     #OCI_ALIASES
+    ### Global
     alias local_alias_update="ansible-playbook ~/Code/cloud_project/cloud_project_ansible/LinuxMint_setup/aliases_only.yaml"
-    alias oc1_tf="tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ apply"
-    # SSH
-    alias oc1_ssh="ssh ${OUTPUT_IP_1} -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null'"
-    # alias oc2_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} ${OUTPUT_IP_2}"
-    # alias oc3_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} ${OUTPUT_IP_3}"
+    alias oc1_tf="tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/"
     
-    ########## Ansible
-    alias oc1_ansible="ansible-playbook -i ${OUTPUT_IP_1}, \
-      -e node_ip_address=${OUTPUT_IP_1} \
-      -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
-      /home/rihards/Code/cloud_project/cloud_project_ansible/oc1.yml"
-    ##### OC2
+    ### OC1
+    # alias oc1_ssh="ssh ${OUTPUT_IP_1} -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null'"
+    # alias oc1_ansible="ansible-playbook -i ${OUTPUT_IP_1}, \
+    #   -e node_ip_address=${OUTPUT_IP_1} \
+    #   -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
+    #   /home/rihards/Code/cloud_project/cloud_project_ansible/oc1.yml"
+    ### OC2
+    # alias oc2_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} ${OUTPUT_IP_2}"
     # alias oc2_ansible="ansible-playbook -i ${OUTPUT_IP_2}, \
     #   -e node_ip_address=${OUTPUT_IP_2} \
     #   --ssh-common-args=\"-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q ${OUTPUT_IP_1}'\" \
     #   -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
     #   /home/rihards/Code/cloud_project/cloud_project_ansible/oc0.yml"
-    ##### OC3
+    ### OC3
+    # alias oc3_ssh="ssh -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -A -J ${OUTPUT_IP_1} ${OUTPUT_IP_3}"
     # alias oc3_ansible="ansible-playbook -i ${OUTPUT_IP_3}, \
     #   -e node_ip_address=${OUTPUT_IP_3} \
     #   --ssh-common-args=\"-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null' -o ProxyCommand='ssh -W %h:22 -q ${OUTPUT_IP_1}'\" \
     #   -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
     #   /home/rihards/Code/cloud_project/cloud_project_ansible/oc0.yml"
+    ### OC0 Pub
+    alias oc0_pub_ssh="ssh ${OUTPUT_IP_0_PUB} -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null'"
+    alias oc0_pub_ansible="ansible-playbook -i ${OUTPUT_IP_0_PUB}, \
+      -e node_ip_address=${OUTPUT_IP_0_PUB} \
+      -u ubuntu --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
+      /home/rihards/Code/cloud_project/cloud_project_ansible/oc0_pub.yml"
+
     #END_OCI_ALIASES
     .
     w!
@@ -73,3 +81,5 @@
     EOF
     # Copy to fish shell too
     cp ~/.bash_aliases ~/.config/fish/conf.d/bash_aliases.fish
+    # Remove the complete kubectl for k, as fish shell complains
+    sed -i -e '/complete/d' ~/.config/fish/conf.d/bash_aliases.fish

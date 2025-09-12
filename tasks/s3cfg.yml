@@ -7,7 +7,7 @@
       - s3cmd
 - name: s3cfg
   copy:
-    src: "/home/rihards/Code/cloud_project/cloud_project_ansible/files/s3cfg_{{ cloud }}"
+    src: "/home/rihards/Code/cloud_project/cloud_project_ansible/files/s3cfg_{{ s3cfg_cloud }}"
     dest: "{{ item }}"
     owner: rihards
     group: rihards

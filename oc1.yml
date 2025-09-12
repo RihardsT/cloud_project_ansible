@@ -9,6 +9,7 @@
     app_user_groups: []
     security_sudoers_passwordless: [rihards]
     cloud: "oracle"
+    s3cfg_cloud: "oracle"
     kubernetes_version: '1.31'
     kubernetes_role: control_plane
     kubernetes_pod_network_cidr: "10.244.0.0/16"

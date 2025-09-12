@@ -22,6 +22,17 @@ ansible-playbook -i 51.158.168.192, -u root --diff sc1.yml
 ### Set up
 Set variables from the template and files/s3cfg also from template
 
+Get the latest nerdctl and cni plugins to put in variables.  
+Command from https://gist.github.com/lukechilds/a83e1d7127b78fef38c2914c4ececc3c  
+In fish shell:
+```
+set NERDCTL_VERSION $(curl --silent "https://api.github.com/repos/containerd/nerdctl/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+set CNI_PLUGIN_VERSION $(curl --silent "https://api.github.com/repos/containernetworking/plugins/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+sed -i "s/nerdctl_version: .*/nerdctl_version: '$NERDCTL_VERSION'/g" oc0.yml
+sed -i "s/cni_plugin_version: .*/cni_plugin_version: '$CNI_PLUGIN_VERSION'/g" oc0.yml
+```
+
+
 Get required roles, before running anything.
 ```
 python3 -m pip install -U --user ansible

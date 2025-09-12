@@ -2,6 +2,7 @@
   stat:
     path: /swapfile
   register: result
+
 - name: Create swapfile
   shell: |
     fallocate -l 4G /swapfile
@@ -9,3 +10,10 @@
     mkswap /swapfile
     swapon /swapfile
   when: not result.stat.exists
+
+- name: Add swap in /etc/fstab
+  ansible.builtin.blockinfile:
+    path: /etc/fstab
+    block: |
+      /swapfile   none    swap    sw    0   0
+  register: fstab

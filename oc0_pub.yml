@@ -15,8 +15,6 @@
     kubernetes_pod_network_cidr: "10.244.0.0/16"
     kubernetes_join_command: "kubeadm join --config=/data/kubeadm_join.yaml"
     server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-    nerdctl_version: 'v2.1.4'
-    cni_plugin_version: 'v1.8.0'
   handlers:
     - import_tasks: handlers/containerd.yml
   vars_files:
@@ -27,13 +25,8 @@
     - include_tasks: ./tasks/OCI/oracle_iptables.yml
     - include_tasks: ./tasks/dirty_swap.yml
     - include_tasks: ./tasks/app_user.yml
-    - include_tasks: ./tasks/s3cfg.yml
-    - include_tasks: ./tasks/containerd.yml
-    - include_tasks: ./tasks/aliases.yaml
-    - include_tasks: ./tasks/kubeadm_join.yaml
   roles:
     - geerlingguy.security
-    - geerlingguy.kubernetes
   tasks:
     - name: Persist iptables on reboot
       shell: |
