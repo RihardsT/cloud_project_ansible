@@ -8,14 +8,16 @@
     jump: ACCEPT
     action: insert # this is required together with rule_num
     rule_num: 3
-  with_items: [80,81,443,6443,10250,10256,25565,8285,8472,8132]
+  with_items: [80,81,443,6443,8000,10250,10256,25565,8285,8472,8132,8081]
   # 81 - Potentially for ACME challenge
-  # 6443
+  # 6443 traefik https
+  # 8000 traefik http
   # 10250 - Kubelet API, required to see logs
   # 25565 - Minecraft
   # 8285,8472 - For flannel, but didn't make k8s work with private subnet nodes
   # 8132 - for k0s - konnectivity, https://docs.k0sproject.io/stable/networking/
   # without it allowed, kubectl logs gives "No agent available" error
+  # 8081 for k8s, Traefik
 - ansible.builtin.iptables:
     chain: INPUT
     match: state

@@ -21,4 +21,5 @@
   apt:
     pkg:
       - jq
+      - net-tools
 # TODO: Copy private SSH key too, for Gitlab
