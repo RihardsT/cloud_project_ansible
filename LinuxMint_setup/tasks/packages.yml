@@ -5,11 +5,6 @@
       - hexchat
       - transmission-*
     state: absent
-- name: Upgrade packages
-  become: yes
-  apt:
-    upgrade: yes
-    update_cache: yes
 - name: Install packages
   become: yes
   apt:
@@ -19,15 +14,25 @@
       - chromium
       - audacious
       - vlc
-      - keepass2
+      - keepassxc
       - psensor
       - sysstat
-#      - lutris
+      - lutris
 #      - kubectl
 #      - cri-tools
 #      - terraform
       - codium
       - brave-browser
-      - gimp
+#      - gimp
       - jq
-      - signal-desktop
+#      - signal-desktop
+
+# TODO Stac packages
+# Install docker
+# edit /etc/docker/daemon.json
+# { "data-root": "/media/ssd/Containers/" }
+
+# WIFI adapter tp-link Archer TX20U AX1800
+# https://github.com/lwfinger/rtl8852au/issues/127
+# git clone https://github.com/morrownr/rtl8852bu-20240418.git
+# cd rtl8852bu-20240418 && sudo sh install-driver.sh

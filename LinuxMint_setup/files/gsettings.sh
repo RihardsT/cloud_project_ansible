@@ -59,7 +59,7 @@ gsettings set org.cinnamon.sounds notification-enabled false
 gsettings set org.cinnamon.desktop.sound maximum-volume 150
 
 # Favovites
-gsettings set org.cinnamon favorite-apps "['firefox.desktop']"
+gsettings set org.cinnamon favorite-apps "['firefox.desktop', 'brave-browser.desktop', 'chromium-browser.desktop']"
 
 # Ignored System reports
 gsettings set com.linuxmint.report ignored-reports "['install-language-packs', 'install-media-codecs', 'timeshift-no-setup']"
@@ -72,5 +72,8 @@ gsettings set org.cinnamon.desktop.peripherals.touchpad send-events 'disabled-on
 # Other
 gsettings set org.blueman.plugins.powermanager auto-power-on '@mb false' # default was '@mb nothing'
 gsettings set org.cinnamon.desktop.interface first-day-of-week 1
+gsettings set org.cinnamon.desktop.screensaver lock-enabled false
+
+gsettings set org.cinnamon alttab-minimized-aware false # Settings -> Windows
 
 gsettings list-recursively > /home/rihards/gsettings_after_ansible

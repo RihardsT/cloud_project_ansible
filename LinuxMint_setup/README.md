@@ -1,10 +1,3 @@
-### Pre requisistes
-```
-sudo apt update
-sudo apt install -y python3-pip
-python3 -m pip install -U --user ansible
-```
-
 ### Run
 ```
 # sudo something first, to make sure ansible can become root
@@ -39,6 +32,13 @@ https://askubuntu.com/questions/313483/how-do-i-change-firefoxs-aboutconfig-from
 put it in .mozilla/firefox/lgc3asai.default-release/user.js
 take inspiration from .mozilla/firefox/lgc3asai.default-release/prefs.js
 
+
+### Pre requisistes LinuxMint ?
+```
+sudo apt update
+sudo apt install -y python3-pip
+python3 -m pip install -U --user ansible
+```
 
 ### LMDE
 ```

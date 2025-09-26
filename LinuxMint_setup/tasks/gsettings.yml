@@ -9,17 +9,26 @@
   become: yes
   ansible.builtin.unarchive:
     src: https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
-    dest: /home/rihards/.local/share/cinnamon/applets
+    dest: /home/{{ user }}//.local/share/cinnamon/applets
     remote_src: yes
 - name: Check that Gsettings were applied. Dirty with a file
   stat:
-    path: /media/data/.gsettings_script_out
+    path: /home/{{ user }}//.gsettings_script_out
   register: result
 - name: Gsettings script
-  ansible.builtin.shell: bash ./files/gsettings.sh >> /media/data/.gsettings_script_out
+  ansible.builtin.shell: bash ./files/gsettings.sh >> /home/{{ user }}//.gsettings_script_out
   when: not result.stat.exists
+- name: Gsettings for stac
+  ansible.builtin.shell: |
+    gsettings set org.cinnamon.desktop.peripherals.mouse left-handed false
 
 # TODO: VScodium and Firefox need to be started before running these
+- name: Check that VSCodium was started once
+  stat:
+    path: "/home/{{ user }}/.config/VSCodium/User/settings.json"
+- name: Open VS Codium first
+  ansible.builtin.shell: codium
+  when: not result.stat.exists
 - name: VSCodium settings
   copy:
     src: "VSCodium/{{ item }}"
