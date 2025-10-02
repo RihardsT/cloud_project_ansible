@@ -8,6 +8,7 @@
 - name: Install packages
   become: yes
   apt:
+    update_cache: yes
     pkg:
       - vim
       - git
@@ -17,22 +18,12 @@
       - keepassxc
       - psensor
       - sysstat
-      - lutris
 #      - kubectl
 #      - cri-tools
-#      - terraform
+      - tofu
       - codium
       - brave-browser
 #      - gimp
       - jq
-#      - signal-desktop
-
-# TODO Stac packages
-# Install docker
-# edit /etc/docker/daemon.json
-# { "data-root": "/media/ssd/Containers/" }
-
-# WIFI adapter tp-link Archer TX20U AX1800
-# https://github.com/lwfinger/rtl8852au/issues/127
-# git clone https://github.com/morrownr/rtl8852bu-20240418.git
-# cd rtl8852bu-20240418 && sudo sh install-driver.sh
+      - signal-desktop
+      - gparted

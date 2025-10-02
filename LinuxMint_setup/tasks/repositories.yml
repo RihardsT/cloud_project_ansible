@@ -4,10 +4,11 @@
     state: present
   loop:
 #    - https://packages.cloud.google.com/apt/doc/apt-key.gpg
-#    - https://apt.releases.hashicorp.com/gpg
+    - https://get.opentofu.org/opentofu.gpg
+    - https://packages.opentofu.org/opentofu/tofu/gpgkey
     - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
     - https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-#    - https://updates.signal.org/desktop/apt/keys.asc
+    - https://updates.signal.org/desktop/apt/keys.asc
 
 - name: apt repositories
   apt_repository:
@@ -16,7 +17,7 @@
     update_cache: false
   loop:
 #    - "deb https://apt.kubernetes.io/ kubernetes-xenial main"
-#    - "deb https://apt.releases.hashicorp.com bullseye main"
+    - "deb https://packages.opentofu.org/opentofu/tofu/any/ any main"
     - "deb https://download.vscodium.com/debs vscodium main"
     - "deb https://brave-browser-apt-release.s3.brave.com/ stable main"
-#    - "deb https://updates.signal.org/desktop/apt xenial main"
+    - "deb https://updates.signal.org/desktop/apt xenial main"

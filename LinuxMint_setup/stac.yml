@@ -19,23 +19,25 @@
   - name: Do the admin tasks
     become: yes
     block:
-    - include: ./tasks/disks.yml
-    - include: ./tasks/repositories.yml
-    - include: ./tasks/packages.yml
-  - include: ./tasks/gsettings.yml
-  - name: Remove folders
-    file:
-      path: "{{ item }}"
-      state: absent
-    loop:
-      - /home/rihards/Videos
-      - /home/rihards/Templates
-      - /home/rihards/Public
-      - /home/rihards/Pictures
-      - /home/rihards/Music
-      - /home/rihards/Documents
+    - include_tasks: ./tasks/disks.yml
+    - include_tasks: ./tasks/repositories.yml
+    - include_tasks: ./tasks/packages.yml
+    - include_tasks: ./tasks/stac_packages.yaml
+    # - include_tasks: ../tasks/containerd.yml
+  - include_tasks: ./tasks/gsettings.yml
   - name: Upgrade packages
     become: yes
     apt:
       upgrade: yes
       update_cache: yes
+  - include_tasks: ./tasks/stac_wifi_adapter.yaml
+  - name: Add user.email to ~/.gitconfig
+    community.general.git_config:
+      name: user.email
+      scope: global
+      value: rudenspavasaris@proton.me
+  - name: Add user.name to ~/.gitconfig
+    community.general.git_config:
+      name: user.name
+      scope: global
+      value: Rihards

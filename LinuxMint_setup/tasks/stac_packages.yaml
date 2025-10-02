@@ -1,0 +1,15 @@
+- name: Install packages
+  become: yes
+  apt:
+    update_cache: yes
+    pkg:
+      - lutris
+      - gimp
+      - kdenlive
+      - handbrake
+      - iw # for the wifi adapter
+
+# TODO Stac packages
+# Install docker
+# edit /etc/docker/daemon.json
+# { "data-root": "/media/ssd/Containers/" }

@@ -1,0 +1,23 @@
+# WIFI adapter tp-link Archer TX20U AX1800
+# https://github.com/lwfinger/rtl8852au/issues/127
+# git clone https://github.com/morrownr/rtl8852bu-20240418.git
+# cd rtl8852bu-20240418 && sudo sh install-driver.sh
+
+### Supposedly this will be included in Kernel 6.17.
+
+- name: Check if wifi was installed
+  stat:
+    path: /var/lib/dkms/rtl8852bu
+  register: result
+
+- name: Get the wifi adapter repo
+  ansible.builtin.git:
+    repo: https://github.com/morrownr/rtl8852bu-20240418.git
+    dest: /home/rihards/Code/rtl8852bu
+
+- name: Install wifi driver
+  become: yes
+  ansible.builtin.shell:
+    chdir: /home/rihards/Code/rtl8852bu
+    cmd: ./install-driver.sh NoPrompt
+  when: not result.stat.exists

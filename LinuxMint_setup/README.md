@@ -1,9 +1,8 @@
 ### Run
 ```
 # sudo something first, to make sure ansible can become root
-sudo echo
-PATH="$PATH:`python3 -m site --user-base`/bin"
 cd ~/Code/cloud_project_ansible/
+sudo echo
 ansible-playbook LinuxMint_setup/stac.yml --diff
 
 cd ~/Code/cloud_project/cloud_project_ansible/
@@ -33,11 +32,9 @@ put it in .mozilla/firefox/lgc3asai.default-release/user.js
 take inspiration from .mozilla/firefox/lgc3asai.default-release/prefs.js
 
 
-### Pre requisistes LinuxMint ?
+### Pre requisistes LinuxMint
 ```
-sudo apt update
-sudo apt install -y python3-pip
-python3 -m pip install -U --user ansible
+sudo apt update && sudo apt install -y ansible
 ```
 
 ### LMDE

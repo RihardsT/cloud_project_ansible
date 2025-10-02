@@ -11,6 +11,7 @@
     src: https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
     dest: /home/{{ user }}//.local/share/cinnamon/applets
     remote_src: yes
+
 - name: Check that Gsettings were applied. Dirty with a file
   stat:
     path: /home/{{ user }}//.gsettings_script_out
@@ -18,17 +19,21 @@
 - name: Gsettings script
   ansible.builtin.shell: bash ./files/gsettings.sh >> /home/{{ user }}//.gsettings_script_out
   when: not result.stat.exists
+
 - name: Gsettings for stac
   ansible.builtin.shell: |
     gsettings set org.cinnamon.desktop.peripherals.mouse left-handed false
+  when: not result.stat.exists
 
 # TODO: VScodium and Firefox need to be started before running these
 - name: Check that VSCodium was started once
   stat:
     path: "/home/{{ user }}/.config/VSCodium/User/settings.json"
+
 - name: Open VS Codium first
   ansible.builtin.shell: codium
   when: not result.stat.exists
+
 - name: VSCodium settings
   copy:
     src: "VSCodium/{{ item }}"
@@ -46,11 +51,36 @@
     recurse: no
     file_type: directory
   register: firefox_setting_folder
+
 - debug:
     var: firefox_setting_folder.files[0].path
+
 - name: Firefox settings
   copy:
     src: "user.js"
     dest: "{{ firefox_setting_folder.files[0].path }}/user.js"
     owner: "{{ user }}"
     group: "{{ user }}"
+
+- name: Remove folders
+  file:
+    path: "/home/{{ user }}/{{ item }}"
+    state: absent
+  loop:
+    - Videos
+    - Templates
+    - Public
+    - Pictures
+    - Music
+    - Documents
+
+- name: Remove file manager bookmarks
+  ansible.builtin.lineinfile:
+    path: "/home/{{ user }}/.config/gtk-3.0/bookmarks"
+    state: absent
+    regexp: "{{ item }}"
+  loop:
+    - Documents
+    - Music
+    - Pictures
+    - Videos
