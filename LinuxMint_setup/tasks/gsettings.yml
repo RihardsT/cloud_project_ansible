@@ -3,6 +3,7 @@
   file:
     path: "/home/{{ user }}/.local/share/cinnamon/applets"
     state: directory
+
 # https://forums.linuxmint.com/viewtopic.php?t=376881
 ### Get the PlacesCenter applet
 - name: PlacesCenter applet
@@ -25,7 +26,6 @@
     gsettings set org.cinnamon.desktop.peripherals.mouse left-handed false
   when: not result.stat.exists
 
-# TODO: VScodium and Firefox need to be started before running these
 - name: Check that VSCodium was started once
   stat:
     path: "/home/{{ user }}/.config/VSCodium/User/settings.json"

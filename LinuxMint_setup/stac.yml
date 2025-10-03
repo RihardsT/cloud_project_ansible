@@ -4,7 +4,6 @@
   vars_files:
     - vars/disks.yml
   vars:
-    user: rihards
     disk_uuid_1TB: "{{ ansible_facts['devices']['sdb']['partitions']['sdb5']['uuid']
       if ansible_facts['devices']['sdb']['partitions']|length == 2
       else
@@ -16,6 +15,8 @@
   handlers:
     - import_tasks: ../handlers/containerd.yml
   tasks:
+  - name: "Include global default vars"
+    ansible.builtin.include_vars: ../../group_vars/all.yml
   - name: Do the admin tasks
     become: yes
     block:
@@ -31,26 +32,4 @@
       upgrade: yes
       update_cache: yes
   - include_tasks: ./tasks/stac_wifi_adapter.yaml
-  - name: Add user.email to ~/.gitconfig
-    community.general.git_config:
-      name: user.email
-      scope: global
-      value: rudenspavasaris@proton.me
-  - name: Add user.name to ~/.gitconfig
-    community.general.git_config:
-      name: user.name
-      scope: global
-      value: Rihards
-  - name: Create .ssh folder
-    file:
-      path: "/home/{{ user }}/.ssh"
-      state: directory
-  - name: Generate SSH key
-    community.crypto.openssh_keypair:
-      path: "/home/{{ user }}/.ssh/id_ed25519"
-      type: ed25519
-  - ansible.builtin.debug:
-      msg: lookup('ansible.builtin.file', "/home/{{ user }}/.ssh/id_ed25519")
-  - ansible.builtin.debug: msg="{{ item }}"
-    with_file:
-      - "/home/{{ user }}/.ssh/id_ed25519.pub"
+  - include_tasks: ./tasks/git_stuff.yaml
