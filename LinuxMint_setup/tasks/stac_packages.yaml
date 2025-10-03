@@ -9,7 +9,17 @@
       - handbrake
       - iw # for the wifi adapter
 
-# TODO Stac packages
-# Install docker
-# edit /etc/docker/daemon.json
-# { "data-root": "/media/ssd/Containers/" }
+- name: Create place for containerd storage
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop: ["/media/ssd/containerd", "/data"]
+
+- name: Symlink to containerd storage
+  ansible.builtin.file:
+    src: /media/ssd/containerd
+    dest: /data/containerd
+    state: link
+
+- include_tasks: ../tasks/containerd.yml

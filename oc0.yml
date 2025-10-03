@@ -15,8 +15,8 @@
     kubernetes_pod_network_cidr: "10.244.0.0/16"
     kubernetes_join_command: "kubeadm join --config=/data/kubeadm_join.yaml"
     server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-    nerdctl_version: 'v2.1.4'
-    cni_plugin_version: 'v1.8.0'
+    nerdctl_version: '2.1.4'
+    cni_plugin_version: '1.8.0'
   handlers:
     - import_tasks: handlers/containerd.yml
   vars_files:

@@ -1,0 +1,15 @@
+- name: Touch again the same file, but do not change times this makes the task idempotent
+  ansible.builtin.file:
+    path: ~/.bash_aliases
+    state: touch
+    mode: u+rw,g-wx,o-rwx
+    modification_time: preserve
+    access_time: preserve
+
+- name: Update ~/.bash_aliases
+  ansible.builtin.blockinfile:
+    path: ~/.bash_aliases
+    block: |
+      alias nerdctl="sudo nerdctl"
+      source <(/usr/local/bin/nerdctl completion bash)
+

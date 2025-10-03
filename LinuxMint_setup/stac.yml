@@ -23,8 +23,8 @@
     - include_tasks: ./tasks/repositories.yml
     - include_tasks: ./tasks/packages.yml
     - include_tasks: ./tasks/stac_packages.yaml
-    # - include_tasks: ../tasks/containerd.yml
   - include_tasks: ./tasks/gsettings.yml
+  - include_tasks: ./tasks/aliases.yaml
   - name: Upgrade packages
     become: yes
     apt:

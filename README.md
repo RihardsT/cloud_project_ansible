@@ -31,6 +31,13 @@ set CNI_PLUGIN_VERSION $(curl --silent "https://api.github.com/repos/containerne
 sed -i "s/nerdctl_version: .*/nerdctl_version: '$NERDCTL_VERSION'/g" oc0.yml
 sed -i "s/cni_plugin_version: .*/cni_plugin_version: '$CNI_PLUGIN_VERSION'/g" oc0.yml
 ```
+Bash
+```
+NERDCTL_VERSION=$(curl --silent "https://api.github.com/repos/containerd/nerdctl/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+CNI_PLUGIN_VERSION=$(curl --silent "https://api.github.com/repos/containernetworking/plugins/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+echo $NERDCTL_VERSION
+echo $CNI_PLUGIN_VERSION
+```
 
 
 Get required roles, before running anything.
