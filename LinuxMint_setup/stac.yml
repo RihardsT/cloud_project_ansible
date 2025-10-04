@@ -10,11 +10,11 @@
       if ansible_facts['devices']['sda']['size'][:-3] | int < 500
       else
       ansible_facts['devices']['sdb']['partitions']['sdb1']['uuid'] }}"
+  vars_files:
+    - ../group_vars/all.yml
   handlers:
     - import_tasks: ../handlers/containerd.yml
   tasks:
-  - name: "Include global default vars"
-    ansible.builtin.include_vars: ../group_vars/all.yml
   - name: Do the admin tasks
     become: yes
     block:

@@ -1,3 +1,15 @@
+### Steam
+- name: Steam apt key
+  apt_key:
+    url: https://repo.steampowered.com/steam/archive/stable/steam.gpg
+    state: present
+
+- name: Steam apt repository
+  apt_repository:
+    repo: deb https://repo.steampowered.com/steam/ stable steam
+    state: present
+    update_cache: false
+
 - name: Install packages
   become: yes
   apt:
@@ -8,18 +20,36 @@
       - kdenlive
       - handbrake
       - iw # for the wifi adapter
+      - libvulkan-dev
+      - mesa-vulkan-drivers
+      - steam-launcher
 
 - name: Create place for containerd storage
   become: yes
   file:
     path: "{{ item }}"
     state: directory
-  loop: ["/media/ssd/containerd", "/data"]
+  loop: ["/media/data/containerd", "/data"]
 
 - name: Symlink to containerd storage
   ansible.builtin.file:
-    src: /media/ssd/containerd
+    src: /media/data/containerd
     dest: /data/containerd
     state: link
 
 - include_tasks: ../tasks/containerd.yml
+
+### Install Heroic Games Launcher
+- shell: |
+    REPO="Heroic-Games-Launcher/HeroicGamesLauncher"
+    curl --silent "https://api.github.com/repos/${REPO}/releases/latest" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/' | grep 'linux.*amd64.deb'
+  register: heroic_games_launcher_url
+  changed_when: False # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_error_handling.html#defining-changed
+
+- debug:
+    var: heroic_games_launcher_url.stdout
+
+- name: Install Heroic Games Launcher
+  become: yes
+  apt:
+    deb: "{{ heroic_games_launcher_url.stdout }}"

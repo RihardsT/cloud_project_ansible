@@ -3,6 +3,8 @@
   file:
     path: "{{ item }}"
     state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
   loop: ["/media/data", "/media/hdd"]
 
 - name: Update /etc/fstab
