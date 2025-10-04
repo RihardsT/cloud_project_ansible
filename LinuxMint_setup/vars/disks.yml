@@ -1,4 +1,0 @@
-- disk_uuid_1TB: "{{ ansible_facts['devices']['sdb']['partitions']['sdb5']['uuid']
-  if ansible_facts['devices']['sdb']['partitions']|length == 2
-  else
-  ansible_facts['devices']['sda']['partitions']['sda5']['uuid'] }}"

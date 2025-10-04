@@ -1,22 +1,20 @@
 - name: "Playing with Ansible and Git"
   hosts: localhost
   connection: local
-  vars_files:
-    - vars/disks.yml
   vars:
-    disk_uuid_1TB: "{{ ansible_facts['devices']['sdb']['partitions']['sdb5']['uuid']
-      if ansible_facts['devices']['sdb']['partitions']|length == 2
+    disk_uuid_1TB: "{{ ansible_facts['devices']['sdb']['partitions']['sdb1']['uuid']
+      if ansible_facts['devices']['sdb']['size'][:-3] | int > 900
       else
-      ansible_facts['devices']['sda']['partitions']['sda5']['uuid'] }}"
+      ansible_facts['devices']['sda']['partitions']['sda1']['uuid'] }}"
     disk_uuid_ssd: "{{ ansible_facts['devices']['sda']['partitions']['sda1']['uuid']
-      if ansible_facts['devices']['sda']['partitions']|length == 1
+      if ansible_facts['devices']['sda']['size'][:-3] | int < 500
       else
       ansible_facts['devices']['sdb']['partitions']['sdb1']['uuid'] }}"
   handlers:
     - import_tasks: ../handlers/containerd.yml
   tasks:
   - name: "Include global default vars"
-    ansible.builtin.include_vars: ../../group_vars/all.yml
+    ansible.builtin.include_vars: ../group_vars/all.yml
   - name: Do the admin tasks
     become: yes
     block:

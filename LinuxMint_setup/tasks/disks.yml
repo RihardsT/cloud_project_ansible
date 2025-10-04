@@ -3,15 +3,15 @@
   file:
     path: "{{ item }}"
     state: directory
-  loop: ["/media/data", "/media/ssd"]
+  loop: ["/media/data", "/media/hdd"]
 
 - name: Update /etc/fstab
   become: yes
   ansible.builtin.blockinfile:
     path: /etc/fstab
     block: |
-      UUID={{ disk_uuid_1TB }} /media/data ntfs-3g defaults,permissions,nofail 0 0
-      UUID={{ disk_uuid_ssd }} /media/ssd ext4 defaults,nofail 0 0
+      UUID={{ disk_uuid_1TB }} /media/hdd ext4 defaults,nofail 0 0
+      UUID={{ disk_uuid_ssd }} /media/data ext4 defaults,nofail 0 0
   register: fstab
 
 - name: 'Mount all'

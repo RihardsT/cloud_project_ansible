@@ -13,6 +13,16 @@
     dest: /home/{{ user }}//.local/share/cinnamon/applets
     remote_src: yes
 
+- name: PlacesCenter applet config
+  copy:
+    src: "applet_placescenter.json"
+    dest: "/home/{{ user }}/.config/cinnamon/spices/placesCenter@scollins/94.json"
+
+- name: Panel launchers applet config
+  copy:
+    src: "applet_panel_launchers.json"
+    dest: "/home/{{ user }}/.config/cinnamon/spices/panel-launchers@cinnamon.org/80.json"
+
 - name: Check that Gsettings were applied. Dirty with a file
   stat:
     path: /home/{{ user }}//.gsettings_script_out
