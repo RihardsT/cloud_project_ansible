@@ -5,6 +5,7 @@
   loop:
     - overlay
     - br_netfilter
+
 - sysctl:
     name: "{{ item }}"
     value: '1'
@@ -15,57 +16,68 @@
     - net.ipv4.ip_forward
     - net.bridge.bridge-nf-call-iptables
     - net.bridge.bridge-nf-call-ip6tables
+
 - name: containerd conf
   ansible.builtin.copy:
     dest: /etc/modules-load.d/containerd.conf
     content: |
       overlay
       br_netfilter
+
 - name: containerd
   apt:
     pkg:
       - containerd
+
 - name: Create a data directory
   file:
     path: /etc/containerd
     state: directory
+
 - name: Check that /etc/containerd/config.toml exists
   stat:
     path: /etc/containerd/config.toml
   register: result
+
 - name: containerd config default
   shell: |
     containerd config default | tee /etc/containerd/config.toml
   when: not result.stat.exists
+
 - name: Create ContainerD directory for GCP
   file:
     path: "/data/containerd"
     state: directory
     mode: '0755'
+
 - name: Containerd root storage
   lineinfile:
     path: /etc/containerd/config.toml
     regexp: '^root ='
     line: 'root = "/data/containerd"'
   register: result
+
 - name: Containerd SystemdCgroup storage
   lineinfile:
     path: /etc/containerd/config.toml
     regexp: '            SystemdCgroup = false'
     line: '            SystemdCgroup = true'
   register: result
+
 - name: Containerd CRI plugin was disabled by default, but enable it by commenting
   lineinfile:
     path: /etc/containerd/config.toml
     regexp: '^disabled_plugins'
     line: '#disabled_plugins'
   register: result
+
 - name: Add sockets to crictl
   copy:
     dest: /etc/crictl.yaml
     content: |
       runtime-endpoint: unix:///run/containerd/containerd.sock
       image-endpoint: unix:///run/containerd/containerd.sock
+
 # TODO: make sure that if one those above changes the result, then it restarts
 # currently first one might change, but not latest, then result is not changed.
 - name: Restart containerd after root storage change
@@ -73,27 +85,32 @@
     name: containerd
     state: restarted
   when: result is changed
+
 - name: CNI plugin directory
   file:
     path: "{{ item }}"
     state: directory
   with_items: ["/cni_plugins", "/opt/cni/bin"]
+
 - name: nerdctl
   ansible.builtin.unarchive:
     src: "https://github.com/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/nerdctl-{{ nerdctl_version }}-linux-{{ server_arch }}.tar.gz"
     include: nerdctl
     dest: /usr/local/bin
     remote_src: yes
+
 - name: Get CNI plugins
   ansible.builtin.unarchive:
     src: "https://github.com/containernetworking/plugins/releases/download/v{{ cni_plugin_version }}/cni-plugins-linux-{{ server_arch }}-v{{ cni_plugin_version }}.tgz"
     # include: bridge # This one breaks this one for some reason
     dest: /cni_plugins
     remote_src: yes
+
 - name: Check that /cni_plugins/host-local exists
   stat:
     path: /cni_plugins/host-local
   register: result
+
 - name: Move CNI plugins
   ansible.builtin.copy:
     src: "/cni_plugins/{{ item }}"

@@ -46,10 +46,6 @@
   delegate_to: localhost
   ansible.builtin.command: "kubectl apply -f {{ item }}"
   loop:
-    - https://raw.githubusercontent.com/traefik/traefik/v2.10/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
-    - https://raw.githubusercontent.com/traefik/traefik/v2.10/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
-    - ~/Code/cloud_project/cloud_project_kubernetes/Base/Traefik_v2/
-    - https://raw.githubusercontent.com/longhorn/longhorn/v1.9.1/deploy/longhorn.yaml
     - ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/namespace.yaml
     - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd
     - ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/argo_config.yaml
