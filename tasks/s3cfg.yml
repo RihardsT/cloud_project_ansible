@@ -1,7 +1,6 @@
-- name: Install pip and utilities
+- name: Install s3cmd and locate
   apt:
     pkg:
-      - python3-pip
       - locate
       - s3cmd
 

@@ -4,3 +4,6 @@ user: rihards
 server_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
 nerdctl_version: '2.1.6'
 cni_plugin_version: '1.8.0'
+
+# On the servers, to allow ssh with password, in case keys fail to copy or something
+security_ssh_password_authentication: yes

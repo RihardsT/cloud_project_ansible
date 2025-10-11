@@ -5,7 +5,6 @@
   become_user: root
   become_method: sudo
   vars:
-    app_user: [rihards]
     app_user_groups: []
     s3cfg_cloud: "oracle"
     # security_ssh_port: 3013

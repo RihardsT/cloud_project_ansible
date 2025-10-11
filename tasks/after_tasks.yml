@@ -23,25 +23,26 @@
 
 - name: Create a .kube directory
   file:
-    path: "/home/{{ item }}/.kube"
+    path: "/home/{{ user }}/.kube"
     state: directory
-    owner: "{{ item }}"
-  with_items: "{{ app_user }}"
+    owner: "{{ user }}"
+
 - name: Symlink the kubectl admin.conf to ~/.kube/conf.
   ansible.builtin.copy:
     src: /etc/kubernetes/admin.conf
-    dest: "/home/{{ item }}/.kube/config"
+    dest: "/home/{{ user }}/.kube/config"
     remote_src: yes
     mode: 0600
-    owner: "{{ item }}"
-  with_items: "{{ app_user }}"
+    owner: "{{ user }}"
+
 - name: Copy kubeconfig to local
   ansible.builtin.fetch:
     src: /etc/kubernetes/admin.conf
     dest: ~/.kube/config
     flat: yes
+
 # Replace this below with K8s task? Don't want to install a module currently
-- name: Set up K8s services (Longhorn, Traefik)
+- name: Set up K8s services (ArgoCD, Longhorn)
   become_user: rihards
   delegate_to: localhost
   ansible.builtin.command: "kubectl apply -f {{ item }}"
@@ -49,3 +50,13 @@
     - ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/namespace.yaml
     - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd
     - ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/argo_config.yaml
+    - ~/Code/cloud_project/cloud_project_kubernetes/Base/Storage/longhorn_argocd.yaml
+    - ~/Code/cloud_project/cloud_project_kubernetes/Monitoring/Metrics-server/metrics_server_argocd.yaml
+
+- name: Set up more K8s services
+  become_user: rihards
+  delegate_to: localhost
+  ansible.builtin.command: "{{ item }}"
+  loop:
+    - helm upgrade --install traefik traefik/traefik -f ~/Code/cloud_project/cloud_project_kubernetes/Base/Traefik/helm-values.yaml
+    - kubectl apply -f ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/ingress.yaml
