@@ -6,4 +6,7 @@ nerdctl_version: '2.1.6'
 cni_plugin_version: '1.8.0'
 
 # On the servers, to allow ssh with password, in case keys fail to copy or something
-security_ssh_password_authentication: yes
+security_ssh_password_authentication: 'yes'
+
+# Disable ssh key checking, because I do rebuild the servers quite often
+ansible_ssh_common_args: "-A -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null'"

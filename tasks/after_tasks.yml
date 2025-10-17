@@ -58,5 +58,6 @@
   delegate_to: localhost
   ansible.builtin.command: "{{ item }}"
   loop:
-    - helm upgrade --install traefik traefik/traefik -f ~/Code/cloud_project/cloud_project_kubernetes/Base/Traefik/helm-values.yaml
+    - helm upgrade --install traefik traefik/traefik -f ~/Code/cloud_project/cloud_project_kubernetes/Base/Traefik/helm-values.yaml --set service.externalIPs[0]={{ node_ip_address }}
     - kubectl apply -f ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/ingress.yaml
+    - kubectl apply -f ~/Code/cloud_project/cloud_project_kubernetes/Security/Trivy/trivy_argocd.yaml
