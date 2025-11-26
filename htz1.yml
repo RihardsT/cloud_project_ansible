@@ -7,6 +7,7 @@
   vars:
     app_user_groups: []
     s3cfg_cloud: "oracle"
+    cloud: "hetzner"
     # security_ssh_port: 3013
     security_sudoers_passwordless: [rihards]
     kubernetes_version: '1.34'
@@ -14,6 +15,8 @@
     kubernetes_ignore_preflight_errors: "all"
     kubernetes_pod_network_cidr: "10.244.0.0/16"
     kubernetes_allow_pods_on_master: True
+    kubernetes_config_cluster_configuration:
+      clusterName: "htz1"
     kubernetes_config_kubelet_configuration:
       failSwapOn: false
     kubernetes_config_init_configuration:
@@ -23,7 +26,6 @@
   vars_files:
     - vars/app_user.yml
   pre_tasks:
-    # - include_tasks: ./tasks/scaleway_dns.yml
     - include_tasks: ./tasks/app_user.yml
     - include_tasks: ./tasks/s3cfg.yml
     - include_tasks: ./tasks/containerd.yml

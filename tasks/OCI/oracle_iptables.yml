@@ -50,3 +50,27 @@
     state: absent
   # Option to get list of commands to remove all REJECT rules, but not needed
   # sudo iptables-save > iptables_save; cat iptables_save | grep REJECT | sed 's/-A/sudo iptables -D/g'
+- ansible.builtin.iptables:
+    chain: INPUT
+    jump: REJECT
+    reject_with: icmp-host-prohibited
+    state: absent
+  # For some reason this was blocking that 443 redirect,
+  # even though https was allowed before this should take effect
+# Given that now I'm running rootless Traefik, set up redirect on host
+- ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    match: tcp
+    destination_port: 80
+    jump: REDIRECT
+    to_ports: 8000
+- ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    match: tcp
+    destination_port: 443
+    jump: REDIRECT
+    to_ports: 8443

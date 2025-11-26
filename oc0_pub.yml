@@ -31,3 +31,9 @@
     - name: Persist iptables on reboot
       shell: |
         netfilter-persistent save
+    - name: Create a /acme directory
+      file:
+        path: "/acme"
+        state: directory
+        owner: 65532
+        group: 65532

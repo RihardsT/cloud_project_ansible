@@ -38,7 +38,7 @@
 - name: Copy kubeconfig to local
   ansible.builtin.fetch:
     src: /etc/kubernetes/admin.conf
-    dest: ~/.kube/config
+    dest: ~/.kube/config_{{ cloud }}
     flat: yes
 
 # Replace this below with K8s task? Don't want to install a module currently
