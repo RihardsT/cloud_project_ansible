@@ -37,3 +37,9 @@
         state: directory
         owner: 65532
         group: 65532
+    - name: Create a /data directory
+      file:
+        path: "/data/radicale"
+        state: directory
+        owner: 1000
+        group: 1000
