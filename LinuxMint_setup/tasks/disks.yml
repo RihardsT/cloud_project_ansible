@@ -5,15 +5,16 @@
     state: directory
     owner: "{{ user }}"
     group: "{{ user }}"
-  loop: ["/media/data", "/media/hdd"]
+  loop: ["/media/data", "/media/hdd", "/media/nvme"]
 
 - name: Update /etc/fstab
   become: yes
   ansible.builtin.blockinfile:
     path: /etc/fstab
     block: |
-      UUID={{ disk_uuid_1TB }} /media/hdd ext4 defaults,nofail 0 0
-      UUID={{ disk_uuid_ssd }} /media/data ext4 defaults,nofail 0 0
+      # UUID={{ disk_uuid_1TB }} /media/hdd ext4 defaults,nofail 0 0
+      # UUID={{ disk_uuid_ssd }} /media/data ext4 defaults,nofail 0 0
+      UUID={{ disk_uuid_nvme }} /media/nvme ext4 defaults,nofail 0 0
   register: fstab
 
 - name: 'Mount all'

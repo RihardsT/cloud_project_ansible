@@ -23,17 +23,27 @@
       - libvulkan-dev
       - mesa-vulkan-drivers
       - steam-launcher
+      - xboxdrv # For controller support
+      - kubectl
+      - kubeadm
+      - kubelet
+      - radeontop
+
+- name: Install packages
+  become: yes
+  apt:
+    deb: https://github.com/Umio-Yasuno/amdgpu_top/releases/download/v0.11.0/amdgpu-top_0.11.0-1_amd64.deb
 
 - name: Create place for containerd storage
   become: yes
   file:
     path: "{{ item }}"
     state: directory
-  loop: ["/media/data/containerd", "/data"]
+  loop: ["/media/nvme/containerd", "/data"]
 
 - name: Symlink to containerd storage
   ansible.builtin.file:
-    src: /media/data/containerd
+    src: /media/nvme/containerd
     dest: /data/containerd
     state: link
 

@@ -10,6 +10,7 @@
       if ansible_facts['devices']['sda']['size'][:-3] | int < 500
       else
       ansible_facts['devices']['sdb']['partitions']['sdb1']['uuid'] }}"
+    disk_uuid_nvme: "{{ ansible_facts['devices']['nvme0n1']['partitions']['nvme0n1p4']['uuid'] }}"
   vars_files:
     - ../group_vars/all.yml
   handlers:

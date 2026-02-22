@@ -3,7 +3,7 @@
     url: "{{ item }}"
     state: present
   loop:
-#    - https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    - https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key
     - https://get.opentofu.org/opentofu.gpg
     - https://packages.opentofu.org/opentofu/tofu/gpgkey
     - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
@@ -16,8 +16,18 @@
     state: present
     update_cache: false
   loop:
-#    - "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    - "deb https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /"
     - "deb https://packages.opentofu.org/opentofu/tofu/any/ any main"
     - "deb https://download.vscodium.com/debs vscodium main"
     - "deb https://brave-browser-apt-release.s3.brave.com/ stable main"
     - "deb https://updates.signal.org/desktop/apt xenial main"
+
+- name: apt keys
+  apt_key:
+    url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+    state: absent
+- name: apt repositories
+  apt_repository:
+    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: absent
+    update_cache: false
