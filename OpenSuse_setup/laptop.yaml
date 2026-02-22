@@ -45,3 +45,8 @@
       job: /usr/bin/echo "mask" > /sys/firmware/acpi/interrupts/gpe16
       user: root
       cron_file: acpi_workaround
+
+### TODO: Get the Gnome-online-accounts working
+# https://www.reddit.com/r/openSUSE/comments/1dl54m5/online_accounts_menu_in_cinnamon_is_empty_when_in/
+# Build it, because it seems that only old packages are available.
+# https://gitlab.gnome.org/GNOME/gnome-online-accounts

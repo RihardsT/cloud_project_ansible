@@ -17,6 +17,10 @@
     kubernetes_allow_pods_on_master: True
     kubernetes_config_cluster_configuration:
       clusterName: "htz1"
+      # Had to also append these, as these variables are not appending
+      networking:
+        podSubnet: "{{ kubernetes_pod_network.cidr }}"
+      kubernetesVersion: "{{ kubernetes_version_kubeadm }}"
     kubernetes_config_kubelet_configuration:
       failSwapOn: false
     kubernetes_config_init_configuration:

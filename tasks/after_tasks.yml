@@ -50,8 +50,8 @@
     - ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/namespace.yaml
     - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd
     - ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/argo_config.yaml
-    - ~/Code/cloud_project/cloud_project_kubernetes/Base/Storage/longhorn_argocd.yaml
-    - ~/Code/cloud_project/cloud_project_kubernetes/Monitoring/Metrics-server/metrics_server_argocd.yaml
+    # - ~/Code/cloud_project/cloud_project_kubernetes/Base/Storage/longhorn_argocd.yaml
+    # - ~/Code/cloud_project/cloud_project_kubernetes/Monitoring/Metrics-server/metrics_server_argocd.yaml
 
 - name: Set up more K8s services
   become_user: rihards
@@ -60,4 +60,5 @@
   loop:
     - helm upgrade --install traefik traefik/traefik -f ~/Code/cloud_project/cloud_project_kubernetes/Base/Traefik/helm-values.yaml --set service.externalIPs[0]={{ node_ip_address }}
     - kubectl apply -f ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/ingress.yaml
-    - kubectl apply -f ~/Code/cloud_project/cloud_project_kubernetes/Security/Trivy/trivy_argocd.yaml
+    # - kubectl apply -f ~/Code/cloud_project/cloud_project_kubernetes/Security/Trivy/trivy_argocd.yaml
+    - helm upgrade --install apps ~/Code/cloud_project/cloud_project_kubernetes/CI_CD_IaC_Tools/ArgoCD/Apps/

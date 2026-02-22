@@ -11,6 +11,7 @@
   with_items: [80,81,443,6443,8000,10250,10256,25565,8285,8472,8132,8081]
   # 81 - Potentially for ACME challenge
   # 6443 traefik https
+  # 6443 k0s Kubernetes API?
   # 8000 traefik http
   # 10250 - Kubelet API, required to see logs
   # 25565 - Minecraft

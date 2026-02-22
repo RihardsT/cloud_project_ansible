@@ -3,13 +3,13 @@
   file:
     path: "{{ item }}"
     state: directory
-  loop: ["/data"]
+  loop: ["/media/data"]
 - name: Update /etc/fstab
   become: yes
   ansible.builtin.blockinfile:
     path: /etc/fstab
     block: |
-      /dev/sdb1 /data ext4 defaults,nofail 0 0
+      UUID={{ ansible_facts['devices']['sdb']['partitions']['sdb1']['uuid'] }} /media/data ext4 defaults,nofail 0 0
   register: fstab
 - name: 'Mount all'
   become: yes

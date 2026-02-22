@@ -40,6 +40,7 @@
     # OUTPUT_IP_3=$(tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -raw ip_3)
     OUTPUT_IP_0_PUB0=$(tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -json oc0_pub_ip | jq '.[0]')
     OUTPUT_IP_0_PUB1=$(tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_oracle/ output -json oc0_pub_ip | jq '.[1]')
+    OUTPUT_IP_HTZ=$(tfer --dir=/home/rihards/Code/cloud_project/cloud_project_terraform_hetzner/ output -json ip | jq '.[0]')
     
     ex ~/.bash_aliases << EOF
     /#OCI_ALIASES/,/#END_OCI_ALIASES/c
@@ -82,11 +83,13 @@
       /home/rihards/Code/cloud_project/cloud_project_ansible/oc0_pub.yml"
 
     ### Hetzner
+    alias htz_ssh="ssh ${OUTPUT_IP_HTZ} -o StrictHostKeyChecking=no -o 'UserKnownHostsFile=/dev/null'"
     alias htz_up="tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_hetzner/ apply -auto-approve -var='htz1=true'"
     alias htz_down="tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_hetzner/ apply -auto-approve -var='htz1=false'"
-    alias htz_ansible="ansible-playbook -i $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_hetzner/ output -json ip | jq -r '.[]'), \
+    alias htz_ansible="export ANSIBLE_HOST_KEY_CHECKING=False && \
+        ansible-playbook -i $(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_hetzner/ output -json ip | jq -r '.[]'), \
         -e node_ip_address=$(tofu -chdir=/home/rihards/Code/cloud_project/cloud_project_terraform_hetzner/ output -json ip | jq -r '.[]') \
-        -u rihards --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
+        -u root --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
         /home/rihards/Code/cloud_project/cloud_project_ansible/htz1.yml"
 
     #END_OCI_ALIASES

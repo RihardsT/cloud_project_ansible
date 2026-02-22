@@ -43,3 +43,7 @@
         state: directory
         owner: 1000
         group: 1000
+
+# TODO: iptables are still not loaded on reboot, so maybe the Oracle VM
+# has some other thing, that clears them on reboot.
+# Make a script, to reapply the necessary iptables on reboot

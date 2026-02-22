@@ -4,3 +4,4 @@ user_pref("browser.sessionstore.restore_pinned_tabs_on_demand", true);
 // Not sure if this will work
 user_pref("browser.search.defaultenginename", "DuckDuckGo"); // DuckDuckGo or Google
 user_pref("browser.search.selectedEngine", "DuckDuckGo"); // DuckDuckGo or Google
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);

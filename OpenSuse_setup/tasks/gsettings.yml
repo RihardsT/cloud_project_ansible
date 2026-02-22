@@ -3,14 +3,12 @@
     path: /home/rihards/.gsettings_script_out
   register: result
 - name: Create applets folder
-  become: yes
   file:
     path: "/home/{{ user }}/.local/share/cinnamon/applets"
     state: directory
 # https://forums.linuxmint.com/viewtopic.php?t=376881
 ### Get the PlacesCenter applet
 - name: PlacesCenter applet
-  become: yes
   ansible.builtin.unarchive:
     src: https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
     dest: /home/rihards/.local/share/cinnamon/applets
@@ -54,5 +52,17 @@
   copy:
     src: "../../LinuxMint_setup/files/user.js"
     dest: "{{ firefox_setting_folder.files[0].path }}/user.js"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+##### Increase Edit Bookmarks size
+# https://superuser.com/questions/1857972/firefox-edit-bookmark-window-is-comically-small
+- name: Create chrome dir for custom Firefox stylesheet
+  file:
+    path: "{{ firefox_setting_folder.files[0].path }}/chrome/"
+    state: directory
+- name: Firefox Edit bookmark window size
+  copy:
+    src: "../../LinuxMint_setup/files/userChrome.css"
+    dest: "{{ firefox_setting_folder.files[0].path }}/chrome/userChrome.css"
     owner: "{{ user }}"
     group: "{{ user }}"
