@@ -1,33 +1,50 @@
-- name: apt keys
-  apt_key:
-    url: "{{ item }}"
-    state: present
-  loop:
-    - https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key
-    - https://get.opentofu.org/opentofu.gpg
-    - https://packages.opentofu.org/opentofu/tofu/gpgkey
-    - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
-    - https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-    - https://updates.signal.org/desktop/apt/keys.asc
+- name: Add VSCodium repo
+  ansible.builtin.deb822_repository:
+    name: VSCodium
+    types: deb
+    uris: https://download.vscodium.com/debs
+    suites: 'vscodium'
+    components: main
+    architectures: amd64
+    signed_by: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
 
-- name: apt repositories
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-    update_cache: false
-  loop:
-    - "deb https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /"
-    - "deb https://packages.opentofu.org/opentofu/tofu/any/ any main"
-    - "deb https://download.vscodium.com/debs vscodium main"
-    - "deb https://brave-browser-apt-release.s3.brave.com/ stable main"
-    - "deb https://updates.signal.org/desktop/apt xenial main"
+- name: Add OpenTofu repo
+  ansible.builtin.deb822_repository:
+    name: OpenTofu
+    types: deb
+    uris: https://packages.opentofu.org/opentofu/tofu/any/
+    suites: any
+    components: main
+    architectures: amd64
+#    signed_by: https://get.opentofu.org/opentofu.gpg
+    signed_by: https://packages.opentofu.org/opentofu/tofu/gpgkey
 
-- name: apt keys
-  apt_key:
-    url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
-    state: absent
-- name: apt repositories
-  apt_repository:
-    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
-    state: absent
-    update_cache: false
+- name: Add Brave repo
+  ansible.builtin.deb822_repository:
+    name: Brave
+    types: deb
+    uris: https://brave-browser-apt-release.s3.brave.com/
+    suites: stable
+    components: main
+    architectures: amd64
+    signed_by: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+
+- name: Add Signal repo
+  ansible.builtin.deb822_repository:
+    name: Signalll
+    types: deb
+    uris: https://updates.signal.org/desktop/apt
+    suites: xenial
+    components: main
+    architectures: amd64
+    signed_by: https://updates.signal.org/desktop/apt/keys.asc
+
+### Kubernetes key fails to download
+#- name: Add Kubernetes repo
+#  deb822_repository:
+#    name: Kubernetes
+#    types: deb
+#    uris: https://pkgs.k8s.io/core:/stable:/v1.36/deb/
+#    suites: /
+#    architectures: amd64
+#    signed_by: https://pkgs.k8s.io/core:/stable:/v1.36/deb/Release.key

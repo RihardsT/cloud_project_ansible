@@ -19,6 +19,7 @@
   community.crypto.openssh_keypair:
     path: "/home/{{ user }}/.ssh/id_ed25519"
     type: ed25519
+    comment: "{{ ansible_hostname }}"
 
 - ansible.builtin.debug:
     msg: lookup('ansible.builtin.file', "/home/{{ user }}/.ssh/id_ed25519")
@@ -26,3 +27,8 @@
 - ansible.builtin.debug: msg="{{ item }}"
   with_file:
     - "/home/{{ user }}/.ssh/id_ed25519.pub"
+
+- community.general.git_config:
+    name: core.editor
+    scope: global
+    value: vim

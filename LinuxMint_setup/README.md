@@ -7,6 +7,7 @@ ansible-playbook LinuxMint_setup/stac.yml --diff
 
 cd ~/Code/cloud_project/cloud_project_ansible/
 ansible-playbook LinuxMint_setup/laptop.yml --diff
+ansible-playbook LinuxMint_setup/laptop_minis.yml --diff -K
 
 ansible-playbook ~/Code/cloud_project/cloud_project_ansible/LinuxMint_setup/aliases_only.yaml
 ```

@@ -1,17 +1,23 @@
 - name: Create applets folder
-  become: yes
+#  become: yes
   file:
     path: "/home/{{ user }}/.local/share/cinnamon/applets"
     state: directory
 
+- name: Check that Gsettings were applied. Dirty with a file
+  stat:
+    path: /home/{{ user }}/.gsettings_script_out
+  register: result
+
 # https://forums.linuxmint.com/viewtopic.php?t=376881
 ### Get the PlacesCenter applet
 - name: PlacesCenter applet
-  become: yes
+#  become: yes
   ansible.builtin.unarchive:
     src: https://cinnamon-spices.linuxmint.com/files/applets/placesCenter@scollins.zip
     dest: /home/{{ user }}//.local/share/cinnamon/applets
     remote_src: yes
+  when: not result.stat.exists
 
 - name: PlacesCenter applet config
   copy:
@@ -23,18 +29,14 @@
     src: "applet_panel_launchers.json"
     dest: "/home/{{ user }}/.config/cinnamon/spices/panel-launchers@cinnamon.org/80.json"
 
-- name: Check that Gsettings were applied. Dirty with a file
-  stat:
-    path: /home/{{ user }}//.gsettings_script_out
-  register: result
 - name: Gsettings script
   ansible.builtin.shell: bash ./files/gsettings.sh >> /home/{{ user }}//.gsettings_script_out
   when: not result.stat.exists
 
-- name: Gsettings for stac
-  ansible.builtin.shell: |
-    gsettings set org.cinnamon.desktop.peripherals.mouse left-handed false
-  when: not result.stat.exists
+#- name: Gsettings for stac
+#  ansible.builtin.shell: |
+#    gsettings set org.cinnamon.desktop.peripherals.mouse left-handed false
+#  when: not result.stat.exists
 
 - name: Check that VSCodium was started once
   stat:
@@ -69,6 +71,19 @@
   copy:
     src: "user.js"
     dest: "{{ firefox_setting_folder.files[0].path }}/user.js"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
+##### Increase Edit Bookmarks size
+# https://superuser.com/questions/1857972/firefox-edit-bookmark-window-is-comically-small
+- name: Create chrome dir for custom Firefox stylesheet
+  file:
+    path: "{{ firefox_setting_folder.files[0].path }}/chrome/"
+    state: directory
+- name: Firefox Edit bookmark window size
+  copy:
+    src: "../../LinuxMint_setup/files/userChrome.css"
+    dest: "{{ firefox_setting_folder.files[0].path }}/chrome/userChrome.css"
     owner: "{{ user }}"
     group: "{{ user }}"
 

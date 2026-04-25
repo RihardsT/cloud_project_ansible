@@ -1,0 +1,19 @@
+- name: "Playing with Ansible and Git"
+  hosts: localhost
+  connection: local
+  vars:
+    user: rihards
+  vars_files:
+    - vars/disks.yml
+  tasks:
+  - name: Do the admin tasks
+    become: yes
+    block:
+    - include_tasks: ./tasks/laptop_disks_minis.yml
+    - include_tasks: ./tasks/repositories.yml
+    - include_tasks: ./tasks/packages.yml
+  - include_tasks: ./tasks/gsettings.yml
+  - include_tasks: ./tasks/git_stuff.yaml
+
+# Set default apps in here
+# /usr/share/applications/defaults.list

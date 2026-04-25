@@ -10,6 +10,13 @@
   apt:
     update_cache: yes
     pkg:
+### From added repositories
+      - signal-desktop
+      - brave-browser
+#      - kubectl
+      - tofu
+      - codium
+# General
       - vim
       - git
       - chromium
@@ -18,12 +25,10 @@
       - keepassxc
       - psensor
       - sysstat
-#      - kubectl
-#      - cri-tools
-      - tofu
-      - codium
-      - brave-browser
 #      - gimp
       - jq
-      - signal-desktop
       - gparted
+
+
+# Get Kubectl directly, as their apt key seemed to be failing recently.
+# https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
