@@ -1,3 +1,9 @@
+# https://en.opensuse.org/VLC
+# sudo zypper ar -cfp 90 -n VLC http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
+# sudo zypper ref
+# sudo zypper in vlc vlc-codecs
+# sudo zypper dup --from vlc --allow-vendor-change
+
 - name: Remove packages
   become: yes
   community.general.zypper:
@@ -14,6 +20,7 @@
     - vim
     - git
     - fish
+    - code
     - chromium
     - audacious
     - sysstat
@@ -27,3 +34,4 @@
     - helm
     - btop # instead of psensor, though I should search more
     - audacity
+    - vlc
