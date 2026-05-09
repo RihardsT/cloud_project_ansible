@@ -5,6 +5,10 @@ user_pref("browser.sessionstore.restore_pinned_tabs_on_demand", true);
 user_pref("browser.search.defaultenginename", "DuckDuckGo"); // DuckDuckGo or Google
 user_pref("browser.search.selectedEngine", "DuckDuckGo"); // DuckDuckGo or Google
 
+// DNS over HTTPS, DoH, NextDNS
+user_pref("network.trr.mode", 3);
+user_pref("network.trr.uri", "https://firefox.dns.nextdns.io/");
+
 // To enable loading custom stylesheet, to expand Edit Bookmarks menu
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 // https://www.reddit.com/r/FirefoxCSS/comments/g30phz/expand_all_bookmark_folders_on_new_bookmark_edit/
