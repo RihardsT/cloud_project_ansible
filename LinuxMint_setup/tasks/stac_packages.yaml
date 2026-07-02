@@ -28,6 +28,7 @@
       - kubeadm
       - kubelet
       - radeontop
+      - corectrl # To control GPU power usage - limit for games that shutdown PC initally
 
 - name: Install packages
   become: yes
