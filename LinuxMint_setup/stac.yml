@@ -30,5 +30,5 @@
     apt:
       upgrade: yes
       update_cache: yes
-  - include_tasks: ./tasks/stac_wifi_adapter.yaml
+  # - include_tasks: ./tasks/stac_wifi_adapter.yaml
   - include_tasks: ./tasks/git_stuff.yaml
