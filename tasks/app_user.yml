@@ -3,7 +3,7 @@
     name: "{{ user }}"
     shell: /bin/bash
     generate_ssh_key: no
-    password: "{{ app_user_password }}"
+    password: "{{ app_user_password | password_hash('sha512') }}"
     groups: "{{ app_user_groups }}"
     append: yes
 

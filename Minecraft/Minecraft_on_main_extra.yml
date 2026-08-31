@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - include: ../tasks/restore_minecraft.yml
+    - name: Set up Minecraft in K8s
+      become_user: rihards
+      delegate_to: localhost
+      ansible.builtin.command: "kubectl apply -f {{ item }}"
+      loop:
+        - ~/Code/cloud_project/cloud_project_kubernetes/Minecraft/minecraft.yml
+

@@ -40,3 +40,5 @@
     - geerlingguy.kubernetes
   tasks:
     - include_tasks: ./tasks/after_tasks.yml
+    - include_tasks: ./tasks/restore_minecraft.yml
+    - include_tasks: ./tasks/minecraft.yml

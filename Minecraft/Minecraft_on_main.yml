@@ -1,0 +1,12 @@
+- name: Set up K8s main node as usual
+  ansible.builtin.import_playbook: ../htz1.yml
+- name: Restore Minecraft and create it in K8s
+  ansible.builtin.import_playbook: Minecraft_on_main_extra.yml
+
+
+
+# export ANSIBLE_HOST_KEY_CHECKING=False && export ANSIBLE_SSH_RETRIES=5 && \
+# ansible-playbook -i 95.217.214.241, \
+# -e node_ip_address=95.217.214.241 \
+# -u root --diff -e ansible_python_interpreter=/usr/bin/python3 -e ansible_port=22 \
+# /home/rihards/Code/cloud_project/cloud_project_ansible/Minecraft_on_main.yml
